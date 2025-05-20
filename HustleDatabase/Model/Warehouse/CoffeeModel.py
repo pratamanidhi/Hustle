@@ -2,7 +2,7 @@ from dataclasses import dataclass
 from datetime import datetime
 
 @dataclass
-class ClassCoffeeModel:
+class CoffeeModel:
     guid: str
     name: str
     description: str
