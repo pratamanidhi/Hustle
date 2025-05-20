@@ -11,7 +11,8 @@ class ConnectionWarehouse():
         with sqlite3.connect(self.db_path) as con:
             con.row_factory = sqlite3.Row
             cur = con.cursor()
-            if param:
+            print(query)
+            if param and isinstance(param, (list, tuple, dict)):
                 cur.execute(query, param)
             else:
                 cur.execute(query)
@@ -23,6 +24,7 @@ class ConnectionWarehouse():
         with sqlite3.connect(self.db_path) as con:
             con.row_factory = sqlite3.Row
             cur = con.cursor()
+            print(query)
             cur.execute(query)
             rows = cur.fetchall()
             if dtoClass:

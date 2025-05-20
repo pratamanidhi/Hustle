@@ -9,7 +9,7 @@ class WarehouseRepository():
     def GetStock(self, table, model):
         db = Connection()
         query = f'SELECT * FROM {table}'
-        stock = db.FetechAll( query, model)
+        stock = db.Execute( query, model)
         return stock
 
     def AddStock(self, table, model):
