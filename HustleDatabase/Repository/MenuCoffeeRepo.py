@@ -1,6 +1,5 @@
 from HustleDatabase.Connection import Connection
 from HustleDatabase.Model.CoffeeModel import Coffee
-from HustleDatabase.Model.CoffeeRequestModel import CoffeeRequest
 import uuid
 
 class MenuCoffeeRepo():
