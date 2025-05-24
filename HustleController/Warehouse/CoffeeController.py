@@ -9,6 +9,10 @@ service = Coffee()
 def GetStock():
     return service.GetStock()
 
+@router.post("/add-stock")
+def AddStock(coffee : Model):
+    return service.AddStock(coffee)
+
 @router.put("/update-stock")
 def UpdateStock(isOut: bool, coffee: Model):
     return service.UpdateStock(isOut, coffee)
