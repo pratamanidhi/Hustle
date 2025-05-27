@@ -1,6 +1,5 @@
 from HustleDatabase.Connection import Connection
 from HustleDatabase.Model.CoffeeModel import Coffee
-from HustleDatabase.Model.CoffeeRequestModel import CoffeeRequest
 import uuid
 
 class MenuCoffeeRepo():
@@ -20,6 +19,8 @@ class MenuCoffeeRepo():
         query = 'INSERT INTO "Menu.Coffee" (guid, name, price) VALUES (?, ?, ?)'
         result = db.Execute(query, (guid, coffee.name, coffee.price))
         return result
+
+
 
 
 

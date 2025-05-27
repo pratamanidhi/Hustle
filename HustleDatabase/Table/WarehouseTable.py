@@ -1,0 +1,9 @@
+class WarehouseTable():
+    Coffee = "Coffee"
+    Juice = "Juice"
+    MilkAndCream = "MilkAndCream"
+    Other = "Other"
+    Powder = "Powder",
+    Syrup = "Syrup"
+    Tea = "Tea"
+    Topping = "Topping"
