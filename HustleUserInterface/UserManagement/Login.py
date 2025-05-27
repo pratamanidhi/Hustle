@@ -29,4 +29,6 @@ def login_page():
                 print(e)
                 ui.notify(f"Error: {e}", type="negative")
 
-        ui.button("Login", on_click=handle_login).classes("mt-4 w-full")
+        # ui.button("Login", on_click=handle_login).classes("mt-4 w-full")
+        ui.button('Go to Page 2', on_click=lambda: ui.navigate.to('/page-2')
+)

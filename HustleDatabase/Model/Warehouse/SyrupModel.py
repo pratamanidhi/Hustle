@@ -1,15 +1,19 @@
 from dataclasses import dataclass
 from datetime import datetime
+from typing import Optional
 
 @dataclass
 class SyrupModel:
     guid: str
-    name: str
-    description: str
-    stockInt: int
-    stockOut: int
-    totalStock: int
-    lastInput: datetime
-    lastOutput: datetime
-    updatedBy: str
-    price: int
+    name: str = None
+    description: str = None
+    stockIn: int = None
+    stockOut: int = None
+    totalStock: int = None
+    updatedBy: str = None
+    price: int = None
+    unit: str = None
+    packaging: int = None
+    priceUnit: float = None
+    lastInput: Optional[datetime] = None
+    lastOutput: Optional[datetime] = None

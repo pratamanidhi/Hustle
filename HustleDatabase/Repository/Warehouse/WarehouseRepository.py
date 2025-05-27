@@ -33,6 +33,12 @@ class WarehouseRepository():
                              priceUnit))
         return result
 
+    def GetIngredient(self, table, model):
+        db = Connection()
+        query = f'Select guid, name, priceUnit from {table}'
+        ingredient = db.Execute(query, model)
+        return ingredient
+
     def CheckStock(self, table, model):
         db = Connection()
         query = f'SELECT * FROM {table} WHERE guid = ? AND name = ?'
