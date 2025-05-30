@@ -3,7 +3,7 @@ from datetime import datetime
 from typing import Optional
 
 @dataclass
-class JuiceModel:
+class WarehouseModel:
     guid: str
     name: str = None
     description: str = None

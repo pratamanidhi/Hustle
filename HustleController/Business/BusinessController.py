@@ -13,7 +13,7 @@ def CalculatePrice(business : Business):
     result = service.CalculatePrice(business)
     return result
 
-@router.get("/coffee-ingredient")
+@router.get("/ingredient")
 def GetIngredient(types: Ingredient):
     result = service.GetIngredient(types)
     return result

@@ -1,6 +1,6 @@
 from enum import IntEnum
 
-class Ingredient(IntEnum):
+class StockEnum(IntEnum):
     Coffee = 1
     Juice = 2
     MilkAndCream = 3
