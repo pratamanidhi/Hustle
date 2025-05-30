@@ -4,13 +4,13 @@ from typing import  Type, List
 
 class ConnectionWarehouse():
     def __init__(self):
-        os.makedirs("DbFile", exist_ok=True)
-        self.db_path = "DbFile/HustleWarehouse.db"
+        self.db_path = "HustleBackend/DbFile/HustleWarehouse.db"
 
     def Execute(self, query, param=None):
         with sqlite3.connect(self.db_path) as con:
             con.row_factory = sqlite3.Row
             cur = con.cursor()
+            print(query)
             if param and isinstance(param, (list, tuple, dict)):
                 cur.execute(query, param)
             else:

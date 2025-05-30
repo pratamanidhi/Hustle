@@ -3,7 +3,7 @@ class WarehouseTable():
     Juice = "Juice"
     MilkAndCream = "MilkAndCream"
     Other = "Other"
-    Powder = "Powder",
+    Powder = "Powder"
     Syrup = "Syrup"
     Tea = "Tea"
     Topping = "Topping"

@@ -33,17 +33,19 @@ class WarehouseRepository():
                              priceUnit))
         return result
 
-    def CheckStock(self, table, model):
+    def GetIngredient(self, table, model):
+        db = Connection()
+        query = f'Select guid, name, priceUnit from {table}'
+        ingredient = db.Execute(query, model)
+        return ingredient
+
+    def StockUpdate(self, table, isOut, model):
         db = Connection()
         query = f'SELECT * FROM {table} WHERE guid = ? AND name = ?'
         result = db.Execute(query,
                             (model.guid,
                              model.name))
-        return dict(result[0])
-
-    def StockUpdate(self, table, isOut, model):
-        db = Connection()
-        checkStock = self.CheckStock(model)
+        checkStock =  dict(result[0])
 
         if isOut:
             totalStock = int(checkStock['totalStock']) - model.stockOut
@@ -59,8 +61,7 @@ class WarehouseRepository():
             lastOutput = checkStock['lastOutput']
 
         query = f'''UPDATE {table}
-                   SET guid = ?, name = ?, description = ?, stockIn = ?, stockOut = ?, 
-                       totalStock = ?, lastInput = ?, c = ?, updatedBy = ?, price = ?
+                   SET guid = ?, name = ?, description = ?, stockIn = ?, stockOut = ?, totalStock = ?, lastInput = ?, lastOutput = ?, updatedBy = ?, price = ?, unit = ?, packaging = ?, priceUnit = ?
                    WHERE guid = ? AND name = ?'''
 
         try:
@@ -75,8 +76,11 @@ class WarehouseRepository():
                 lastOutput,
                 model.updatedBy,
                 checkStock['price'],
-                checkStock['guid'],  # for WHERE clause
-                checkStock['name']  # for WHERE clause
+                checkStock['unit'],
+                checkStock['packaging'],
+                checkStock['priceUnit'],
+                checkStock['guid'],
+                checkStock['name']
             ))
             return result
         except Exception as e:

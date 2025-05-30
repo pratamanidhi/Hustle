@@ -1,5 +1,6 @@
 from nicegui import ui
-import requests
+from HustleUserInterface.API.UserManagement.UserManagementAPI import UserManagementAPI as User
+import asyncio
 
 @ui.page('/')
 def login_page():
@@ -9,24 +10,20 @@ def login_page():
         username_input = ui.input("Username").classes("w-full")
         password_input = ui.input("Password", password=True, password_toggle_button=True).classes("w-full")
 
+        spinner = ui.spinner().style('display:none')  # hidden initially
+
         def handle_login():
+            spinner.style('display:block')  # show spinner
             username = username_input.value
             password = password_input.value
 
-            try:
-                response = requests.post("http://localhost:8000/user-login", json={
-                    "username": username,
-                    "password": password,
-                })
+            result = User().Login(username, password)
+            spinner.style('display:none')  # hide spinner
 
-                if response.status_code == 200:
-                    for i in response:
-                        print(i)
-                    ui.notify(response.json(), type="positive")
-                else:
-                    ui.notify("Login failed!", type="negative")
-            except Exception as e:
-                print(e)
-                ui.notify(f"Error: {e}", type="negative")
+            if result is not None:
+                ui.notify("Login Success", type="positive")
+                ui.navigate.to('/warehouse')
+            else:
+                ui.notify("Login Failed: Invalid username or password.", type="negative")
 
         ui.button("Login", on_click=handle_login).classes("mt-4 w-full")
