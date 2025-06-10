@@ -1,6 +1,10 @@
 from HustleUserInterface.Common.ApiEnum import Enum as Enum
 
+mainiUrl = 'http://localhost:8000'
 class APIUrl:
-    mainiUrl = 'http://localhost:8000'
+
     warehouse = mainiUrl + f"/{Enum.Warehouse}/get-stock"
     login = mainiUrl + f"/{Enum.UserManagement}/user-login"
+    ingredientEnum = mainiUrl + f"/{Enum.Enum}/ingredient"
+    ingredient = mainiUrl + f"/{Enum.Business}/ingredient"
+    checkOutStock = mainiUrl + f"/{Enum.Warehouse}/update-stock"

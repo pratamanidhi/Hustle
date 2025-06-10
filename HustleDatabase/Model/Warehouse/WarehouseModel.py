@@ -1,19 +1,17 @@
-from dataclasses import dataclass
-from datetime import datetime
+from pydantic import BaseModel
 from typing import Optional
 
-@dataclass
-class WarehouseModel:
+class WarehouseModel(BaseModel):
     guid: str
-    name: str = None
-    description: str = None
-    stockIn: int = None
-    stockOut: int = None
-    totalStock: int = None
-    updatedBy: str = None
-    price: int = None
-    unit: str = None
-    packaging: int = None
-    priceUnit: float = None
-    lastInput: Optional[datetime] = None
-    lastOutput: Optional[datetime] = None
+    name: Optional[str] = None
+    description: Optional[str] = None
+    stockIn: Optional[int] = None
+    stockOut: Optional[int] = None
+    totalStock: Optional[int] = None
+    updatedBy: Optional[str] = None
+    price: Optional[int] = None
+    unit: Optional[str] = None
+    packaging: Optional[int] = None
+    priceUnit: Optional[float] = None
+    lastInput: Optional[str] = None
+    lastOutput: Optional[str] = None

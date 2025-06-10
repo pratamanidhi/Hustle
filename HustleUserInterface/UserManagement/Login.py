@@ -2,7 +2,7 @@ from nicegui import ui
 from HustleUserInterface.API.UserManagement.UserManagementAPI import UserManagementAPI as User
 import asyncio
 
-@ui.page('/')
+@ui.page('/login')
 def login_page():
     with ui.card().classes("absolute-center w-96"):
         ui.label("Login").classes("text-2xl mb-4")

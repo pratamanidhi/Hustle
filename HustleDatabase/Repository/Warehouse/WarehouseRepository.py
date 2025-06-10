@@ -50,7 +50,7 @@ class WarehouseRepository():
         if isOut:
             totalStock = int(checkStock['totalStock']) - model.stockOut
             stockIn = checkStock['stockIn']
-            stockOut = model.stockOut
+            stockOut = int(checkStock['stockOut']) + model.stockOut
             lastInput = checkStock['lastInput']
             lastOutput = datetime.now()
         else:
