@@ -1,4 +1,4 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, Body
 from HustleBussiness.Warehouse.WarehouseBussiness import WarehouseBusiness as wh
 from HustleDatabase.Model.Warehouse.WarehouseModel import WarehouseModel as Model
 from HustleCommon.Enums.Ingredient import Ingredient as stockType
@@ -15,5 +15,6 @@ def AddStock(types: stockType, model: Model):
     return service.AddStock(types, model)
 
 @router.put("/update-stock")
-def UpdateStock(types: stockType, isOut: bool, model: Model):
+def UpdateStock(types: stockType, isOut: bool, model: Model = Body(...)):
     return service.UpdateStock(types, isOut, model)
+
