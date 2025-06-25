@@ -7,3 +7,4 @@ class WarehouseTable():
     Syrup = "Syrup"
     Tea = "Tea"
     Topping = "Topping"
+    Unit = "Unit"

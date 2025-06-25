@@ -5,3 +5,4 @@ class Enum(StrEnum):
     UserManagement = "users"
     Enum = "enum"
     Business = "business"
+    Unit = "unit"

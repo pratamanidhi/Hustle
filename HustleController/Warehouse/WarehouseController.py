@@ -11,7 +11,7 @@ def GetStock(types: stockType):
     return service.GetStock(types)
 
 @router.post("/add-stock")
-def AddStock(types: stockType, model: Model):
+def AddStock(types: stockType, model: Model = Body(...)):
     return service.AddStock(types, model)
 
 @router.put("/update-stock")

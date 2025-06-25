@@ -2,7 +2,7 @@ from pydantic import BaseModel
 from typing import Optional
 
 class WarehouseModel(BaseModel):
-    guid: str
+    guid: str = None
     name: Optional[str] = None
     description: Optional[str] = None
     stockIn: Optional[int] = None
