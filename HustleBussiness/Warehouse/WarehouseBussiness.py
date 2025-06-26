@@ -29,6 +29,7 @@ class WarehouseBusiness:
     def AddStock(self, types: Enum, model):
         if types in self.context_map:
             context, _ = self.context_map[types]
+
             return repo.AddStock(context, model)
         return "No Data"
 

@@ -1,8 +1,10 @@
 from HustleUserInterface.API.Warehouse.WarehouseAPI import WarehouseAPI as Warehouse
+from HustleUserInterface.Business.Logs.LogsBusiness import LogsBusiness as Log
 from HustleUserInterface.API.Unit.UnitAPI import UnitAPI as Unit
 from datetime import datetime
 
 warehouse = Warehouse()
+log = Log()
 unit = Unit()
 class WarehouseBusiness:
     def __init__(self) -> None:
@@ -75,6 +77,7 @@ class WarehouseBusiness:
             data["stockOut"] = int(item["outQty"])
             data["unit"] = unitGuid["guid"]
 
+            log.InsertLog(item)
             result = warehouse.CheckOutStock(item["type"], item["isOut"], data)
             return result
 

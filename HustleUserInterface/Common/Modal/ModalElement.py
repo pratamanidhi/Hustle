@@ -34,7 +34,6 @@ class ModalElement:
                 'description': str(d.get('description', '')),
                 'stockOut': str(d.get('stockOut', '')),
                 'totalStock': str(d.get('totalStock', '')),
-                'updatedBy' : userInfo['name']
             }
             if userInfo['isAdmin']:
                 row['stockIn'] = str(d.get('stockIn'))
@@ -42,6 +41,7 @@ class ModalElement:
 
 
         def onCheckout():
+            datas[0]['updatedBy'] = userInfo['name']
             isOut = True
             item = {
                 "type": type,
