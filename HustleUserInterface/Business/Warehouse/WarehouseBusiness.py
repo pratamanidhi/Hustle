@@ -70,11 +70,15 @@ class WarehouseBusiness:
         unitGuid = unit.GetUnitByName(data['unit'])
 
         if unitGuid is not False:
+            print(item)
             data["price"] = int(data["price"].replace('Rp', '').replace('.', '').strip())
             data["priceUnit"] = int(data["priceUnit"].replace('Rp', '').replace('.', '').strip())
             data["lastInput"] = None
             data["lastOutput"] = None
-            data["stockOut"] = int(item["outQty"])
+            if item['isOut']:
+                data["stockOut"] = int(item["outQty"])
+            else:
+                data["stockIn"] = int(item['inQty'])
             data["unit"] = unitGuid["guid"]
 
             log.InsertLog(item)

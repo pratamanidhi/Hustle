@@ -1,4 +1,5 @@
 from nicegui import ui
+
 from HustleUserInterface.Business.Warehouse.WarehouseBusiness import WarehouseBusiness as Business
 
 
@@ -55,6 +56,22 @@ class ModalElement:
             else:
                 print(False)
 
+        if userInfo['isAdmin']:
+            def onCheckin():
+                datas[0]['updatedBy'] = userInfo['name']
+                isOut = False
+                item = {
+                    "type": type,
+                    "inQty": inQty.value,
+                    "isOut": isOut,
+                    "data": datas
+                }
+                result = business.UpdateItem(item)
+                if result:
+                    dialog.close()
+                else:
+                    print(False)
+
 
         with dialog, ui.card().classes('w-full max-w-screen-md p-6 relative space-y-4 shadow-xl'):
             ui.button(icon='close', on_click=dialog.close) \
@@ -68,10 +85,10 @@ class ModalElement:
             with ui.column().classes('relative p-4 border rounded-md'):
                 with ui.grid(columns=2).classes('gap-3'):
                     if userInfo['isAdmin']:
-                        outQty = ui.input(label='Quantity Out') \
+                        inQty = ui.input(label='Quantity Out') \
                             .props('type=number dense outlined') \
                             .classes('flex-1 text-sm').bind_visibility_from(userInfo['isAdmin'])
-                        ui.button('Stock In', on_click=onCheckout) \
+                        ui.button('Stock In', on_click=onCheckin) \
                             .classes('text-sm px-3 py-1 rounded-md')
 
                     outQty = ui.input(label='Quantity Out') \
