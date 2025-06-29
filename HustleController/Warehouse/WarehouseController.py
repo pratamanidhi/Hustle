@@ -1,6 +1,7 @@
 from fastapi import APIRouter, Body
 from HustleBussiness.Warehouse.WarehouseBussiness import WarehouseBusiness as wh
 from HustleDatabase.Model.Warehouse.WarehouseModel import WarehouseModel as Model
+from HustleDatabase.Model.Logs.DailyLogModel import DailyLogModel as DailyModel
 from HustleCommon.Enums.Ingredient import Ingredient as stockType
 
 router = APIRouter()
@@ -18,3 +19,6 @@ def AddStock(types: stockType, model: Model = Body(...)):
 def UpdateStock(types: stockType, isOut: bool, model: Model = Body(...)):
     return service.UpdateStock(types, isOut, model)
 
+@router.post("/add-daily-log")
+def AddDailyLog(model: DailyModel = Body(...)):
+    return service.InsertIntoDaliyLog(model)

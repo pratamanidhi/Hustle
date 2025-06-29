@@ -6,3 +6,4 @@ class Enum(StrEnum):
     Enum = "enum"
     Business = "business"
     Unit = "unit"
+    Log = "logs"

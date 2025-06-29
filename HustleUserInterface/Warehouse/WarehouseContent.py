@@ -118,13 +118,13 @@ def WarehouseContent():
 
             with ui.row().classes('w-full justify-evenly'):
                 TableRender(enum.Coffee, 'Coffee Stock', userInfo)
-                TableRender(enum.Juice, 'Juice Stock', userInfo)
-                TableRender(enum.MilkAndCream, 'Milk And Cream Stock', userInfo)
-                TableRender(enum.Powder, 'Powder Stock', userInfo)
-                TableRender(enum.Syrup, 'Syrup Stock', userInfo)
-                TableRender(enum.Tea, 'Tea Stock', userInfo)
-                TableRender(enum.Topping, 'Topping Stock', userInfo)
-                TableRender(enum.Other, 'Other Stock', userInfo)
+                # TableRender(enum.Juice, 'Juice Stock', userInfo)
+                # TableRender(enum.MilkAndCream, 'Milk And Cream Stock', userInfo)
+                # TableRender(enum.Powder, 'Powder Stock', userInfo)
+                # TableRender(enum.Syrup, 'Syrup Stock', userInfo)
+                # TableRender(enum.Tea, 'Tea Stock', userInfo)
+                # TableRender(enum.Topping, 'Topping Stock', userInfo)
+                # TableRender(enum.Other, 'Other Stock', userInfo)
         else:
             ui.notify("No login info found", type='warning')
             ui.navigate.to('/')

@@ -1,4 +1,5 @@
 from nicegui import ui
+
 from HustleUserInterface.Business.Warehouse.WarehouseBusiness import WarehouseBusiness as Business
 
 
@@ -34,7 +35,6 @@ class ModalElement:
                 'description': str(d.get('description', '')),
                 'stockOut': str(d.get('stockOut', '')),
                 'totalStock': str(d.get('totalStock', '')),
-                'updatedBy' : userInfo['name']
             }
             if userInfo['isAdmin']:
                 row['stockIn'] = str(d.get('stockIn'))
@@ -42,6 +42,7 @@ class ModalElement:
 
 
         def onCheckout():
+            datas[0]['updatedBy'] = userInfo['name']
             isOut = True
             item = {
                 "type": type,
@@ -54,6 +55,22 @@ class ModalElement:
                 dialog.close()
             else:
                 print(False)
+
+        if userInfo['isAdmin']:
+            def onCheckin():
+                datas[0]['updatedBy'] = userInfo['name']
+                isOut = False
+                item = {
+                    "type": type,
+                    "inQty": inQty.value,
+                    "isOut": isOut,
+                    "data": datas
+                }
+                result = business.UpdateItem(item)
+                if result:
+                    dialog.close()
+                else:
+                    print(False)
 
 
         with dialog, ui.card().classes('w-full max-w-screen-md p-6 relative space-y-4 shadow-xl'):
@@ -68,10 +85,10 @@ class ModalElement:
             with ui.column().classes('relative p-4 border rounded-md'):
                 with ui.grid(columns=2).classes('gap-3'):
                     if userInfo['isAdmin']:
-                        outQty = ui.input(label='Quantity Out') \
+                        inQty = ui.input(label='Quantity Out') \
                             .props('type=number dense outlined') \
                             .classes('flex-1 text-sm').bind_visibility_from(userInfo['isAdmin'])
-                        ui.button('Stock In', on_click=onCheckout) \
+                        ui.button('Stock In', on_click=onCheckin) \
                             .classes('text-sm px-3 py-1 rounded-md')
 
                     outQty = ui.input(label='Quantity Out') \

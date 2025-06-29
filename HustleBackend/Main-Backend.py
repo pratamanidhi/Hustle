@@ -5,6 +5,7 @@ from HustleController.Warehouse import WarehouseController
 from HustleController.Business import BusinessController
 from HustleController.Enums import IngredientController
 from HustleController.Unit import UnitController
+from HustleController.Log import LogController
 import sys
 import os
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
@@ -24,6 +25,7 @@ app.include_router(BusinessController.router, prefix="/business", tags=["Busines
 app.include_router(WarehouseController.router, prefix="/warehouse", tags=["Warehouse Coffee"])
 app.include_router(IngredientController.router, prefix="/enum", tags=["Enum"])
 app.include_router(UnitController.router, prefix="/unit", tags=["Unit"])
+app.include_router(LogController.router, prefix="/logs", tags=["Logs"])
 
 if __name__ == "__main__":
     uvicorn.run(app, host="127.0.0.1", port=8000)
