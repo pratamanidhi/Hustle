@@ -1,15 +1,24 @@
+import json
+from dataclasses import asdict
+
 from HustleDatabase.Table.WarehouseTable import WarehouseTable as DbContext
 from HustleCommon.Enums.Ingredient import Ingredient as Enum
 from HustleDatabase.Repository.Warehouse.WarehouseRepository import WarehouseRepository as Repo
 from HustleDatabase.Model.Warehouse.WarehouseModel import WarehouseModel as Warehouse
 from datetime import datetime
-from HustleBussiness.Log.LogBusiness import LogBusiness as Log
-from HustleDatabase.Model.Logs.DailyLogModel import DailyLogModel as Model
+from HustleBussiness.Log.LogBusiness import LogBusiness as LogBusiness
+from HustleBussiness.Unit.UnitBusiness import UnitBusiness as Unit
+from HustleDatabase.Model.Logs.DailyLogModel import DailyLogModel as DailyModel
+from HustleDatabase.Model.Logs.LogModel import LogModel as LogModel
+from HustleUtils.Utils import Utils as Utils
 
 repo = Repo()
 dbContext = DbContext()
-dailyLog = Model()
-log = Log()
+dailyLog = DailyModel()
+log = LogModel()
+logBusiness = LogBusiness()
+unit = Unit()
+utils = Utils()
 
 class WarehouseBusiness:
     def __init__(self) -> None:
@@ -53,13 +62,36 @@ class WarehouseBusiness:
                 model.lastInput = datetime.now()
                 model.lastOutput = checkStock['lastOutput']
 
+            unitGuid = self.GetUnitGuid(model.unit)
+            model.unit = unitGuid
+            self.InsertLog(isOut, model)
             self.InsertIntoDaliyLog(model, isOut)
             return repo.StockUpdate(context, model)
         return "No Data"
 
+    def GetUnitGuid(self, unitName):
+        result = unit.GetUnitByName(unitName)
+        return result['guid']
+
+    def InsertLog(self, isOut, data):
+        data.lastInput = utils.FormatedDate(data.lastInput)
+        data.lastOutput = utils.FormatedDate(data.lastOutput)
+        action = {
+            "data": {
+                "isOut": isOut,
+                "input": json.dumps(data.dict())
+            }
+        }
+        log.user = data.updatedBy
+        log.action = str(action)
+
+        result = logBusiness.InsertLog(log)
+        return result
+
+
     def InsertIntoDaliyLog(self, model, isOut):
         print(model)
-        latestDatas = log.GetDailyLogByName(model.name)
+        latestDatas = logBusiness.GetDailyLogByName(model.name)
         print(f"latest: {latestDatas}")
         dailyLog.name = model.name
         dailyLog.price = model.price
@@ -78,7 +110,7 @@ class WarehouseBusiness:
                 else:
                     dailyLog.stockIn = int(latestDatas['stockIn']) + int(model.stockIn)
 
-            result = log.UpdateDailyStock(model, isOut)
+            result = logBusiness.UpdateDailyStock(model, isOut)
         else:
 
             if isOut:
@@ -86,5 +118,5 @@ class WarehouseBusiness:
             else:
                 dailyLog.stockIn = int(model.stockIn)
 
-            result = log.InsertDailyLog(dailyLog)
+            result = logBusiness.InsertDailyLog(dailyLog)
         return result
