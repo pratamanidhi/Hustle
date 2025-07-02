@@ -11,9 +11,11 @@ class UserManagementAPI:
                 'username': username,
                 'password': password
             }
+            print('param', params)
             response = requests.post(Api.login, json=params)
             if response.status_code == 200:
                 data = response.json()
+                print(data)
                 return data
             else:
                 return None

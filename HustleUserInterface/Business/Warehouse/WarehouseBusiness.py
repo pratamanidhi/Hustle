@@ -67,7 +67,12 @@ class WarehouseBusiness:
     def UpdateItem(self, item):
 
         data = item["data"][0]
-        data["price"] = int(data["price"].replace('Rp', '').replace('.', '').strip())
+
+        if item['inPrice'] != '':
+            data['price'] = item['itemPrice']
+        else:
+            data["price"] = int(data["price"].replace('Rp', '').replace('.', '').strip())
+
         data["priceUnit"] = int(data["priceUnit"].replace('Rp', '').replace('.', '').strip())
         data["lastInput"] = None
         data["lastOutput"] = None
@@ -80,6 +85,12 @@ class WarehouseBusiness:
 
     def GetUnit(self):
         return unit.GetAllUnit()
+
+    def DeleteStock(self, item):
+        data = item['data'][0]
+        return warehouse.DeleteStock(item['type'], data['guid'])
+
+
 
 
 

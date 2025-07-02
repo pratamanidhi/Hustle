@@ -1,12 +1,18 @@
 from datetime import datetime
 from nicegui import ui, context
 from HustleUserInterface.Business.Warehouse.WarehouseBusiness import WarehouseBusiness as Warehouse
+from HustleUserInterface.Common.Button import Button as Button
 from HustleUserInterface.Common.StockEnum import StockEnum as enum
 from HustleUserInterface.Common.Modal.ModalElement import ModalElement as modal
+from Common.Layout.Layout import Layout as Layout
+from Common.Session.Session import Session as Session
 import json
 
 
 warehouse = Warehouse()
+button = Button()
+layout = Layout()
+session = Session()
 def GetColumn():
     return [
         {'name': 'name', 'label': 'Name', 'field': 'name'},
@@ -19,7 +25,6 @@ def GetColumn():
 
 def TableRender(stock_type, title, userInfo):
     with ui.column().classes('w-full max-w-screen-md'):
-        ui.separator()
         ui.label(title).classes('text-lg font-bold mb-2')
 
         if userInfo['isAdmin']:
@@ -62,7 +67,7 @@ def TableRender(stock_type, title, userInfo):
 
                     <q-btn 
                         v-else-if="col.name === 'action'" 
-                        color="primary" size="sm" 
+                        color="amber-500" size="sm" 
                         label="Edit" 
                         @click="() => $parent.$emit('edit', props.row)" />
 
@@ -93,39 +98,32 @@ def TableRender(stock_type, title, userInfo):
 
 @ui.page('/warehouse')
 def WarehouseContent():
-    loading = ui.label("Loading...")
+    with ui.row().classes('w-full h-screen items-center justify-center') as container:
+        ui.label('Loading Data..')
+        ui.spinner('dots', size='lg', color='red')
 
     async def init():
-        await ui.run_javascript('await new Promise(resolve => setTimeout(resolve, 200));')
-
-        js_user = await ui.run_javascript('localStorage.getItem("user")')
-        if js_user and js_user != 'null':
-            user = json.loads(js_user)
-            context.client.storage['user'] = user
-
-            username = user['username']
-            is_admin = user['isAdmin']
-
-            if is_admin == 1:
-                admin = True
-            else:
-                admin = False
-
-            userInfo = {
-                'name' : username,
-                'isAdmin' : admin
-            }
+        result = await session.Session()
+        if result is not False:
+            layout.Header(result)
 
             with ui.row().classes('w-full justify-evenly'):
-                TableRender(enum.Coffee, 'Coffee Stock', userInfo)
-                # TableRender(enum.Juice, 'Juice Stock', userInfo)
-                # TableRender(enum.MilkAndCream, 'Milk And Cream Stock', userInfo)
-                # TableRender(enum.Powder, 'Powder Stock', userInfo)
-                # TableRender(enum.Syrup, 'Syrup Stock', userInfo)
-                # TableRender(enum.Tea, 'Tea Stock', userInfo)
-                # TableRender(enum.Topping, 'Topping Stock', userInfo)
-                # TableRender(enum.Other, 'Other Stock', userInfo)
+                TableRender(enum.Coffee, 'Coffee Stock', result)
+                TableRender(enum.Juice, 'Juice Stock', result)
+                TableRender(enum.MilkAndCream, 'Milk And Cream Stock', result)
+                TableRender(enum.Powder, 'Powder Stock', result)
+                TableRender(enum.Syrup, 'Syrup Stock', result)
+                TableRender(enum.Tea, 'Tea Stock', result)
+                TableRender(enum.Topping, 'Topping Stock', result)
+                TableRender(enum.Other, 'Other Stock', result)
+
+            container.visible = False
         else:
             ui.notify("No login info found", type='warning')
             ui.navigate.to('/')
+
     ui.timer(0.1, init, once=True)
+
+
+
+

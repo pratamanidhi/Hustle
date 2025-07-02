@@ -11,6 +11,7 @@ from HustleBussiness.Unit.UnitBusiness import UnitBusiness as Unit
 from HustleDatabase.Model.Logs.DailyLogModel import DailyLogModel as DailyModel
 from HustleDatabase.Model.Logs.LogModel import LogModel as LogModel
 from HustleUtils.Utils import Utils as Utils
+from HustleCommon.Enums.Ingredient import Ingredient as Ingredient
 
 repo = Repo()
 dbContext = DbContext()
@@ -32,6 +33,20 @@ class WarehouseBusiness:
             Enum.Tea: (dbContext.Tea, Warehouse),
             Enum.Topping: (dbContext.Topping, Warehouse),
         }
+
+    def GetAllStock(self):
+        datas = []
+        for i in Ingredient:
+            if i in self.context_map:
+                context, model = self.context_map[i]
+                result = repo.GetStock(context, model)
+
+                data = {
+                    'type': i,
+                    'data': result
+                }
+                datas.append(data)
+        return datas
 
     def GetStock(self, types: Enum):
         if types in self.context_map:
@@ -68,6 +83,13 @@ class WarehouseBusiness:
             self.InsertIntoDaliyLog(model, isOut)
             return repo.StockUpdate(context, model)
         return "No Data"
+
+    def DeleteStock(self, types:Enum, model):
+        if types in self.context_map:
+            context, _ = self.context_map[types]
+            return repo.Delete(context, model)
+        return False
+
 
     def GetUnitGuid(self, unitName):
         result = unit.GetUnitByName(unitName)
