@@ -3,8 +3,16 @@ from HustleDatabase.Table.WarehouseTable import WarehouseTable as DbContext
 from HustleDatabase.Model.Ingredient.IngredientModel import IngredientModel as Model
 from HustleCommon.Enums.Ingredient import Ingredient as Enum
 
+#region business
+from HustleBussiness.Warehouse.WarehouseBussiness import WarehouseBusiness as Warehouse
+from HustleBussiness.Log.LogBusiness import LogBusiness as LogBusiness
+
 repo = Repo()
 dbContext = DbContext()
+
+#region business
+warehouse = Warehouse()
+log = LogBusiness()
 
 class BusinessBusiness:
     def __init__(self) -> None:
@@ -26,3 +34,5 @@ class BusinessBusiness:
 
     def CalculatePrice(self, business):
         return sum(business.ingredient) + business.expectedProfit
+
+

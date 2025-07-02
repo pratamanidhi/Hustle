@@ -67,29 +67,30 @@ class WarehouseBusiness:
     def UpdateItem(self, item):
 
         data = item["data"][0]
-        unitGuid = unit.GetUnitByName(data['unit'])
 
-        if unitGuid is not False:
-            print(item)
-            data["price"] = int(data["price"].replace('Rp', '').replace('.', '').strip())
-            data["priceUnit"] = int(data["priceUnit"].replace('Rp', '').replace('.', '').strip())
-            data["lastInput"] = None
-            data["lastOutput"] = None
-            if item['isOut']:
-                data["stockOut"] = int(item["outQty"])
-            else:
-                data["stockIn"] = int(item['inQty'])
-            data["unit"] = unitGuid["guid"]
-
-            log.InsertLog(item)
-            result = warehouse.CheckOutStock(item["type"], item["isOut"], data)
-            return result
-
+        if item['inPrice'] != '':
+            data['price'] = item['itemPrice']
         else:
-            return False
+            data["price"] = int(data["price"].replace('Rp', '').replace('.', '').strip())
+
+        data["priceUnit"] = int(data["priceUnit"].replace('Rp', '').replace('.', '').strip())
+        data["lastInput"] = None
+        data["lastOutput"] = None
+        if item['isOut']:
+            data["stockOut"] = int(item["outQty"])
+        else:
+            data["stockIn"] = int(item['inQty'])
+        result = warehouse.CheckOutStock(item["type"], item["isOut"], data)
+        return result
 
     def GetUnit(self):
         return unit.GetAllUnit()
+
+    def DeleteStock(self, item):
+        data = item['data'][0]
+        return warehouse.DeleteStock(item['type'], data['guid'])
+
+
 
 
 

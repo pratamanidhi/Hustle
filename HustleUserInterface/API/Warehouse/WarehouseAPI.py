@@ -1,4 +1,6 @@
 import requests
+from nicegui.html import param
+
 from HustleUserInterface.Common.ApiUrl import APIUrl as Api
 
 class WarehouseAPI:
@@ -9,6 +11,19 @@ class WarehouseAPI:
         try:
             params = {'types': type}
             response = requests.get(Api.warehouse, params)
+            if response.status_code == 200:
+                data = response.json()
+                return data
+            else:
+                print(f"Failed with status code: {response.status_code}")
+                return None
+        except Exception as e:
+            print(f"Exception occurred: {e}")
+            return None
+
+    def GetAllStock(self):
+        try:
+            response = requests.get(Api.getAllWarehouse)
             if response.status_code == 200:
                 data = response.json()
                 return data
@@ -47,6 +62,25 @@ class WarehouseAPI:
                 return False
         except Exception as e:
             print(f'Exception occured: {e}')
+            return None
+
+    def DeleteStock(self, type, guid):
+        try:
+            param = {
+                'types': type
+            }
+
+            guid = {
+                'guid': guid
+            }
+
+            response = requests.delete(Api.deleteStock, params=param, json=guid)
+            if response.status_code == 200:
+                return True
+            else:
+                return False
+        except Exception as e:
+            print(f'Exception occured: ', e)
             return None
 
 
