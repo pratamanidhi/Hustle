@@ -64,6 +64,7 @@ class ModalElement:
                 item = {
                     "type": type,
                     "inQty": inQty.value,
+                    ""
                     "isOut": isOut,
                     "data": datas
                 }

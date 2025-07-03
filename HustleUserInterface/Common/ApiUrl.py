@@ -4,7 +4,7 @@ mainiUrl = 'http://localhost:8000'
 class APIUrl:
 
     warehouse = mainiUrl + f"/{Enum.Warehouse}/get-stock"
-    getAllWarehouse = mainiUrl + f"{Enum.Warehouse}/get-all-stock"
+    getAllWarehouse = mainiUrl + f"/{Enum.Warehouse}/get-all-stock"
     login = mainiUrl + f"/{Enum.UserManagement}/user-login"
     ingredientEnum = mainiUrl + f"/{Enum.Enum}/ingredient"
     ingredient = mainiUrl + f"/{Enum.Business}/ingredient"
