@@ -1,9 +1,24 @@
 from nicegui import ui
 from Common.Session.Session import Session as Session
 from Common.Layout.Layout import Layout as Layout
+from Common.Modal.ModalElement import ModalElement as Modal
+from Business.Warehouse.WarehouseBusiness import WarehouseBusiness as WarehouseBusiness
+from Business.Common.CommonBusiness import CommonBusiness as CommonBusiness
 
 session = Session()
 layout = Layout()
+modal = Modal()
+warehouse = WarehouseBusiness()
+common = CommonBusiness()
+
+def GenerateContent(stocks, ingredients, units):
+
+    def CreateMenuItem():
+        modal.ShowAddMenuModal(stocks, ingredients, units)
+
+
+    ui.button('Add new', on_click=CreateMenuItem) \
+        .props('flat dense')
 
 @ui.page('/menu')
 def MenuContent():
@@ -14,10 +29,14 @@ def MenuContent():
     async def Init():
         result = await session.Session()
         if result is not False:
+            allStocks = warehouse.GetAllStock()
+            ingredients = common.GetIngredient()
+            units = common.GetUnit()
             layout.Header(result)
 
             ui.label('This page still under construction')
             container.visible = False
+            GenerateContent(allStocks, ingredients, units)
         else:
             ui.notify("No login info found", type='warning')
             ui.navigate.to('/')

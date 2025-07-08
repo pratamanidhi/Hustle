@@ -1,9 +1,11 @@
 from nicegui import ui
+from nicegui.elements.button_dropdown import DropdownButton
 
 from HustleUserInterface.Business.Warehouse.WarehouseBusiness import WarehouseBusiness as Business
+from Business.Common.CommonBusiness import CommonBusiness as CommonBusiness
 
 business = Business()
-
+commonBusiness = CommonBusiness()
 
 class ModalElement:
     def __init__(self) -> None:
@@ -234,5 +236,124 @@ class ModalElement:
 
             # Run async init after UI renders
             ui.timer(0.1, init_form, once=True)
+
+        dialog.open()
+
+    def ShowAddMenuModal(self, ingredients, categories, units):
+        categoryRef = [None]
+        ingredientRef = [None]
+        unitRef = [None]
+        ingredientContainer = [None]
+        ingredientDatas = []
+        ingredientDropdown = []
+
+        dialog = ui.dialog().props('maximized')
+        textInput = []
+
+        def categoryLabel(new_label: str):
+            categoryRef[0].props(f'label={new_label}')
+            categoryRef[0].update()
+            ui.notify(f'You selected {new_label}')
+
+        def ingredientLabel(new_label: str):
+            ingredientRef[0].props(f'label={new_label}')
+            ingredientRef[0].update()
+            ui.notify(f'Selected ingredient: {new_label}')
+
+        def unitLabel(new_label: str):
+            unitRef[0].props(f'label={new_label}')
+            unitRef[0].update()
+            ui.notify(f'selected unit: {new_label}')
+
+        def getIngredient(name):
+            print(name)
+
+        def getValue(name):
+            nonlocal ingredientDatas
+            value = next((val['value'] for val in categories if val['name'] == name), None)
+
+            if value is not None:
+                for ingredient in ingredients:
+                    if ingredient['type'] == value:
+                        ingredientDatas = ingredient['data']
+                        break
+                else:
+                    ingredientDatas = []
+
+            print('Updated ingredientDropdown:', ingredientDatas)
+
+            if ingredientContainer[0]:
+                ingredientContainer[0].clear()
+
+                if ingredientDatas:
+                    for ingredient in ingredientDatas:
+                        item_name = ingredient['name']
+                        with ingredientContainer[0]:
+                            ui.item(item_name, on_click=lambda name=item_name: (
+                                getIngredient(name),
+                                ingredientLabel(name)
+                            ))
+                else:
+                    with ingredientContainer[0]:
+                        ui.item('No data found', on_click=lambda: ui.notify('No data was found'))
+
+            print(ingredientDropdown)
+
+
+
+        def AddIngredient():
+            with ui.grid(columns=4).classes('gap-4'):
+                with ui.dropdown_button('Category', auto_close=True) as dropdown:
+                    categoryRef[0] = dropdown
+                    for category in categories:
+                        name = category['name']
+                        ui.item(name, on_click=lambda name=name: (getValue(name), categoryLabel(name)))
+
+                with ui.dropdown_button('Ingredient', auto_close=True) as dropdown:
+                    ingredientRef[0] = dropdown
+                    container = ui.element('div')  # plain HTML div for dynamic items
+                    ingredientContainer[0] = container
+
+                ui.input(label=f'Ingredient{len(textInput) + 1}') \
+                    .props('dense outlined') \
+                    .classes('w-60 text-sm')
+
+                with ui.dropdown_button('Unit', auto_close=True):
+                    for unit in units:
+                        name = unit['name']
+                        ui.item(name, on_click=lambda name=name: unitLabel(name))
+
+        with dialog, ui.card().classes('w-full h-full p-6 max-w-none shadow-xl'):
+            ui.button(icon='close', on_click=dialog.close) \
+                .props('flat round dense color=grey') \
+                .classes('absolute top-2 right-2 z-10')
+
+            with ui.stepper().props('vertical').classes('w-full') as stepper:
+                with ui.step('Product Name'):
+                    ui.label('Name of your product')
+                    with ui.grid(columns=2).classes('gap-2'):
+                        ui.label('Product Name')
+                        productName = ui.input(label='Product Name') \
+                            .props('dense outlined') \
+                            .classes('w-60 text-sm')
+                    with ui.stepper_navigation():
+                        ui.button('Next', on_click=stepper.next)
+
+
+                with ui.step('Ingredient'):
+                    ui.label('Input Ingredient')
+                    ui.button('Add', on_click=AddIngredient) \
+                        .classes('text-sm px-3 py-1 rounded-md') \
+                        .props('color=amber-500 text-black')
+                    with ui.stepper_navigation():
+                        ui.button('Next', on_click=stepper.next)
+                        ui.button('Back', on_click=stepper.previous).props('flat')
+
+
+                with ui.step('Bake'):
+                    ui.label('Bake for 20 minutes')
+                    with ui.stepper_navigation():
+                        ui.button('Done', on_click=lambda: ui.notify('Yay!', type='positive'))
+                        ui.button('Back', on_click=stepper.previous).props('flat')
 
         dialog.open()

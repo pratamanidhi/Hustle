@@ -126,8 +126,6 @@ class WarehouseBusiness:
                     'data' : newRow
                 }
                 newDatas.append(newDataOfStock)
-
-        print(newDatas)
         return newDatas
 
 
