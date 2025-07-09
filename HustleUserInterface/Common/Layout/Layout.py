@@ -55,7 +55,7 @@ class Layout():
 
             if userInfo['isAdmin']:
                 def CreateNewItem():
-                    modal().ShowAddModal(stockType, userInfo)
+                    modal.ShowAddModal(stockType, userInfo)
 
                 ui.button('Add new', on_click=CreateNewItem) \
                     .props('flat dense')
