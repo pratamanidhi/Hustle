@@ -147,7 +147,6 @@ class Layout():
                         with ui.tabs().props('vertical').classes('w-50') as tabs:
                             chart = ui.tab('Chart Report', icon='bar_chart')
                             table = ui.tab('Table Report', icon='view_list')
-                            movie = ui.tab('Movies', icon='movie')
 
                     with splitter.after:
                         with ui.input('Date') as date:
@@ -168,9 +167,6 @@ class Layout():
                             with ui.tab_panel(table):
                                 for reportValue in data:
                                     self.RenderTableReport(reportValue)
-                            with ui.tab_panel(movie):
-                                ui.label('Movies').classes('text-h4')
-                                ui.label('Content of movies')
             container.visible = False
 
         def UpdateDatas():
