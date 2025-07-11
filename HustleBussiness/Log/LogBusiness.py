@@ -1,7 +1,10 @@
+from HustleCommon.Enums.Ingredient import Ingredient
 from HustleDatabase.Repository.Logs.LogRepository import LogRepository as Repository
-from datetime import datetime
+from HustleDatabase.Table.LogTable import LogTable as DbContext
+from datetime import datetime, date
 
 repo = Repository()
+dbContext = DbContext()
 class LogBusiness():
     def __init__(self) -> None:
         pass
@@ -25,3 +28,37 @@ class LogBusiness():
 
     def UpdateDailyStock(self, model, isOut):
         return repo.UpdateDailyStock(model, isOut)
+
+    def GetReportByCategory(self, types):
+        category = Ingredient(types).name
+        print("category", category)
+        return repo.GetReportByCategory(dbContext.DailyStock, category)
+
+
+    def InputIntoDailyStockReport(self, model):
+        model.datetime = date.today().isoformat()
+        model.lastUpdated = datetime.now()
+        checkReport = self.CheckDailyReport(model)
+
+        if checkReport is not None:
+            if model.stockIn is None or model.stockIn == int(checkReport['stockIn']):
+                model.stockIn = 0
+
+            if model.stockOut is None or model.stockOut == int(checkReport['stockOut']):
+                model.stockOut = 0
+
+            model.totalStockTransaction = int(model.stockIn) + int(model.stockOut)
+
+
+
+        if checkReport is not None:
+            model.guid = checkReport['guid']
+            model.stockOut = int(model.stockOut) + int(checkReport['stockOut'])
+            model.stockIn = int(model.stockIn) + int(checkReport['stockIn'])
+            model.totalStockTransaction = int(model.totalStockTransaction) + int(checkReport['totalStockTransaction'])
+            return repo.UpdateDailyReport(dbContext.DailyStock, model)
+        else:
+            return repo.InsertIntoDailyReport(dbContext.DailyStock, model)
+
+    def CheckDailyReport(self, model):
+        return repo.CheckDailyReport(dbContext.DailyStock, model)

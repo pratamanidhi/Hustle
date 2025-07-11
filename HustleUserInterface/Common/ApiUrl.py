@@ -14,3 +14,4 @@ class APIUrl:
     getAllUnit = mainiUrl + f"/{Enum.Unit}/get-unit"
     getUnitBytName = mainiUrl + f"/{Enum.Unit}/get-unit-by-name"
     insertLogs = mainiUrl + f"/{Enum.Log}/insert-log"
+    getReport = mainiUrl + f"/{Enum.Report}/get-report"

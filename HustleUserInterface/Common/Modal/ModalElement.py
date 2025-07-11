@@ -10,7 +10,6 @@ class ModalElement:
         pass
 
     def ShowModal(self, datas, type, userInfo):
-        print(userInfo)
         if isinstance(datas, dict):
             datas = [datas]
 
