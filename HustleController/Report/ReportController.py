@@ -9,3 +9,7 @@ service = Report()
 @router.get('/get-report')
 def GetReport(types: stockType):
     return service.GetReportByCategory(types)
+
+@router.get('/get-report-all')
+def GetAllReport():
+    return service.GetAllReport()

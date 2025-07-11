@@ -129,17 +129,7 @@ class Layout():
             table.on('edit', handle_edit)
             ui.separator()
 
-    def GetReportMainContent(self, stockType):
-        def reportData():
-            data = []
-            for stock in stockType:
-                reports = report.GetReport(stock)
-                data.append({
-                    "name": StockEnum(stock).name,
-                    "data": reports
-                })
-            return data
-
+    def GetReportMainContent(self):
         content_container = ui.column().classes('w-full h-full')
 
         def renderContent():
@@ -149,7 +139,7 @@ class Layout():
 
             content_container.clear()
 
-            data = reportData()
+            data = report.GetAllReport()
 
             with content_container:
                 with ui.splitter(value=10).classes('w-full h-full') as splitter:
@@ -238,7 +228,6 @@ class Layout():
         rowsData = []
 
         for reportData in datas['data']:
-            print("reportData", reportData)
             dt_object = datetime.fromisoformat(reportData['lastUpdated'])
             data = {
                 'name' : reportData['name'],

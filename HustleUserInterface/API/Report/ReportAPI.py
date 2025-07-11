@@ -14,3 +14,10 @@ class ReportApi:
             return response.json()
         else:
             return None
+
+    def GetAllReport(self):
+        response = requests.get(Api.getAllReport)
+        if response.status_code == 200:
+            return response.json()
+        else:
+            return None

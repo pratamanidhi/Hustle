@@ -17,7 +17,7 @@ def ReportContent():
             with ui.row().classes('w-full h-screen items-center justify-center') as container:
                 ui.label('Loading Data..')
                 ui.spinner('dots', size='lg', color='red')
-            layout.GetReportMainContent(StockEnum)
+            layout.GetReportMainContent()
             container.visible = False
         else:
             ui.notify("No login info found", type='warning')

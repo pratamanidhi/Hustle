@@ -31,8 +31,17 @@ class LogBusiness():
 
     def GetReportByCategory(self, types):
         category = Ingredient(types).name
-        print("category", category)
         return repo.GetReportByCategory(dbContext.DailyStock, category)
+
+    def GetAllReport(self):
+        datas = []
+        for category in Ingredient:
+            data = {
+                'name' : Ingredient(category).name,
+                'data' : repo.GetReportByCategory(dbContext.DailyStock, Ingredient(category).name)
+            }
+            datas.append(data)
+        return datas
 
 
     def InputIntoDailyStockReport(self, model):

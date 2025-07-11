@@ -7,3 +7,6 @@ class ReportBusiness:
 
     def GetReport(self, type):
         return api.GetReport(type)
+
+    def GetAllReport(self):
+        return api.GetAllReport()
