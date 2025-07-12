@@ -7,3 +7,4 @@ class Enum(StrEnum):
     Business = "business"
     Unit = "unit"
     Log = "logs"
+    Report = "report"

@@ -12,6 +12,7 @@ from HustleDatabase.Model.Logs.DailyLogModel import DailyLogModel as DailyModel
 from HustleDatabase.Model.Logs.LogModel import LogModel as LogModel
 from HustleUtils.Utils import Utils as Utils
 from HustleCommon.Enums.Ingredient import Ingredient as Ingredient
+from HustleDatabase.Model.Logs.DailyStockReport import DailyStockReport as StockReport
 
 repo = Repo()
 dbContext = DbContext()
@@ -20,6 +21,7 @@ log = LogModel()
 logBusiness = LogBusiness()
 unit = Unit()
 utils = Utils()
+stockReport = StockReport()
 
 class WarehouseBusiness:
     def __init__(self) -> None:
@@ -66,14 +68,23 @@ class WarehouseBusiness:
             context, _ = self.context_map[types]
             checkStock = repo.CheckStock(context, model)
 
+            if checkStock['totalStock'] is None:
+                checkStock['totalStock'] = 0
+
+            if checkStock['stockIn'] is None:
+                checkStock['stockIn'] = 0
+
+            if checkStock['stockOut'] is None:
+                checkStock['stockOut'] = 0
+
             if isOut:
-                model.totalStock = int(checkStock['totalStock']) - model.stockOut
-                model.stockOut =  model.stockOut
+                model.totalStock = int(checkStock['totalStock']) - int(model.stockOut)
+                model.stockOut =  int(model.stockOut)
                 model.lastInput = checkStock['lastInput']
                 model.lastOutput = datetime.now()
             else:
-                model.totalStock = int(checkStock['totalStock']) + model.stockIn
-                model.stockIn = model.stockIn
+                model.totalStock = int(checkStock['totalStock']) + int(model.stockIn)
+                model.stockIn = int(model.stockIn)
                 model.lastInput = datetime.now()
                 model.lastOutput = checkStock['lastOutput']
 
@@ -81,6 +92,7 @@ class WarehouseBusiness:
             model.unit = unitGuid
             self.InsertLog(isOut, model)
             self.InsertIntoDaliyLog(model, isOut)
+            self.InsertToDailyReport(types, model)
             return repo.StockUpdate(context, model)
         return "No Data"
 
@@ -110,11 +122,20 @@ class WarehouseBusiness:
         result = logBusiness.InsertLog(log)
         return result
 
+    def InsertToDailyReport(self, types, model):
+        if types in self.context_map:
+            context, models = self.context_map[types]
+            stockReport.name = model.name
+            stockReport.category = context
+            stockReport.stockOut = model.stockOut
+            stockReport.stockIn = model.stockIn
+            stockReport.totalStockTransaction = model.totalStock
+            logBusiness.InputIntoDailyStockReport(stockReport)
+
+
 
     def InsertIntoDaliyLog(self, model, isOut):
-        print(model)
         latestDatas = logBusiness.GetDailyLogByName(model.name)
-        print(f"latest: {latestDatas}")
         dailyLog.name = model.name
         dailyLog.price = model.price
 

@@ -10,7 +10,6 @@ class ModalElement:
         pass
 
     def ShowModal(self, datas, type, userInfo):
-        print(userInfo)
         if isinstance(datas, dict):
             datas = [datas]
 
@@ -114,8 +113,6 @@ class ModalElement:
                 ui.label('Manage Stock').classes('text-2xl font-semibold text-gray-800')
             else:
                 ui.label('Checkout Stock Item').classes('text-2xl font-semibold text-gray-800')
-
-            print(datas)
 
             ui.table(columns=columns, rows=rows, row_key='name').classes('w-full rounded border border-gray-300')
             ui.separator()

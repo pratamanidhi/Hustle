@@ -11,7 +11,6 @@ class LogsAPI:
                 "user": user,
                 "action": str(data)
             }
-            print(datas)
             response = requests.post(Api.insertLogs, json=datas)
             if response.status_code == 200:
                 return True

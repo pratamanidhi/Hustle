@@ -49,6 +49,7 @@ class WarehouseAPI:
 
     def CheckOutStock(self, type, isOut, datas):
         try:
+            print("payload", datas)
             param = {
                 'types' : type,
                 'isOut' : str(isOut).lower()

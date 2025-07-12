@@ -1,10 +1,14 @@
 from nicegui import ui
 from Common.Button import Button as Button
 from HustleUserInterface.Common.Modal.ModalElement import ModalElement as Modal
+from Business.Report.ReportBusiness import ReportBusiness as Report
+from Common.StockEnum import StockEnum
+from datetime import datetime
 
 
 modal = Modal()
 button = Button()
+report = Report()
 class Layout():
     def __init__(self) -> None:
         pass
@@ -12,8 +16,6 @@ class Layout():
     def Header(self, datas):
         async def handleLogout():
             await button.ButtonLogout()
-
-
 
         with ui.header().classes('bg-[#292928] text-white'):
             with ui.element('div').classes('flex justify-between w-full items-center'):
@@ -27,10 +29,14 @@ class Layout():
                 def goToMenu():
                     ui.navigate.to('/menu')
 
+                def goToReport():
+                    ui.navigate.to('/report')
+
                 ui.button('Home', on_click=goToHome).props('flat dense')
                 ui.button('Warehouse', on_click=goToWarehouse).props('flat dense')
                 if datas['isAdmin']:
                     ui.button('Menu', on_click=goToMenu).props('flat dense')
+                    ui.button('Report', on_click=goToReport).props('flat dense')
 
 
 
@@ -120,4 +126,144 @@ class Layout():
 
             table.on('edit', handle_edit)
             ui.separator()
+
+    def GetReportMainContent(self):
+        content_container = ui.column().classes('w-full h-full')
+
+        def applyFilter(from_date, to_date):
+            ui.notify(f'Filter applied: {from_date} → {to_date}')
+            renderContent()
+
+        def renderContent():
+            with ui.row().classes('w-full min-h-16 items-center justify-center gap-2') as container:
+                ui.label('Loading Data..')
+                ui.spinner('dots', size='lg', color='red')
+
+            content_container.clear()
+
+            data = report.GetAllReport()
+
+            with content_container:
+                with ui.splitter(value=10).classes('w-full h-full') as splitter:
+                    with splitter.before:
+                        with ui.tabs().props('vertical').classes('w-50') as tabs:
+                            chart = ui.tab('Chart Report', icon='bar_chart')
+                            table = ui.tab('Table Report', icon='view_list')
+
+                    with splitter.after:
+                        self.FilterDate(onApply=applyFilter)
+
+                        with ui.tab_panels(tabs, value=chart).props('vertical').classes('w-full h-full'):
+                            with ui.tab_panel(chart):
+                                for reportValue in data:
+                                    self.RenderChartReport(reportValue)
+                            with ui.tab_panel(table):
+                                for reportValue in data:
+                                    self.RenderTableReport(reportValue)
+            container.visible = False
+        renderContent()
+
+
+    def RenderChartReport(self, datas):
+        ui.separator()
+        ui.label(datas['name'])
+
+        chart = ui.highchart({
+            'title': datas['name'],
+            'chart': {'type': 'bar'},
+            'xAxis': {'categories': ['Stock In', 'Stock Out']},
+            'series': [],
+        }).classes('w-full h-64')
+
+        def loadData():
+            reports = datas['data']
+            charts = []
+            if reports is not None:
+                for reportData in reports:
+                    data = []
+                    if reportData['stockIn'] is not None:
+                        data.append(reportData['stockIn'])
+                    if reportData['stockOut'] is not None:
+                        data.append(reportData['stockOut'])
+
+                    charts.append({
+                        'name': reportData['name'],
+                        'data': data,
+                    })
+
+            chart.options['series'] = charts
+            chart.update()
+            ui.separator()
+        ui.timer(0.5, loadData, once=True)
+
+    def RenderTableReport(self, datas):
+        ui.separator()
+        ui.label(datas['name'])
+
+        columns = [
+            {'name': 'Name', 'label': 'Name', 'field': 'name', 'required': True, 'align': 'left'},
+            {'name': 'Stock In', 'label': 'Stock In', 'field': 'stockIn', 'sortable': True},
+            {'name': 'Stock Out', 'label': 'Stock Out', 'field': 'stockOut', 'sortable': True},
+            {'name': 'Total Transaction', 'label': 'Total Transaction', 'field': 'totalTransaction', 'sortable': True},
+            {'name': 'Date', 'label': 'Date', 'field': 'date', 'sortable': True},
+            {'name': 'Last Update', 'label': 'Last Update', 'field': 'lastUpdate', 'sortable': True},
+        ]
+
+        rowsData = []
+
+        for reportData in datas['data']:
+            dt_object = datetime.fromisoformat(reportData['lastUpdated'])
+            data = {
+                'name' : reportData['name'],
+                'stockIn' : reportData['stockIn'],
+                'stockOut' : reportData['stockOut'],
+                'totalTransaction' : reportData['totalStockTransaction'],
+                'date' : reportData['datetime'],
+                'lastUpdate' : dt_object.strftime('%Y-%b-%d %H:%M:%S')
+            }
+            rowsData.append(data)
+
+        ui.table(
+            columns=columns,
+            rows=rowsData,
+            pagination={
+                'rowsPerPage': 4,
+                'page': 1,
+            }
+        ).props('multi-sort')
+
+        ui.separator()
+
+    def FilterDate(self, onApply):
+        def UpdateDatas():
+            fromValue = fromDate.value
+            toValue = toDate.value
+            ui.notify('Applying filter...')
+            onApply(fromValue, toValue)
+
+        with ui.grid(columns=4).classes('gap-3'):
+            fromDate = ui.input('From').props('dense').classes('w-32 text-sm')
+            with ui.menu().props('no-parent-event') as menu:
+                with ui.date().bind_value(fromDate):
+                    with ui.row().classes('justify-end'):
+                        ui.button('Close', on_click=menu.close).props('flat color=amber-500 text-black')
+            with fromDate.add_slot('append'):
+                ui.icon('edit_calendar').on('click', menu.open).classes('cursor-pointer')
+
+            toDate = ui.input('To').props('dense').classes('w-32 text-sm')
+            with ui.menu().props('no-parent-event') as menu:
+                with ui.date().bind_value(toDate):
+                    with ui.row().classes('justify-end'):
+                        ui.button('Close', on_click=menu.close).props('flat color=amber-500 text-black')
+            with toDate.add_slot('append'):
+                ui.icon('edit_calendar').on('click', menu.open).classes('cursor-pointer')
+
+            ui.button('Apply Filter', on_click=UpdateDatas).classes(
+                'text-sm px-3 py-1 rounded-md').props('color=amber-500 text-black')
+
+
+
+
+
+
 

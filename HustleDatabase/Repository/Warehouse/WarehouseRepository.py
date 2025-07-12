@@ -11,7 +11,6 @@ class WarehouseRepository():
     def GetStock(self, table, model):
         query = f'select A.guid, A.name, A.description, A.stockIn, A.stockOut, A.totalStock, A.lastInput, A.lastOutput, A.updatedBy, A.price, B.name as unit, A.packaging, A.priceUnit from {table} AS A INNER JOIN Unit AS B WHERE A.unit = B.guid'
         stock = db.Execute( query, model)
-        print(query)
         return stock
 
     def AddStock(self, table, model):
