@@ -11,7 +11,6 @@ class Button():
         async def handleLogin():
             try:
                 result = userManagement.Login(username, password)
-                print('Login result:', result)
 
                 if result is False:
                     ui.notify("Login Failed: Invalid username or password.", type="negative")

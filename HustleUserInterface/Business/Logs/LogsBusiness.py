@@ -7,9 +7,6 @@ class LogsBusiness:
 
     def InsertLog(self,data):
         datas = data['data'][0]
-        print(f'user: {datas['updatedBy']}')
-        print(f'datas: {datas}')
-
         logsData = {
             "data" : {
                 "isOut": data['isOut'],

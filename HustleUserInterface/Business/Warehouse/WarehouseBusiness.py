@@ -137,12 +137,13 @@ class WarehouseBusiness:
         return warehouse.AddStock(item)
 
     def UpdateItem(self, item):
-        print(item)
-
         data = item["data"][0]
 
-        if item['inPrice'] is not None:
-            data['price'] = item['itemPrice']
+        if 'inPrice' in item:
+            if item['inPrice'] is not None:
+                data['price'] = item['itemPrice']
+            else:
+                data["price"] = int(data["price"].replace('Rp', '').replace('.', '').strip())
         else:
             data["price"] = int(data["price"].replace('Rp', '').replace('.', '').strip())
 
