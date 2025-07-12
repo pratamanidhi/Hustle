@@ -8,15 +8,14 @@ session = Session()
 
 @ui.page('/report')
 def ReportContent():
-
+    with ui.row().classes('w-full h-screen items-center justify-center') as container:
+        ui.label('Loading Data..')
+        ui.spinner('dots', size='lg', color='red')
 
     async def init():
         result = await session.Session()
         if result is not False:
             layout.Header(result)
-            with ui.row().classes('w-full h-screen items-center justify-center') as container:
-                ui.label('Loading Data..')
-                ui.spinner('dots', size='lg', color='red')
             layout.GetReportMainContent()
             container.visible = False
         else:

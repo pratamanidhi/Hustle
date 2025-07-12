@@ -114,8 +114,6 @@ class ModalElement:
             else:
                 ui.label('Checkout Stock Item').classes('text-2xl font-semibold text-gray-800')
 
-            print(datas)
-
             ui.table(columns=columns, rows=rows, row_key='name').classes('w-full rounded border border-gray-300')
             ui.separator()
             with ui.column().classes('relative p-4 border rounded-md'):

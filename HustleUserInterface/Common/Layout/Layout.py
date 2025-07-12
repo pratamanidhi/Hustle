@@ -17,8 +17,6 @@ class Layout():
         async def handleLogout():
             await button.ButtonLogout()
 
-
-
         with ui.header().classes('bg-[#292928] text-white'):
             with ui.element('div').classes('flex justify-between w-full items-center'):
                 ui.label('Hustle Management System').classes('text-xl')
@@ -132,6 +130,10 @@ class Layout():
     def GetReportMainContent(self):
         content_container = ui.column().classes('w-full h-full')
 
+        def applyFilter(from_date, to_date):
+            ui.notify(f'Filter applied: {from_date} → {to_date}')
+            renderContent()
+
         def renderContent():
             with ui.row().classes('w-full min-h-16 items-center justify-center gap-2') as container:
                 ui.label('Loading Data..')
@@ -149,18 +151,9 @@ class Layout():
                             table = ui.tab('Table Report', icon='view_list')
 
                     with splitter.after:
-                        with ui.input('Date') as date:
-                            with ui.menu().props('no-parent-event') as menu:
-                                with ui.date().bind_value(date):
-                                    with ui.row().classes('justify-end'):
-                                        ui.button('Close', on_click=menu.close).props('flat')
-                            with date.add_slot('append'):
-                                ui.icon('edit_calendar').on('click', menu.open).classes('cursor-pointer')
+                        self.FilterDate(onApply=applyFilter)
 
-                        ui.button('Add new', on_click=UpdateDatas).props('flat dense')
-
-                        with ui.tab_panels(tabs, value=chart) \
-                                .props('vertical').classes('w-full h-full'):
+                        with ui.tab_panels(tabs, value=chart).props('vertical').classes('w-full h-full'):
                             with ui.tab_panel(chart):
                                 for reportValue in data:
                                     self.RenderChartReport(reportValue)
@@ -168,11 +161,6 @@ class Layout():
                                 for reportValue in data:
                                     self.RenderTableReport(reportValue)
             container.visible = False
-
-        def UpdateDatas():
-            ui.notify('Update clicked')
-            renderContent()
-
         renderContent()
 
 
@@ -245,4 +233,37 @@ class Layout():
         ).props('multi-sort')
 
         ui.separator()
+
+    def FilterDate(self, onApply):
+        def UpdateDatas():
+            fromValue = fromDate.value
+            toValue = toDate.value
+            ui.notify('Applying filter...')
+            onApply(fromValue, toValue)
+
+        with ui.grid(columns=4).classes('gap-3'):
+            fromDate = ui.input('From').props('dense').classes('w-32 text-sm')
+            with ui.menu().props('no-parent-event') as menu:
+                with ui.date().bind_value(fromDate):
+                    with ui.row().classes('justify-end'):
+                        ui.button('Close', on_click=menu.close).props('flat color=amber-500 text-black')
+            with fromDate.add_slot('append'):
+                ui.icon('edit_calendar').on('click', menu.open).classes('cursor-pointer')
+
+            toDate = ui.input('To').props('dense').classes('w-32 text-sm')
+            with ui.menu().props('no-parent-event') as menu:
+                with ui.date().bind_value(toDate):
+                    with ui.row().classes('justify-end'):
+                        ui.button('Close', on_click=menu.close).props('flat color=amber-500 text-black')
+            with toDate.add_slot('append'):
+                ui.icon('edit_calendar').on('click', menu.open).classes('cursor-pointer')
+
+            ui.button('Apply Filter', on_click=UpdateDatas).classes(
+                'text-sm px-3 py-1 rounded-md').props('color=amber-500 text-black')
+
+
+
+
+
+
 
