@@ -36,7 +36,6 @@ class WarehouseAPI:
 
     def AddStock(self, value):
         try:
-            print(value)
             param = {'types': value['type']}
             response = requests.post(Api.addStock, params=param, json=value['data'])
             if response.status_code == 200:
@@ -49,14 +48,12 @@ class WarehouseAPI:
 
     def CheckOutStock(self, type, isOut, datas):
         try:
-            print("payload", datas)
             param = {
                 'types' : type,
                 'isOut' : str(isOut).lower()
             }
 
             response = requests.put(Api.checkOutStock, params=param, json=datas)
-            print(response)
             if response.status_code == 200:
                 return True
             else:

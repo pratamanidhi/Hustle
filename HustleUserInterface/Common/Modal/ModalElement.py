@@ -1,11 +1,11 @@
 from nicegui import ui
-from nicegui.elements.button_dropdown import DropdownButton
-
 from HustleUserInterface.Business.Warehouse.WarehouseBusiness import WarehouseBusiness as Business
 from Business.Common.CommonBusiness import CommonBusiness as CommonBusiness
+from starlette.formparsers import MultiPartParser
 
 business = Business()
 commonBusiness = CommonBusiness()
+
 
 class ModalElement:
     def __init__(self) -> None:
@@ -132,7 +132,7 @@ class ModalElement:
                         inPrice = ui.input(label='Item Price', value=formatedPrice) \
                             .props('type=number dense outlined') \
                             .classes('flex-1 text-sm').bind_visibility_from(userInfo['isAdmin'])
-                        ui.button('Update Price', on_click=onUpdatePrice)\
+                        ui.button('Update Price', on_click=onUpdatePrice) \
                             .classes('text-sm px-3 py-1 rounded-md')
 
                     outQty = ui.input(label='Quantity Out') \
@@ -151,8 +151,6 @@ class ModalElement:
         dialog.open()
 
     def ShowAddModal(self, type, userInfo):
-        print(type)
-
         dialog = ui.dialog()
 
         with dialog, ui.card().classes('w-full max-w-screen-md p-6 relative space-y-4 shadow-xl'):
@@ -227,130 +225,227 @@ class ModalElement:
                             .classes('text-sm px-3 py-1 rounded-md') \
                             .props('color=amber-500 text-black')
 
-                # Hide spinner and show form
                 container.visible = False
                 form_container.classes(remove='hidden')
 
-            # Run async init after UI renders
             ui.timer(0.1, init_form, once=True)
 
         dialog.open()
 
+
     def ShowAddMenuModal(self, ingredients, categories, units):
-        categoryRef = [None]
-        ingredientRef = [None]
-        unitRef = [None]
-        ingredientContainer = [None]
-        ingredientDatas = []
-        ingredientDropdown = []
-
         dialog = ui.dialog().props('maximized')
-        textInput = []
 
-        def categoryLabel(new_label: str):
-            categoryRef[0].props(f'label={new_label}')
-            categoryRef[0].update()
-            ui.notify(f'You selected {new_label}')
+        def categoryForm():
+            return {category["value"]: category["name"] for category in categories}
 
-        def ingredientLabel(new_label: str):
-            ingredientRef[0].props(f'label={new_label}')
-            ingredientRef[0].update()
-            ui.notify(f'Selected ingredient: {new_label}')
+        def unitForm():
+            return {unit['guid']: unit['name'] for unit in units}
 
-        def unitLabel(new_label: str):
-            unitRef[0].props(f'label={new_label}')
-            unitRef[0].update()
-            ui.notify(f'selected unit: {new_label}')
+        def ingredientForm(category_id):
+            option = {}
+            for ingredient in ingredients:
+                if ingredient['type'] == category_id:
+                    for ingredientData in ingredient['data']:
+                        option[f"{ingredientData['guid']} ({ingredientData['priceUnit']})"] = ingredientData['name']
+            return option
 
-        def getIngredient(name):
-            print(name)
+        categoryDatas = categoryForm()
+        unitDatas = unitForm()
 
-        def getValue(name):
-            nonlocal ingredientDatas
-            value = next((val['value'] for val in categories if val['name'] == name), None)
+        inputFormContainer = None
+        ingredientListContainer = None
 
-            if value is not None:
-                for ingredient in ingredients:
-                    if ingredient['type'] == value:
-                        ingredientDatas = ingredient['data']
-                        break
-                else:
-                    ingredientDatas = []
+        ingredientForms = []
+        listOfIngredient = []
 
-            print('Updated ingredientDropdown:', ingredientDatas)
+        def inputForm():
+            formData = {
+                'category': '',
+                'ingredient': '',
+                'price': 0,
+                'doseInput': None,
+                'selectedUnit': None,
+                'selectedIngredient': None,
+            }
+            ingredientForms.append(formData)
 
-            if ingredientContainer[0]:
-                ingredientContainer[0].clear()
+            with inputFormContainer:
+                with ui.grid(columns=4).classes('gap-3'):
 
-                if ingredientDatas:
-                    for ingredient in ingredientDatas:
-                        item_name = ingredient['name']
-                        with ingredientContainer[0]:
-                            ui.item(item_name, on_click=lambda name=item_name: (
-                                getIngredient(name),
-                                ingredientLabel(name)
-                            ))
-                else:
-                    with ingredientContainer[0]:
-                        ui.item('No data found', on_click=lambda: ui.notify('No data was found'))
+                    def onChangeCategory(e, formData=formData):
+                        formData['category'] = e.value
+                        options = ingredientForm(e.value)
+                        ingredient_placeholder.clear()
+                        with ingredient_placeholder:
+                            formData['selectedIngredient'] = ui.select(
+                                options=options,
+                                with_input=True,
+                                on_change=lambda ev: onChangeIngredient(ev, formData),
+                                label='Ingredient'
+                            ).props('dense outlined').classes('w-60 text-sm')
 
-            print(ingredientDropdown)
+                    def onChangeIngredient(e, formData=formData):
+                        formData['ingredient'] = e.value
+                        selected_guid = e.value.split(' ')[0]
+                        for ingredient in ingredients:
+                            for ingredientData in ingredient['data']:
+                                if ingredientData['guid'] == selected_guid:
+                                    price = int(ingredientData['priceUnit'].replace('Rp', '').replace('.', '').strip())
+                                    formData['price'] = price
+                                    return
+
+                    ui.select(
+                        options=categoryDatas,
+                        with_input=True,
+                        on_change=onChangeCategory,
+                        label='Category'
+                    ).props('dense outlined').classes('w-60 text-sm')
+
+                    ingredient_placeholder = ui.row()
+
+                    with ingredient_placeholder:
+                        formData['selectedIngredient'] = ui.select(
+                            options={}, with_input=True,
+                            on_change=lambda e: onChangeIngredient(e, formData),
+                            label='Ingredient'
+                        ).props('dense outlined').classes('w-60 text-sm')
+
+                    formData['doseInput'] = ui.input(label='Dose').props('type=number dense outlined').classes(
+                        'w-60 text-sm')
+                    formData['selectedUnit'] = ui.select(
+                        options=unitDatas,
+                        with_input=True,
+                        label='Unit'
+                    ).props('dense outlined').classes('w-60 text-sm')
+
+        def onAddItem():
+            inputForm()
+
+        def onSubmitAll():
+            listOfIngredient.clear()
+            for form in ingredientForms:
+                form['doseInput'] = form['doseInput'].value if form['doseInput'] else ''
+                form['selectedUnit'] = form['selectedUnit'].value if form['selectedUnit'] else ''
+                form['selectedIngredient'] = form['selectedIngredient'].value if form['selectedIngredient'] else ''
+                listOfIngredient.append(form)
 
 
+            ingredientListContainer.clear()
+            with ingredientListContainer:
+                self.DevelopMenu(listOfIngredient, ingredients, units)
 
-        def AddIngredient():
-            with ui.grid(columns=4).classes('gap-4'):
-                with ui.dropdown_button('Category', auto_close=True) as dropdown:
-                    categoryRef[0] = dropdown
-                    for category in categories:
-                        name = category['name']
-                        ui.item(name, on_click=lambda name=name: (getValue(name), categoryLabel(name)))
+                ui.separator()
 
-                with ui.dropdown_button('Ingredient', auto_close=True) as dropdown:
-                    ingredientRef[0] = dropdown
-                    container = ui.element('div')  # plain HTML div for dynamic items
-                    ingredientContainer[0] = container
+                totalProductionCost = sum(item['price'] * int(item['doseInput']) for item in listOfIngredient)
+                self.ProductionCost(totalProductionCost)
 
-                ui.input(label=f'Ingredient{len(textInput) + 1}') \
-                    .props('dense outlined') \
-                    .classes('w-60 text-sm')
 
-                with ui.dropdown_button('Unit', auto_close=True):
-                    for unit in units:
-                        name = unit['name']
-                        ui.item(name, on_click=lambda name=name: unitLabel(name))
 
         with dialog, ui.card().classes('w-full h-full p-6 max-w-none shadow-xl'):
-            ui.button(icon='close', on_click=dialog.close) \
-                .props('flat round dense color=grey') \
-                .classes('absolute top-2 right-2 z-10')
+            ui.button(icon='close', on_click=dialog.close).props('flat round dense color=grey').classes(
+                'absolute top-2 right-2 z-10')
 
             with ui.stepper().props('vertical').classes('w-full') as stepper:
                 with ui.step('Product Name'):
                     ui.label('Name of your product')
                     with ui.grid(columns=2).classes('gap-2'):
                         ui.label('Product Name')
-                        productName = ui.input(label='Product Name') \
-                            .props('dense outlined') \
-                            .classes('w-60 text-sm')
+                        ui.input(label='Product Name').props('dense outlined').classes('w-60 text-sm')
+
+                        ui.label('Upload image')
+                        MultiPartParser.spool_max_size = 1024 * 1024 * 5  # 5 MB
+                        ui.upload(on_upload=lambda e: ui.notify(f'Uploaded {e.name}')).classes('max-w-full')
+
                     with ui.stepper_navigation():
                         ui.button('Next', on_click=stepper.next)
 
-
                 with ui.step('Ingredient'):
                     ui.label('Input Ingredient')
-                    ui.button('Add', on_click=AddIngredient) \
-                        .classes('text-sm px-3 py-1 rounded-md') \
-                        .props('color=amber-500 text-black')
+
+                    inputFormContainer = ui.column().classes('gap-4')
+                    inputForm()
+
+                    with ui.row().classes('gap-2 mt-4'):
+                        ui.button('Add item', on_click=onAddItem).classes('text-sm px-3 py-1 rounded-md').props(
+                            'color=amber-500 text-black')
+                        ui.button('Submit All', on_click=onSubmitAll).classes('text-sm px-3 py-1 rounded-md').props(
+                            'color=green text-white')
+
                     with ui.stepper_navigation():
                         ui.button('Next', on_click=stepper.next)
                         ui.button('Back', on_click=stepper.previous).props('flat')
 
-
                 with ui.step('Bake'):
-                    ui.label('Bake for 20 minutes')
+                    ingredientListContainer = ui.column().classes('gap-2 mt-2')
+                    ingredientListContainer
+
+
+
                     with ui.stepper_navigation():
                         ui.button('Done', on_click=lambda: ui.notify('Yay!', type='positive'))
                         ui.button('Back', on_click=stepper.previous).props('flat')
 
         dialog.open()
+
+    def DevelopMenu(self, listOfIngredient, ingredients, units):
+        row = []
+
+        for i, ingredient in enumerate(listOfIngredient, 1):
+            ingredient['selectedIngredient'] = ingredient['selectedIngredient'].split(' ')[0]
+
+            for ingredientList in ingredients:
+                for ingredientData in ingredientList['data']:
+                    if ingredientData['guid'] == ingredient['selectedIngredient']:
+                        ingredient['selectedIngredient'] = ingredientData['name']
+
+            for unit in units:
+                if unit.get('guid') == ingredient['selectedUnit']:
+                    ingredient['selectedUnit'] = unit.get('name')
+
+            datas = {
+                'id': i,
+                'ingredient': ingredient['selectedIngredient'],
+                'dose': ingredient['doseInput'],
+                'unit': ingredient['selectedUnit'],
+                'price': f'Rp. {ingredient['price']}',
+                'totalCost': f'Rp. {int(ingredient['price']) * int(ingredient['doseInput'])}'
+            }
+            row.append(datas)
+
+        ui.label('Summary of the ingredient')
+        columns = [
+            {'name': 'id', 'label': 'No', 'field': 'id', 'required': True, 'align': 'left'},
+            {'name': 'ingredient', 'label': 'Ingredient', 'field': 'ingredient', 'required': True,
+             'align': 'left'},
+            {'name': 'dose', 'label': 'Dose', 'field': 'dose', 'sortable': False},
+            {'name': 'unit', 'label': 'Unit', 'field': 'unit', 'sortable': False},
+            {'name': 'price', 'label': 'Price PerMl', 'field': 'price', 'sortable': False},
+            {'name': 'totalCost', 'label': 'Total Cost', 'field': 'totalCost', 'sortable': False},
+        ]
+        ui.table(columns=columns, rows=row, row_key='name')
+        return listOfIngredient
+
+    def ProductionCost(self, TotalProductionCost):
+
+        def calculate():
+            total = int(profitInput.value) + int(TotalProductionCost)
+            finalPrice.text = f'Rp {total}'
+
+        with ui.grid(columns=2).classes('gap-3'):
+            ui.label('Production Cost')
+            ui.label(f'Rp {TotalProductionCost}')
+
+            ui.label('Target Profit')
+            profitInput = ui.input(label='Profit').props('type=number dense outlined').classes('w-60 text-sm')
+            ui.button('Add item', on_click=calculate).classes('text-sm px-3 py-1 rounded-md').props(
+                'color=amber-500 text-black')
+
+        ui.separator()
+
+        with ui.grid(columns=2).classes('gap-3'):
+            ui.label('Final pricing point')
+            finalPrice = ui.label('Rp 0').classes('text-green-600 font-bold text-2xl')
+
+
+
