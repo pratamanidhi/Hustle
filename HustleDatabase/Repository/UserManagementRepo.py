@@ -2,12 +2,13 @@ from HustleDatabase.Connection import Connection
 from HustleDatabase.Model import UserLogin, UserManagement
 from datetime import datetime
 
+
+db = Connection()
 class UserManagementRepo():
     def __init__(self) -> None:
         pass
 
     def UserLogin(self, login):
-        db = Connection()
         query = 'SELECT * FROM "User.Management" WHERE username = ? AND password = ?'
         result = db.Execute(query, (login.username, login.password))
         if result and result[0] is not None:
@@ -18,8 +19,12 @@ class UserManagementRepo():
         else:
             return False
 
+    def GetAllUser(self):
+        query = 'select * from "User.Management" where isAdmin = 0'
+        result = db.Execute(query)
+        return result
+
     def UpdateLoginData(self, login, isLogin):
-        db = Connection()
         if isLogin:
             query = 'Update "User.Management" set lastLogin = ? where username = ?'
         else:

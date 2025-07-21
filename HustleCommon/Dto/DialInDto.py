@@ -7,7 +7,7 @@ class DialInDto(BaseModel):
     time: float = None
     calibrationYield: float = None
     sweetSpot: float = None
-    grinder: str = None
+    tools: str = None
     grindSize: float = None
     mouthFeel: str = None
     black: str = None

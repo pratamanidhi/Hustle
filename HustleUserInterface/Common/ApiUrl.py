@@ -6,6 +6,7 @@ class APIUrl:
     warehouse = mainiUrl + f"/{Enum.Warehouse}/get-stock"
     getAllWarehouse = mainiUrl + f"/{Enum.Warehouse}/get-all-stock"
     login = mainiUrl + f"/{Enum.UserManagement}/user-login"
+    getAllUser = mainiUrl + f"/{Enum.UserManagement}/get-all-user"
     ingredientEnum = mainiUrl + f"/{Enum.Enum}/ingredient"
     ingredient = mainiUrl + f"/{Enum.Business}/ingredient"
     addStock = mainiUrl + f"/{Enum.Warehouse}/add-stock"
@@ -16,3 +17,4 @@ class APIUrl:
     insertLogs = mainiUrl + f"/{Enum.Log}/insert-log"
     getReport = mainiUrl + f"/{Enum.Report}/get-report"
     getAllReport = mainiUrl + f"/{Enum.Report}/get-report-all"
+    getAllTools = mainiUrl + f"/{Enum.Warehouse}/get-tools"

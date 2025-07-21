@@ -8,3 +8,6 @@ class UserBusiness():
 
     def Login(self, username, password):
         return api.Login(username, password)
+
+    def GetAlluser(self):
+        return api.GetAllUser()
