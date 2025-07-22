@@ -18,3 +18,5 @@ class APIUrl:
     getReport = mainiUrl + f"/{Enum.Report}/get-report"
     getAllReport = mainiUrl + f"/{Enum.Report}/get-report-all"
     getAllTools = mainiUrl + f"/{Enum.Warehouse}/get-tools"
+    getAllDialIn = mainiUrl + f"/{Enum.DialIn}/get-all-dialIn"
+    insertDialIn = mainiUrl + f"/{Enum.DialIn}/add-dialIn"

@@ -21,7 +21,7 @@ class DialInBusiness():
         model.time = input.time
         model.calibrationYield = input.calibrationYield
         model.sweetSpot = input.sweetSpot
-        model.grinder = input.grinder
+        model.tools = input.tools
         model.grindSize = input.grindSize
         model.mouthFeel = input.mouthFeel
         model.black = input.black

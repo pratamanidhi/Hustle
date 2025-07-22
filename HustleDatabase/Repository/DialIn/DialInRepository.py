@@ -1,5 +1,6 @@
 from HustleDatabase.ConnectionLog import ConnectionLogs as Connection
 import uuid
+import json
 
 db = Connection()
 class DialInRepository():
@@ -7,24 +8,44 @@ class DialInRepository():
         pass
 
     def GetDialInAllData(self):
-        query = "select * from DialIn"
-        result = db.Execute(query)
+        query = "SELECT * FROM DialIn"
+        rows = db.Execute(query)
+        result = []
+
+        for row in rows:
+            rowDict = dict(row)
+            try:
+                if rowDict['dialedBy']:
+                    rowDict['dialedBy'] = json.loads(rowDict['dialedBy'])
+            except json.JSONDecodeError:
+                rowDict['dialedBy'] = []
+
+            try:
+                if rowDict['tools']:
+                    rowDict['tools'] = json.loads(rowDict['tools'])
+            except json.JSONDecodeError:
+                rowDict['tools'] = []
+
+            result.append(rowDict)
+
         return result
 
     def InsertDialInData(self, model):
         guid = str(uuid.uuid4())
-        query = f'insert into DialIn(guid, beansName, date, roastDate, dialedBy, dose, time, calibrationYield, sweetSpot, grinder, grindSize, mouthFeel, black, blackNotes, white, whiteNotes, updatedAt) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)'
+        dialedBy = json.dumps(model.dialedBy) if model.dialedBy else None
+        tools = json.dumps(model.tools) if model.tools else None
+        query = f'insert into DialIn(guid, beansName, date, roastDate, dialedBy, dose, time, calibrationYield, sweetSpot, tools, grindSize, mouthFeel, black, blackNotes, white, whiteNotes, updatedAt) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)'
         result = db.Execute(query, (
             guid,
             model.beansName,
             model.date,
             model.roastDate,
-            model.dialedBy,
+            dialedBy,
             model.dose,
             model.time,
             model.calibrationYield,
             model.sweetSpot,
-            model.grinder,
+            tools,
             model.grindSize,
             model.mouthFeel,
             model.black,

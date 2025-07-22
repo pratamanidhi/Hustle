@@ -1,16 +1,18 @@
 from pydantic import BaseModel
+from typing import List, Optional
+
 class DialInDto(BaseModel):
-    beansName: str = None
-    roastDate: str = None
-    dialedBy: str = None
-    dose: float = None
-    time: float = None
-    calibrationYield: float = None
-    sweetSpot: float = None
-    tools: str = None
-    grindSize: float = None
-    mouthFeel: str = None
-    black: str = None
-    blackNotes: str = None
-    white: str = None
-    whiteNotes: str = None
+    beansName: Optional[str] = None
+    roastDate: Optional[str] = None
+    dialedBy: Optional[List[str]] = None
+    dose: Optional[float] = None
+    time: Optional[float] = None
+    calibrationYield: Optional[float] = None
+    sweetSpot: Optional[float] = None
+    tools: Optional[List[str]] = None
+    grindSize: Optional[float] = None
+    mouthFeel: Optional[str] = None
+    black: Optional[str] = None
+    blackNotes: Optional[str] = None
+    white: Optional[str] = None
+    whiteNotes: Optional[str] = None

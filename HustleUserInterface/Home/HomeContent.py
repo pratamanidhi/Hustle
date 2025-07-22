@@ -1,6 +1,7 @@
 from nicegui import ui, context
 from Common.Session.Session import Session as Session
 from Common.Layout.Layout import Layout as Layout
+from Common.Modal.ModalElement import ModalElement as Modal
 from HustleUserInterface.Business.Warehouse.WarehouseBusiness import WarehouseBusiness as Warehouse
 from HustleUserInterface.Business.UserManagement.UserBusiness import UserBusiness as User
 from HustleUserInterface.Business.Tools.ToolsBussiness import ToolsBusiness as Tools
@@ -9,9 +10,21 @@ from HustleUserInterface.Business.Tools.ToolsBussiness import ToolsBusiness as T
 session = Session()
 layout = Layout()
 
-warehouse = Warehouse()
-user = User()
-tools = Tools()
+whBusiness = Warehouse()
+userBusiness = User()
+toolsBusiness = Tools()
+modal = Modal()
+
+def GenerateContent(warehouse, user, tools):
+
+    def AddDialIn():
+        ui.notify("Dial in is clicked")
+        modal.AddDialInModal(warehouse, user, tools)
+
+    ui.button('Add new', on_click=AddDialIn) \
+        .props('flat dense')
+
+
 @ui.page('/home')
 def HomeContent():
     with ui.row().classes('w-full h-screen items-center justify-center') as container:
@@ -24,13 +37,10 @@ def HomeContent():
             layout.Header(result)
 
             ui.label(f'Hi! {result['name']}, Welcome to Hustle management system')
-            wh = warehouse.GetStock(1)
-            usr = user.GetAlluser()
-            tool = tools.GetTools()
-
-            print("warehouse: ", wh)
-            print("user: ", usr)
-            print("tools: ", tool)
+            warehouse = whBusiness.GetStock(1)
+            user = userBusiness.GetAlluser()
+            tool = toolsBusiness.GetTools()
+            GenerateContent(warehouse, user, tool)
 
 
             container.visible = False

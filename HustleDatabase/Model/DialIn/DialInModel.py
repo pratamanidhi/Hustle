@@ -1,15 +1,17 @@
 from pydantic import BaseModel
+from typing import List, Optional
+
 class DialInModel(BaseModel):
     guid: str = None
     beansName: str = None
     date: str = None
     roastDate : str = None
-    dialedBy: str = None
+    dialedBy: Optional[List[str]] = None
     dose: float = None
     time: float = None
     calibrationYield: float = None
     sweetSpot: float = None
-    tools: str = None
+    tools: Optional[List[str]] = None
     grindSize: float = None
     mouthFeel: str = None
     black: str = None
