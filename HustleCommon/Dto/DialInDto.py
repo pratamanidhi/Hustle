@@ -13,6 +13,8 @@ class DialInDto(BaseModel):
     grindSize: Optional[float] = None
     mouthFeel: Optional[str] = None
     black: Optional[str] = None
-    blackNotes: Optional[str] = None
+    espressoNotes: Optional[str] = None
+    americanoNotes: Optional[str] = None
     white: Optional[str] = None
-    whiteNotes: Optional[str] = None
+    cappuccinoNotes: Optional[str] = None
+    latteNotes: Optional[str] = None

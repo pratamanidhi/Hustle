@@ -34,7 +34,7 @@ class DialInRepository():
         guid = str(uuid.uuid4())
         dialedBy = json.dumps(model.dialedBy) if model.dialedBy else None
         tools = json.dumps(model.tools) if model.tools else None
-        query = f'insert into DialIn(guid, beansName, date, roastDate, dialedBy, dose, time, calibrationYield, sweetSpot, tools, grindSize, mouthFeel, black, blackNotes, white, whiteNotes, updatedAt) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)'
+        query = f'insert into DialIn(guid, beansName, date, roastDate, dialedBy, dose, time, calibrationYield, sweetSpot, tools, grindSize, mouthFeel, black, espressoNotes, americanoNotes, white, cappuccinoNotes, latteNotes, updatedAt) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)'
         result = db.Execute(query, (
             guid,
             model.beansName,
@@ -49,9 +49,11 @@ class DialInRepository():
             model.grindSize,
             model.mouthFeel,
             model.black,
-            model.blackNotes,
+            model.espressoNotes,
+            model.americanoNotes,
             model.white,
-            model.whiteNotes,
+            model.cappuccinoNotes,
+            model.latteNotes,
             model.updatedAt
         ))
         return result

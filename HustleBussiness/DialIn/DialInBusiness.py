@@ -25,9 +25,11 @@ class DialInBusiness():
         model.grindSize = input.grindSize
         model.mouthFeel = input.mouthFeel
         model.black = input.black
-        model.blackNotes = input.blackNotes
+        model.espressoNotes = input.espressoNotes
+        model.americanoNotes = input.americanoNotes
         model.white = input.white
-        model.whiteNotes = input.whiteNotes
+        model.latteNotes = input.latteNotes
+        model.cappuccinoNotes = input.cappuccinoNotes
         model.updatedAt = str(datetime.now())
 
         result = repo.InsertDialInData(model)

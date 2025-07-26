@@ -261,6 +261,111 @@ class Layout():
             ui.button('Apply Filter', on_click=UpdateDatas).classes(
                 'text-sm px-3 py-1 rounded-md').props('color=amber-500 text-black')
 
+    def DialInContent(self, datas):
+        with ui.grid(columns=2).classes('gap-4'):
+            for data in datas:
+                self.DialInData(data)
+
+    def DialInData(self, data):
+        print("Dial in data: ", data)
+
+        with ui.column().classes('w-full relative p-4 border-2 rounded-3xl'):
+            # with ui.grid(columns=2).classes('gap-1'):
+            #     ui.label('Date').classes('font-semibold text-gray-800')
+            #     dates = datetime.fromisoformat(data['updatedAt'])
+            #     newDate = dates.strftime("%d %b %Y %H:%M")
+            #     ui.label(newDate)
+            dates = datetime.fromisoformat(data['updatedAt'])
+            newDate = dates.strftime("%d %b %Y %H:%M")
+            ui.chip(icon='calendar_today', color='indigo-5', removable=False).style('color: white; padding-left: 8px; gap: 0.5rem').set_text(newDate)
+
+
+            with ui.tabs().classes('w-full') as tabs:
+                one = ui.tab('Dial In')
+                two = ui.tab('Body')
+            with ui.tab_panels(tabs, value=one).classes('w-full h-[550px]'):
+                with ui.tab_panel(one).classes('h-full'):
+                    ui.label('Dial in').classes('text-2xl font-semibold text-gray-800')
+                    ui.separator()
+
+                    with ui.row().classes('w-full items-center justify-center h-full'):
+                        with ui.column().classes('relative p-4 border-2 rounded-3xl h-full'):
+                            with ui.grid(columns=2).classes('gap-2'):
+                                ui.label('Beans Name').classes('font-semibold text-gray-800')
+                                ui.label(data["beansName"])
+
+                                ui.label('Roast Date').classes('font-semibold text-gray-800')
+                                ui.label(data['roastDate'])
+
+                                ui.label('Dialed By').classes('font-semibold text-gray-800')
+                                with ui.grid(columns=2).classes('gap-2'):
+                                    for employee in data['dialedBy']:
+                                        ui.chip(employee, removable=False, icon='person', color='indigo-5').style('color: white')
+
+                                ui.label('Dose').classes('font-semibold text-gray-800')
+                                ui.label(f'{data['dose']} gr')
+
+                                ui.label('Time').classes('font-semibold text-gray-800')
+                                ui.label(f'{data['time']} second')
+
+                                ui.label('Yield').classes('font-semibold text-gray-800')
+                                ui.label(f'{data['calibrationYield']} ml')
+
+                                ui.label('Sweet Spot').classes('font-semibold text-gray-800')
+                                ui.label(f'{data['sweetSpot']} ml')
+
+                                ui.label('Tools').classes('font-semibold text-gray-800')
+                                with ui.grid(columns=2).classes('gap-2'):
+                                    for tool in data['tools']:
+                                        ui.chip(tool, removable=False, icon='label', color='grey-3')
+
+                                ui.label('Grind Size').classes('font-semibold text-gray-800')
+                                ui.label(data['grindSize'])
+
+                                ui.label('Mouth Feels').classes('font-semibold text-gray-800')
+                                ui.label(data['mouthFeel'])
+
+                with ui.tab_panel(two).classes('h-full'):
+                    with ui.column().classes('h-full justify-start w-full'):
+                        ui.label('Body').classes('text-2xl font-semibold text-gray-800')
+                        ui.separator()
+
+                        # Remove centered row — use full-width instead
+                        with ui.column().classes('w-full relative p-4 border-2 rounded-3xl'):
+                            with ui.grid(columns=2).classes('gap-2 w-full'):
+                                ui.label('Black').classes('font-semibold text-gray-800')
+                                ui.label(data['black'])
+
+                                ui.label('Espresso').classes('font-semibold text-gray-800')
+                                ui.label(data['espressoNotes'])
+
+                                ui.label('Americano').classes('font-semibold text-gray-800')
+                                ui.label(data['americanoNotes'])
+
+                                ui.label('White').classes('font-semibold text-gray-800')
+                                ui.label(data['white'])
+
+                                ui.label('Cappuccino').classes('font-semibold text-gray-800')
+                                ui.label(data['cappuccinoNotes'])
+
+                                ui.label('Latte').classes('font-semibold text-gray-800')
+                                ui.label(data['latteNotes'])
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

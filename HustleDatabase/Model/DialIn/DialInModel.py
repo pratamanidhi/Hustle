@@ -15,8 +15,10 @@ class DialInModel(BaseModel):
     grindSize: float = None
     mouthFeel: str = None
     black: str = None
-    blackNotes: str = None
+    espressoNotes: str = None
+    americanoNotes: str = None
     white: str = None
-    whiteNotes: str = None
+    cappuccinoNotes: str = None
+    latteNotes: str = None
     updatedAt: str = None
 

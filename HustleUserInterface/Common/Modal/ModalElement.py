@@ -492,9 +492,11 @@ class ModalElement:
                 'grindSize': float(grindSize.value),
                 'mouthFeel': mouthFeels.value,
                 'black': black.value,
-                'blackNotes': blackNotes.value,
+                'espressoNotes': espressoNotes.value,
+                'americanoNotes': americanoNotes.value,
                 'white': white.value,
-                'whiteNotes': whiteNotes.value
+                'cappuccinoNotes': cappuccinoNotes.value,
+                'latteNotes': latteNotes.value
             }
 
             response = dialIn.InputDialIn(inputData)
@@ -591,8 +593,13 @@ class ModalElement:
                                 .props('dense outlined') \
                                 .classes('w-60 text-sm')
 
-                            ui.label('Black Notes')
-                            blackNotes = ui.textarea(label='Black Notes') \
+                            ui.label('Espresso')
+                            espressoNotes = ui.textarea(label='Espresso Notes') \
+                                .props('dense outlined') \
+                                .classes('w-60 text-sm')
+
+                            ui.label('Americano')
+                            americanoNotes = ui.textarea(label='Americano Notes') \
                                 .props('dense outlined') \
                                 .classes('w-60 text-sm')
 
@@ -601,8 +608,13 @@ class ModalElement:
                                 .props('dense outlined') \
                                 .classes('w-60 text-sm')
 
-                            ui.label('White Notes')
-                            whiteNotes = ui.textarea(label='White Notes') \
+                            ui.label('Cappuccino Notes')
+                            cappuccinoNotes = ui.textarea(label='Cappuccino Notes') \
+                                .props('dense outlined') \
+                                .classes('w-60 text-sm')
+
+                            ui.label('Latte Notes')
+                            latteNotes = ui.textarea(label='Latte Notes') \
                                 .props('dense outlined') \
                                 .classes('w-60 text-sm')
 
