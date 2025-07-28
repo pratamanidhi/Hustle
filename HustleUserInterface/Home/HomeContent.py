@@ -20,7 +20,6 @@ dialIn = DialIn()
 def GenerateContent(warehouse, user, tools):
 
     def AddDialIn():
-        ui.notify("Dial in is clicked")
         modal.AddDialInModal(warehouse, user, tools)
 
     ui.button('Add new', on_click=AddDialIn) \
@@ -42,16 +41,12 @@ def HomeContent():
         result = await session.Session()
         if result is not False:
             layout.Header(result)
-
-            ui.label(f'Hi! {result['name']}, Welcome to Hustle management system')
-            # warehouse = whBusiness.GetStock(1)
-            # user = userBusiness.GetAlluser()
-            # tool = toolsBusiness.GetTools()
-            # GenerateContent(warehouse, user, tool)
+            warehouse = whBusiness.GetStock(1)
+            user = userBusiness.GetAlluser()
+            tool = toolsBusiness.GetTools()
+            GenerateContent(warehouse, user, tool)
             dialInData = dialIn.GetAllDialIn()
             GenerateMainMenu(dialInData)
-
-
             container.visible = False
         else:
             ui.notify("No login info found", type='warning')

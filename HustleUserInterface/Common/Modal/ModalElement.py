@@ -235,7 +235,6 @@ class ModalElement:
 
         dialog.open()
 
-
     def ShowAddMenuModal(self, ingredients, categories, units):
         dialog = ui.dialog().props('maximized')
 
@@ -333,7 +332,6 @@ class ModalElement:
                 form['selectedIngredient'] = form['selectedIngredient'].value if form['selectedIngredient'] else ''
                 listOfIngredient.append(form)
 
-
             ingredientListContainer.clear()
             with ingredientListContainer:
                 self.DevelopMenu(listOfIngredient, ingredients, units)
@@ -342,8 +340,6 @@ class ModalElement:
 
                 totalProductionCost = sum(item['price'] * int(item['doseInput']) for item in listOfIngredient)
                 self.ProductionCost(totalProductionCost)
-
-
 
         with dialog, ui.card().classes('w-full h-full p-6 max-w-none shadow-xl'):
             ui.button(icon='close', on_click=dialog.close).props('flat round dense color=grey').classes(
@@ -382,8 +378,6 @@ class ModalElement:
                 with ui.step('Bake'):
                     ingredientListContainer = ui.column().classes('gap-2 mt-2')
                     ingredientListContainer
-
-
 
                     with ui.stepper_navigation():
                         ui.button('Done', on_click=lambda: ui.notify('Yay!', type='positive'))
@@ -460,7 +454,6 @@ class ModalElement:
         print("user data: ", userData)
         print("tools data: ", toolsData)
 
-
         def getUser():
             for user in userData:
                 name = user['username']
@@ -475,9 +468,6 @@ class ModalElement:
             for warehouse in warehouseData:
                 name = warehouse['name']
                 coffeeList.append(name)
-
-
-
 
         def onAddItem():
             inputData = {
@@ -508,22 +498,33 @@ class ModalElement:
             print('input data: ', inputData)
             ui.notify("input to db")
 
-
         with dialog, ui.card().classes('w-full max-w-screen-md p-6 relative space-y-4 shadow-xl'):
-                ui.button(icon='close', on_click=dialog.close) \
-                    .props('flat round dense color=grey') \
-                    .classes('absolute top-2 right-2 z-10')
 
-                ui.label('Add dial in').classes('text-2xl font-semibold text-gray-800')
-                ui.separator()
+            ui.button(icon='close', on_click=dialog.close) \
+                .props('flat round dense color=grey') \
+                .classes('absolute top-2 right-2 z-10')
 
-                with ui.row().classes('w-full h-screen items-center justify-center'):
-                    with ui.column().classes('relative p-4 border rounded-md'):
+            ui.label('Dial In Form').classes('text-2xl font-semibold text-gray-800')
+            dateNow = datetime.now().strftime("%d %b %Y %H:%M")
+            ui.chip( color='amber-500', removable=False).style(
+                'color: white; padding-left: 8px; gap: 0.5rem').set_text(dateNow)
+            ui.separator()
+
+
+            with ui.tabs().classes('w-full') as tabs:
+                one = ui.tab('Dial In')
+                two = ui.tab('Body')
+            with ui.tab_panels(tabs, value=one).classes('w-full h-[550px]'):
+                with ui.tab_panel(one).classes('h-full'):
+                    ui.label('Calibration').classes('text-2xl font-semibold text-gray-800')
+                    ui.separator()
+
+                    with ui.row().classes('w-full h-screen items-center justify-center'):
                         with ui.grid(columns=2).classes('gap-3'):
                             getCoffee()
                             ui.label('Beans Name')
                             beansName = ui.select(options=coffeeList, with_input=True,
-                                      on_change=lambda e: ui.notify(e.value))\
+                                                  on_change=lambda e: ui.notify(e.value)) \
                                 .props('dense outlined') \
                                 .classes('w-60 text-sm')
 
@@ -581,13 +582,12 @@ class ModalElement:
                                 .props('dense outlined') \
                                 .classes('w-60 text-sm')
 
-                ui.label('Notes Body').classes('text-2xl font-semibold text-gray-800')
-                ui.separator()
+                with ui.tab_panel(two).classes('h-full'):
+                    ui.label('Notes Body').classes('text-2xl font-semibold text-gray-800')
+                    ui.separator()
 
-                with ui.row().classes('w-full h-screen items-center justify-center'):
-                    with ui.column().classes('relative p-4 border rounded-md'):
+                    with ui.row().classes('w-full h-screen items-center justify-center'):
                         with ui.grid(columns=2).classes('gap-3'):
-
                             ui.label('Black')
                             black = ui.input(label='Black') \
                                 .props('dense outlined') \
@@ -618,11 +618,8 @@ class ModalElement:
                                 .props('dense outlined') \
                                 .classes('w-60 text-sm')
 
-                ui.button('Add product', on_click=onAddItem) \
-                    .classes('text-sm px-3 py-1 rounded-md') \
-                    .props('color=amber-500 text-black')
+            ui.button('Add product', on_click=onAddItem) \
+                .classes('text-sm px-3 py-1 rounded-md') \
+                .props('color=amber-500 text-black')
 
         dialog.open()
-
-
-

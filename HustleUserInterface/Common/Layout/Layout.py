@@ -270,11 +270,6 @@ class Layout():
         print("Dial in data: ", data)
 
         with ui.column().classes('w-full relative p-4 border-2 rounded-3xl'):
-            # with ui.grid(columns=2).classes('gap-1'):
-            #     ui.label('Date').classes('font-semibold text-gray-800')
-            #     dates = datetime.fromisoformat(data['updatedAt'])
-            #     newDate = dates.strftime("%d %b %Y %H:%M")
-            #     ui.label(newDate)
             dates = datetime.fromisoformat(data['updatedAt'])
             newDate = dates.strftime("%d %b %Y %H:%M")
             ui.chip(icon='calendar_today', color='indigo-5', removable=False).style('color: white; padding-left: 8px; gap: 0.5rem').set_text(newDate)
