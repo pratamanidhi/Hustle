@@ -492,11 +492,11 @@ class ModalElement:
             response = dialIn.InputDialIn(inputData)
 
             if response:
-                print(response)
+                dialog.close()
+                ui.notify("Success to save dial-in data")
+                ui.navigate.to('/home')
             else:
-                print(response)
-            print('input data: ', inputData)
-            ui.notify("input to db")
+                ui.notify("Failed to save dial-in")
 
         with dialog, ui.card().classes('w-full max-w-screen-md p-6 relative space-y-4 shadow-xl'):
 
