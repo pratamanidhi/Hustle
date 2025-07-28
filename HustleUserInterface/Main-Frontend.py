@@ -4,6 +4,7 @@ import Warehouse.WarehouseContent
 import Home.HomeContent
 import Menu.MenuContent
 import Report.ReportContent
+import Supplier.SupplierContent
 import Test.Test
 
 if __name__ in {"__main__", "__mp_main__"}:
