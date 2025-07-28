@@ -20,3 +20,5 @@ class APIUrl:
     getAllTools = mainiUrl + f"/{Enum.Warehouse}/get-tools"
     getAllDialIn = mainiUrl + f"/{Enum.DialIn}/get-all-dialIn"
     insertDialIn = mainiUrl + f"/{Enum.DialIn}/add-dialIn"
+    getAllSupplier = mainiUrl + f"/{Enum.Supplier}/get-all-supplier"
+    inputSupplier = mainiUrl + f"/{Enum.Supplier}/add-supplier"
