@@ -8,3 +8,6 @@ class WarehouseTable():
     Tea = "Tea"
     Topping = "Topping"
     Unit = "Unit"
+    Supplier = "Supplier"
+    BankAccount = "BankAccount"
+    OrderType = "OrderType"

@@ -1,0 +1,33 @@
+from fastapi import APIRouter, Body
+from HustleBussiness.Supplier.SupplierBussiness import SupplierBussiness as Business
+from HustleCommon.Dto.SupplierDto import SupplierDto as SupplierDto
+from HustleCommon.Dto.OrderTypeDto import OrderTypeDto as OrderTypeDto
+from HustleCommon.Dto.BankAccountDto import BankAccountDto as BankAccountDto
+
+router = APIRouter()
+service = Business()
+
+@router.get('/get-all-supplier')
+def GetAllSupplier():
+    return service.GetAllSupplier()
+
+@router.post('/add-supplier')
+def InsertSupplier(model: SupplierDto = Body(...)):
+    return service.InputSupplier(model)
+
+@router.get('/supplier-type')
+def GetSupplierType():
+    return service.GetAllSupplierType()
+
+@router.post('/add-supplier-type')
+def InputSupplierType(model: OrderTypeDto = Body(...)):
+    return service.InputSupplierType(model)
+
+@router.get('/get-bank-account')
+def GetBankAccount():
+    return service.GetAllBankAccount()
+
+@router.post('/add-bank-account')
+def InputBankAccount(model: BankAccountDto = Body(...)):
+    return service.InputBankAccount(model)
+
