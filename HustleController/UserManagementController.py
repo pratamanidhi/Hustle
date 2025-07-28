@@ -8,3 +8,7 @@ service = UserManagement()
 @router.post("/user-login")
 def UserLogin(user : Login):
     return service.UserLogin(user)
+
+@router.get("/get-all-user")
+def GetAlluser():
+    return service.GetAllUser()

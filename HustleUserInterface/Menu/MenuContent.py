@@ -33,8 +33,6 @@ def MenuContent():
             ingredients = common.GetIngredient()
             units = common.GetUnit()
             layout.Header(result)
-
-            ui.label('This page still under construction')
             container.visible = False
             GenerateContent(allStocks, ingredients, units)
         else:

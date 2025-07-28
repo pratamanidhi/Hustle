@@ -8,3 +8,6 @@ class UserManagementBussiness():
     def UserLogin(self, user):
         loginResult = UserMgmt.UserLogin(user)
         return loginResult
+
+    def GetAllUser(self):
+        return UserMgmt.GetAllUser()

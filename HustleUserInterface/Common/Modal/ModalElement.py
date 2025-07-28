@@ -2,9 +2,12 @@ from nicegui import ui
 from HustleUserInterface.Business.Warehouse.WarehouseBusiness import WarehouseBusiness as Business
 from Business.Common.CommonBusiness import CommonBusiness as CommonBusiness
 from starlette.formparsers import MultiPartParser
+from datetime import datetime, date
+from HustleUserInterface.Business.DialIn.DialInBussiness import DialInBussiness as DialIn
 
 business = Business()
 commonBusiness = CommonBusiness()
+dialIn = DialIn()
 
 
 class ModalElement:
@@ -232,7 +235,6 @@ class ModalElement:
 
         dialog.open()
 
-
     def ShowAddMenuModal(self, ingredients, categories, units):
         dialog = ui.dialog().props('maximized')
 
@@ -330,7 +332,6 @@ class ModalElement:
                 form['selectedIngredient'] = form['selectedIngredient'].value if form['selectedIngredient'] else ''
                 listOfIngredient.append(form)
 
-
             ingredientListContainer.clear()
             with ingredientListContainer:
                 self.DevelopMenu(listOfIngredient, ingredients, units)
@@ -339,8 +340,6 @@ class ModalElement:
 
                 totalProductionCost = sum(item['price'] * int(item['doseInput']) for item in listOfIngredient)
                 self.ProductionCost(totalProductionCost)
-
-
 
         with dialog, ui.card().classes('w-full h-full p-6 max-w-none shadow-xl'):
             ui.button(icon='close', on_click=dialog.close).props('flat round dense color=grey').classes(
@@ -379,8 +378,6 @@ class ModalElement:
                 with ui.step('Bake'):
                     ingredientListContainer = ui.column().classes('gap-2 mt-2')
                     ingredientListContainer
-
-
 
                     with ui.stepper_navigation():
                         ui.button('Done', on_click=lambda: ui.notify('Yay!', type='positive'))
@@ -447,5 +444,182 @@ class ModalElement:
             ui.label('Final pricing point')
             finalPrice = ui.label('Rp 0').classes('text-green-600 font-bold text-2xl')
 
+    def AddDialInModal(self, warehouseData, userData, toolsData):
+        dialog = ui.dialog()
+        userList = []
+        toolsList = []
+        coffeeList = []
+
+        print("warehouse data: ", warehouseData)
+        print("user data: ", userData)
+        print("tools data: ", toolsData)
+
+        def getUser():
+            for user in userData:
+                name = user['username']
+                userList.append(name)
+
+        def getTools():
+            for tool in toolsData:
+                name = tool['name']
+                toolsList.append(name)
+
+        def getCoffee():
+            for warehouse in warehouseData:
+                name = warehouse['name']
+                coffeeList.append(name)
+
+        def onAddItem():
+            inputData = {
+                'beansName': beansName.value,
+                'roastDate': dates.value,
+                'dialedBy': dialedBy.value,
+                'dose': float(dose.value),
+                'time': float(timing.value),
+                'calibrationYield': float(calibrationYield.value),
+                'sweetSpot': float(sweetSpot.value),
+                'tools': tools.value,
+                'grindSize': float(grindSize.value),
+                'mouthFeel': mouthFeels.value,
+                'black': black.value,
+                'espressoNotes': espressoNotes.value,
+                'americanoNotes': americanoNotes.value,
+                'white': white.value,
+                'cappuccinoNotes': cappuccinoNotes.value,
+                'latteNotes': latteNotes.value
+            }
+
+            response = dialIn.InputDialIn(inputData)
+
+            if response:
+                dialog.close()
+                ui.notify("Success to save dial-in data")
+                ui.navigate.to('/home')
+            else:
+                ui.notify("Failed to save dial-in")
+
+        with dialog, ui.card().classes('w-full max-w-screen-md p-6 relative space-y-4 shadow-xl'):
+
+            ui.button(icon='close', on_click=dialog.close) \
+                .props('flat round dense color=grey') \
+                .classes('absolute top-2 right-2 z-10')
+
+            ui.label('Dial In Form').classes('text-2xl font-semibold text-gray-800')
+            dateNow = datetime.now().strftime("%d %b %Y %H:%M")
+            ui.chip( color='amber-500', removable=False).style(
+                'color: white; padding-left: 8px; gap: 0.5rem').set_text(dateNow)
+            ui.separator()
 
 
+            with ui.tabs().classes('w-full') as tabs:
+                one = ui.tab('Dial In')
+                two = ui.tab('Body')
+            with ui.tab_panels(tabs, value=one).classes('w-full h-[550px]'):
+                with ui.tab_panel(one).classes('h-full'):
+                    ui.label('Calibration').classes('text-2xl font-semibold text-gray-800')
+                    ui.separator()
+
+                    with ui.row().classes('w-full h-screen items-center justify-center'):
+                        with ui.grid(columns=2).classes('gap-3'):
+                            getCoffee()
+                            ui.label('Beans Name')
+                            beansName = ui.select(options=coffeeList, with_input=True,
+                                                  on_change=lambda e: ui.notify(e.value)) \
+                                .props('dense outlined') \
+                                .classes('w-60 text-sm')
+
+                            ui.label('Date')
+                            ui.label(date.today().isoformat())
+
+                            ui.label('Roast Date')
+                            with ui.input('Date') as dates:
+                                with ui.menu().props('no-parent-event') as menu:
+                                    with ui.date().bind_value(dates):
+                                        with ui.row().classes('justify-end'):
+                                            ui.button('Close', on_click=menu.close).props('dense outlined')
+                                with dates.add_slot('append'):
+                                    ui.icon('edit_calendar').on('click', menu.open).classes('cursor-pointer')
+
+                            getUser()
+                            ui.label('Dialed By')
+                            dialedBy = ui.select(userList, multiple=True, value=[], label='Dialed By') \
+                                .props('dense outlined use-chips') \
+                                .classes('w-60 text-sm')
+
+                            ui.label('Dose')
+                            dose = ui.input(label='Dose') \
+                                .props('type=number step=any dense outlined') \
+                                .classes('w-60 text-sm')
+
+                            ui.label('Timing')
+                            timing = ui.input(label='Timing') \
+                                .props('type=number step=any dense outlined') \
+                                .classes('w-60 text-sm')
+
+                            ui.label('Calibration Yield')
+                            calibrationYield = ui.input(label='Yield') \
+                                .props('type=number step=any dense outlined') \
+                                .classes('w-60 text-sm')
+
+                            ui.label('Sweet Spot')
+                            sweetSpot = ui.input(label='Sweet Spot') \
+                                .props('type=number step=any dense outlined') \
+                                .classes('w-60 text-sm')
+
+                            getTools()
+                            ui.label('Tools')
+                            tools = ui.select(toolsList, multiple=True, value=[], label='Tools') \
+                                .props('dense outlined use-chips') \
+                                .classes('w-60 text-sm')
+
+                            ui.label('Grind Size')
+                            grindSize = ui.input(label='Grind Size') \
+                                .props('type=number step=any dense outlined') \
+                                .classes('w-60 text-sm')
+
+                            ui.label('Mouth Feels')
+                            mouthFeels = ui.input(label='Mouth Feels') \
+                                .props('dense outlined') \
+                                .classes('w-60 text-sm')
+
+                with ui.tab_panel(two).classes('h-full'):
+                    ui.label('Notes Body').classes('text-2xl font-semibold text-gray-800')
+                    ui.separator()
+
+                    with ui.row().classes('w-full h-screen items-center justify-center'):
+                        with ui.grid(columns=2).classes('gap-3'):
+                            ui.label('Black')
+                            black = ui.input(label='Black') \
+                                .props('dense outlined') \
+                                .classes('w-60 text-sm')
+
+                            ui.label('Espresso')
+                            espressoNotes = ui.textarea(label='Espresso Notes') \
+                                .props('dense outlined') \
+                                .classes('w-60 text-sm')
+
+                            ui.label('Americano')
+                            americanoNotes = ui.textarea(label='Americano Notes') \
+                                .props('dense outlined') \
+                                .classes('w-60 text-sm')
+
+                            ui.label('White')
+                            white = ui.input(label='White') \
+                                .props('dense outlined') \
+                                .classes('w-60 text-sm')
+
+                            ui.label('Cappuccino Notes')
+                            cappuccinoNotes = ui.textarea(label='Cappuccino Notes') \
+                                .props('dense outlined') \
+                                .classes('w-60 text-sm')
+
+                            ui.label('Latte Notes')
+                            latteNotes = ui.textarea(label='Latte Notes') \
+                                .props('dense outlined') \
+                                .classes('w-60 text-sm')
+
+            ui.button('Add product', on_click=onAddItem) \
+                .classes('text-sm px-3 py-1 rounded-md') \
+                .props('color=amber-500 text-black')
+
+        dialog.open()

@@ -8,3 +8,4 @@ class Enum(StrEnum):
     Unit = "unit"
     Log = "logs"
     Report = "report"
+    DialIn = "dialIn"
