@@ -262,9 +262,10 @@ class Layout():
                 'text-sm px-3 py-1 rounded-md').props('color=amber-500 text-black')
 
     def DialInContent(self, datas):
-        with ui.grid(columns=2).classes('gap-4'):
+        with ui.row().classes('w-full flex-wrap gap-4 justify-evenly'):
             for data in datas:
-                self.DialInData(data)
+                with ui.column().classes('w-full max-w-xl'):
+                    self.DialInData(data)
 
     def DialInData(self, data):
         print("Dial in data: ", data)
