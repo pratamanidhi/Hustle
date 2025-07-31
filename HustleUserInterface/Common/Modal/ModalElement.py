@@ -147,7 +147,7 @@ class ModalElement:
 
             ui.separator()
             if userInfo['isAdmin']:
-                ui.button('Delele Item', on_click=onDeleteItem) \
+                ui.button('Delete Item', on_click=onDeleteItem) \
                     .classes('text-sm px-3 py-1 rounded-md') \
                     .props('color=amber-500 text-black')
 

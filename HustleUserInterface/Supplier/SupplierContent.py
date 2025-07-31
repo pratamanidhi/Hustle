@@ -1,19 +1,16 @@
 from nicegui import ui
 from Common.Session.Session import Session as Session
 from Common.Layout.Layout import Layout as Layout
-from Supplier.SupplierModal import SupplierModal as Modal
+
+from Supplier.SupplierLayout import SupplierLayout as SupplierLayout
 
 session = Session()
 layout = Layout()
-modal = Modal()
 
-def AddSupplier():
+supplierLayout = SupplierLayout()
 
-    def addNewSupplier():
-        modal.AddSupplierModal()
-
-    ui.button('Add new supplier', on_click=addNewSupplier) \
-        .props('flat dense')
+def SupplierList():
+    supplierLayout.SupplierContent()
 
 @ui.page('/supplier')
 def SupplierContent():
@@ -26,7 +23,7 @@ def SupplierContent():
         if result is not False:
             layout.Header(result)
             ui.label('Supplier page is still under construction')
-            AddSupplier()
+            SupplierList()
             container.visible = False
         else:
             ui.notify("No login info found", type='warning')

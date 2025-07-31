@@ -72,3 +72,5 @@ class SupplierModal():
                 .props('color=amber-500 text-black')
 
         dialog.open()
+
+
