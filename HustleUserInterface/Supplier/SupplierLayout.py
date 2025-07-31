@@ -7,7 +7,7 @@ class SupplierLayout:
     def __init__(self) -> None:
         pass
 
-    def SupplierContent(self):
+    def SupplierContent(self, supplierList):
         def addNewSupplier():
             modal.AddSupplierModal()
 
@@ -28,13 +28,14 @@ class SupplierLayout:
                             ui.separator()
                             ui.label("List of supplier").classes('font-semibold text-gray-800')
                             with ui.grid().classes('grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 w-full'):
-                                for i in range(10):
+                                for supplier in supplierList:
                                     with ui.card().classes('p-0 shadow-sm !border-0 w-full'):
-                                        self.SupplierListContent()
+                                        self.SupplierListContent(supplier)
                         with ui.tab_panel(history_tab):
                             ui.label('Supplier history list')
 
-    def SupplierListContent(self):
+    def SupplierListContent(self, supplier):
+        print("supplier: ", supplier)
         def onDeleteItem():
             ui.notify("Item Deleted")
 
@@ -46,19 +47,19 @@ class SupplierLayout:
             with ui.column().classes('w-full p-4 border-2 rounded-3xl h-full'):
                 with ui.grid(columns=2).classes('gap-5'):
                     ui.label("Supplier Name").classes('font-semibold text-gray-800')
-                    ui.label("Sendy")
+                    ui.label(supplier['name'])
 
                     ui.label("Product").classes('font-semibold text-gray-800')
-                    ui.label("Cup")
+                    ui.label(supplier['orderType'])
 
                     ui.label("Bank Name").classes('font-semibold text-gray-800')
-                    ui.label("BCA")
+                    ui.label(supplier['bankName'])
 
                     ui.label("Bank Number").classes('font-semibold text-gray-800')
-                    ui.label("1221416240")
+                    ui.label(supplier['bankNumber'])
 
                     ui.label("Contact Person").classes('font-semibold text-gray-800')
-                    ui.label("082133076388")
+                    ui.label(supplier['contactPerson'])
 
             ui.button('Delete', on_click=onDeleteItem) \
                 .classes('text-sm px-3 py-1 rounded-md') \
