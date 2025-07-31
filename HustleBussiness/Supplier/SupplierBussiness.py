@@ -21,12 +21,9 @@ class SupplierBussiness():
 
     def InputSupplier(self, input):
         model.name = input.name
-        model.orderType = input.orderType
-        model.bankNumber = input.bankNumber
-        model.bankName = input.bankName
+        model.orderType = self.SupplierTypeid(input.orderType)['guid']
+        model.bankAccount = self.BankAccountId(input)['guid']
         model.contactPerson = input.contactPerson
-        print("input", input)
-        print("model", model)
 
         result = repo.InsertSupplier(dbContext.Supplier, model)
         return result
@@ -51,4 +48,27 @@ class SupplierBussiness():
 
         result = repo.InputBankNumber(dbContext.BankAccount, bankModel)
         return result
+
+    def SupplierTypeid(self, name):
+        result = repo.GetSupplierId(dbContext.OrderType, name)
+
+        if result is None:
+            orderModel.name = name
+            input = repo.InsertSupplierType(dbContext.OrderType, orderModel)
+            return input
+        else:
+            return result
+
+
+    def BankAccountId(self, model):
+        result = repo.GetBankNumberId(dbContext.BankAccount, model)
+        print(result)
+
+        if result is None:
+            input = repo.InputBankNumber(dbContext.BankAccount, model)
+            return input
+        else:
+            return result
+
+
 
