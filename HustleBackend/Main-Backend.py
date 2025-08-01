@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 import uvicorn
-from HustleController import CoffeeMenuController, MilkBaseMenuController, CameraController, UserManagementController
+from HustleController import CoffeeMenuController, MilkBaseMenuController, UserManagementController
 from HustleController.Warehouse import WarehouseController
 from HustleController.Business import BusinessController
 from HustleController.Enums import IngredientController
@@ -20,7 +20,6 @@ app = FastAPI(
 
 app.include_router(CoffeeMenuController.router, prefix="/coffee", tags=["Coffee Menu"])
 app.include_router(MilkBaseMenuController.router, prefix="/milkbase", tags=["Milk Base"])
-app.include_router(CameraController.router, prefix="/device", tags=["Device"])
 app.include_router(UserManagementController.router, prefix="/users", tags=["User Management"])
 app.include_router(BusinessController.router, prefix="/business", tags=["Business"])
 app.include_router(WarehouseController.router, prefix="/warehouse", tags=["Warehouse Coffee"])
