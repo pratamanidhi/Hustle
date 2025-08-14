@@ -49,5 +49,16 @@ class SupplierAPI:
             else:
                 return False
         except Exception as e:
-            print("Exception occures: ", e)
+            print("Exception occurred: ", e)
+            return e
+
+    def DeleteSupplier(self, body):
+        try:
+            response = requests.delete(Api.deleteSupplier, json=body)
+            if response.status_code == 200:
+                return True
+            else:
+                return False
+        except Exception as e:
+            print("Exception occurred: ", e)
             return e

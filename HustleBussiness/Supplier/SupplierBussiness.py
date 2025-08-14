@@ -88,5 +88,10 @@ class SupplierBussiness():
         result = repo.InputReceiveOrder(dbContext.ReceivedOrder, receiveOrderModel)
         return result
 
+    def DeleteSupplier(self, param):
+        print(param)
+        result = repo.DeleteSupplier(dbContext.Supplier, param.guid)
+        return result
+
 
 

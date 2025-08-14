@@ -25,3 +25,4 @@ class APIUrl:
     getAllSupplierCategory = mainiUrl + f"/{Enum.Supplier}/supplier-type"
     getSupplierByCategory = mainiUrl + f"/{Enum.Supplier}/get-supplier-by-category"
     receiveOrder = mainiUrl + f"/{Enum.Supplier}/receive-order"
+    deleteSupplier = mainiUrl + f"/{Enum.Supplier}/delete-supplier"

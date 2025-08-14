@@ -34,3 +34,12 @@ class SupplierBusiness:
             return api.ReceiveOrder(jsons)
         else:
             return False
+
+    def DeleteSupplier(self, guid):
+        if guid is not None:
+            jsons = {
+                "guid": guid
+            }
+            return api.DeleteSupplier(jsons)
+        else:
+            return False

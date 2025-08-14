@@ -67,8 +67,9 @@ class SupplierRepository():
         return result
 
     def GetSupplierId(self, dbContext, input):
+        print(input)
         query = f"select guid from {dbContext} where name = ?"
-        result = db.Execute(query, (input.name,))
+        result = db.Execute(query, (input,))
         if result:
             return dict(result[0])
         else:
@@ -101,7 +102,6 @@ class SupplierRepository():
         else:
             return None
 
-
     def InputBankNumber(self, dbContext, model):
         guid = str(uuid.uuid4())
         updatedAt = datetime.now()
@@ -127,4 +127,11 @@ class SupplierRepository():
             dateNow,
             updatedAt
         ))
+        return result
+
+    def DeleteSupplier(self, dbContext, guid):
+        print(dbContext)
+        print(guid)
+        query = f"delete from {dbContext} where guid = ?"
+        result = db.Execute(query, (guid,))
         return result

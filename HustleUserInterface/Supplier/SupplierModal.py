@@ -90,7 +90,7 @@ class SupplierModal():
 
         dialog.open()
 
-    def ReceiveOrder(self, identity):
+    def ReceiveOrderModal(self, identity):
         dialog = ui.dialog()
 
         def onSubmitQuantity():
@@ -121,6 +121,34 @@ class SupplierModal():
                         .classes('w-60 text-sm')
 
             ui.button('Submit', on_click=onSubmitQuantity) \
+                .classes('text-sm px-3 py-1 rounded-md') \
+                .props('color=amber-500 text-black')
+
+        dialog.open()
+
+    def ConfirmationDeleteModal(self, datas):
+        dialog = ui.dialog()
+
+        def onDeleteConfirmation():
+            result = business.DeleteSupplier(datas['guid'])
+            if result:
+                ui.notify("item already deleted")
+                ui.navigate.to('/supplier')
+                dialog.close()
+            else:
+                ui.notify("Item failed to deleted")
+
+        with dialog, ui.card().classes('w-full max-w-screen-md p-6 relative space-y-4 shadow-xl'):
+            ui.button(icon='close', on_click=dialog.close) \
+                .props('flat round dense color=grey') \
+                .classes('absolute top-2 right-2 z-10')
+
+            ui.label('Confirmation').classes('text-2xl font-semibold text-gray-800')
+            ui.separator()
+            ui.label(f"Are you sure going to delete this item?")
+
+
+            ui.button('Yes', on_click=onDeleteConfirmation) \
                 .classes('text-sm px-3 py-1 rounded-md') \
                 .props('color=amber-500 text-black')
 

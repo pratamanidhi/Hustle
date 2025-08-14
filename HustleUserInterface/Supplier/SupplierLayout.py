@@ -37,10 +37,10 @@ class SupplierLayout:
 
     def SupplierListContent(self, supplier):
         def onDeleteItem():
-            ui.notify("Item Deleted")
+            modal.ConfirmationDeleteModal(supplier)
 
         def receiveOrder():
-            modal.ReceiveOrder(supplier)
+            modal.ReceiveOrderModal(supplier)
 
 
         with ui.column().classes('w-full relative p-4 border-2 rounded-3xl'):
