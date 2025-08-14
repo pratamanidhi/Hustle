@@ -94,8 +94,12 @@ class SupplierModal():
         dialog = ui.dialog()
 
         def onSubmitQuantity():
-            print("identity: ", identity)
-            ui.notify(f"Received quantity: {quantity.value}")
+            result = business.ReceiveOrder(identity['guid'], quantity.value)
+            if result:
+                ui.notify("Order submitted")
+                dialog.close()
+            else:
+                ui.notify(result)
 
         with dialog, ui.card().classes('w-full max-w-screen-md p-6 relative space-y-4 shadow-xl'):
             ui.button(icon='close', on_click=dialog.close) \

@@ -40,3 +40,14 @@ class SupplierAPI:
         except Exception as e:
             print('Exception occurred: ', e)
             return e
+
+    def ReceiveOrder(self, body):
+        try:
+            response = requests.post(Api.receiveOrder, json=body)
+            if response.status_code == 200:
+                return True
+            else:
+                return False
+        except Exception as e:
+            print("Exception occures: ", e)
+            return e

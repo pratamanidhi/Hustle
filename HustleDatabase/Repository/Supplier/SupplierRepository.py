@@ -1,6 +1,6 @@
 from HustleDatabase.ConnectionWarehouse import ConnectionWarehouse as Connection
 import uuid
-from datetime import datetime
+from datetime import datetime, date
 
 db = Connection()
 
@@ -118,11 +118,13 @@ class SupplierRepository():
     def InputReceiveOrder(self, dbContext, model):
         guid = str(uuid.uuid4())
         updatedAt = datetime.now()
-        query = f"insert into {dbContext} (guid, supplierId, quantity, updatedAt) values (?, ?, ?, ?)"
+        dateNow = date.today()
+        query = f"insert into {dbContext} (guid, supplierId, quantity, dateReceived, updatedAt) values (?, ?, ?, ?, ?)"
         result = db.Execute(query, (
             guid,
             model.supplierId,
             model.quantity,
+            dateNow,
             updatedAt
         ))
         return result

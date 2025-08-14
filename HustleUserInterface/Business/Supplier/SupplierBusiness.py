@@ -1,3 +1,5 @@
+from charset_normalizer.cli import query_yes_no
+
 from HustleUserInterface.API.Supplier.SupplierAPI import SupplierAPI as Api
 
 api = Api()
@@ -20,5 +22,15 @@ class SupplierBusiness:
                 "name" : body
             }
             return api.GetSupplierByCategory(jsons)
+        else:
+            return False
+
+    def ReceiveOrder(self, supplierId, quantity):
+        if supplierId is not None and quantity is not None:
+            jsons = {
+                "supplierId" : supplierId,
+                "quantity": quantity
+            }
+            return api.ReceiveOrder(jsons)
         else:
             return False

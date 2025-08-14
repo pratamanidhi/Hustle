@@ -11,9 +11,6 @@ class SupplierLayout:
         def addNewSupplier():
             modal.AddSupplierModal()
 
-        def receiveOrder():
-            modal.ReceiveOrderModal()
-
         content_container = ui.column().classes('w-full h-full')
         with content_container:
             with ui.splitter(value=10).classes('w-full h-full') as splitter:
@@ -28,10 +25,6 @@ class SupplierLayout:
                             with ui.grid(columns=2).classes('gap-5'):
                                 ui.button('Add new supplier', on_click=addNewSupplier) \
                                     .props('flat dense')
-
-                                ui.button('Receive order', on_click=receiveOrder) \
-                                    .props('flat dense')
-
 
                             ui.separator()
                             ui.label("List of supplier").classes('font-semibold text-gray-800')
@@ -52,7 +45,7 @@ class SupplierLayout:
 
         with ui.column().classes('w-full relative p-4 border-2 rounded-3xl'):
             ui.button("Receive", on_click=receiveOrder) \
-                .props('flat round dense color=grey') \
+                .props('flat round dense color=black') \
                 .classes('absolute top-2 right-10 z-10')
 
 

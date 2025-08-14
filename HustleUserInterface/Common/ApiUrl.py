@@ -24,3 +24,4 @@ class APIUrl:
     inputSupplier = mainiUrl + f"/{Enum.Supplier}/add-supplier"
     getAllSupplierCategory = mainiUrl + f"/{Enum.Supplier}/supplier-type"
     getSupplierByCategory = mainiUrl + f"/{Enum.Supplier}/get-supplier-by-category"
+    receiveOrder = mainiUrl + f"/{Enum.Supplier}/receive-order"
