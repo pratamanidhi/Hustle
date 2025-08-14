@@ -2,6 +2,7 @@ from fastapi import APIRouter, Body
 from HustleBussiness.Supplier.SupplierBussiness import SupplierBussiness as Business
 from HustleCommon.Dto.SupplierDto import SupplierDto as SupplierDto
 from HustleCommon.Dto.OrderTypeDto import OrderTypeDto as OrderTypeDto
+from HustleCommon.Dto.SupplierByCategoryDto import SupplierByCategoryDto as SupplierByCategoryDto
 from HustleCommon.Dto.BankAccountDto import BankAccountDto as BankAccountDto
 
 router = APIRouter()
@@ -10,6 +11,10 @@ service = Business()
 @router.get('/get-all-supplier')
 def GetAllSupplier():
     return service.GetAllSupplier()
+
+@router.post('/get-supplier-by-category')
+def GetSupplierByCategory(model: SupplierByCategoryDto = Body(...)):
+    return service.GetSupplierWithCategory(model)
 
 @router.post('/add-supplier')
 def InsertSupplier(model: SupplierDto = Body(...)):

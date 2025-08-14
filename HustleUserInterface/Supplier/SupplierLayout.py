@@ -11,6 +11,9 @@ class SupplierLayout:
         def addNewSupplier():
             modal.AddSupplierModal()
 
+        def receiveOrder():
+            modal.ReceiveOrderModal()
+
         content_container = ui.column().classes('w-full h-full')
         with content_container:
             with ui.splitter(value=10).classes('w-full h-full') as splitter:
@@ -22,8 +25,13 @@ class SupplierLayout:
                 with splitter.after:
                     with ui.tab_panels(tabs, value=list_tab).props('vertical').classes('w-full h-full'):
                         with ui.tab_panel(list_tab):
-                            ui.button('Add new supplier', on_click=addNewSupplier) \
-                                .props('flat dense')
+                            with ui.grid(columns=2).classes('gap-5'):
+                                ui.button('Add new supplier', on_click=addNewSupplier) \
+                                    .props('flat dense')
+
+                                ui.button('Receive order', on_click=receiveOrder) \
+                                    .props('flat dense')
+
 
                             ui.separator()
                             ui.label("List of supplier").classes('font-semibold text-gray-800')
@@ -35,11 +43,19 @@ class SupplierLayout:
                             ui.label('Supplier history list')
 
     def SupplierListContent(self, supplier):
-        print("supplier: ", supplier)
         def onDeleteItem():
             ui.notify("Item Deleted")
 
+        def receiveOrder():
+            modal.ReceiveOrder(supplier)
+
+
         with ui.column().classes('w-full relative p-4 border-2 rounded-3xl'):
+            ui.button("Receive", on_click=receiveOrder) \
+                .props('flat round dense color=grey') \
+                .classes('absolute top-2 right-10 z-10')
+
+
             dates = datetime.now()
             newDate = dates.strftime("%d %b %Y %H:%M")
             ui.chip(icon='calendar_today', color='indigo-5', removable=False).style(
@@ -49,7 +65,10 @@ class SupplierLayout:
                     ui.label("Supplier Name").classes('font-semibold text-gray-800')
                     ui.label(supplier['name'])
 
-                    ui.label("Product").classes('font-semibold text-gray-800')
+                    ui.label("Product Name").classes('font-semibold text-gray-800')
+                    ui.label(supplier['productName'])
+
+                    ui.label("Product Category").classes('font-semibold text-gray-800')
                     ui.label(supplier['orderType'])
 
                     ui.label("Bank Name").classes('font-semibold text-gray-800')

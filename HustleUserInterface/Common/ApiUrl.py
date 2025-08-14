@@ -22,3 +22,5 @@ class APIUrl:
     insertDialIn = mainiUrl + f"/{Enum.DialIn}/add-dialIn"
     getAllSupplier = mainiUrl + f"/{Enum.Supplier}/get-all-supplier"
     inputSupplier = mainiUrl + f"/{Enum.Supplier}/add-supplier"
+    getAllSupplierCategory = mainiUrl + f"/{Enum.Supplier}/supplier-type"
+    getSupplierByCategory = mainiUrl + f"/{Enum.Supplier}/get-supplier-by-category"

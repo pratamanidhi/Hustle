@@ -8,5 +8,17 @@ class SupplierBusiness:
     def GetAllSupplier(self):
         return api.GetAllSupplier()
 
+    def GetAllSupplierCategory(self):
+        return api.GetAllSupplierCategory()
+
     def InputSupplier(self, input):
         return api.InputSupplier(input)
+
+    def GetSupplierByCategory(self, body):
+        if body is not None:
+            jsons = {
+                "name" : body
+            }
+            return api.GetSupplierByCategory(jsons)
+        else:
+            return False

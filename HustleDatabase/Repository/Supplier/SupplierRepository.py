@@ -14,6 +14,7 @@ class SupplierRepository():
                 s.guid, 
                 s.name, 
                 s.contactPerson, 
+                s.productName,
                 s.updatedAt, 
                 ot.name AS orderType, 
                 ba.name AS bankName, 
@@ -25,15 +26,35 @@ class SupplierRepository():
         result = db.Execute(query)
         return result
 
+    def GetSupplierWithCategory(self, dbContext, orderType):
+        query = f"""
+            SELECT 
+                    s.guid, 
+                    s.name, 
+                    s.contactPerson, 
+                    s.productName,
+                    s.updatedAt, 
+                    ot.name AS orderType, 
+                    ba.name AS bankName, 
+                    ba.bankNumber 
+                FROM {dbContext} AS s
+                JOIN OrderType AS ot ON s.orderType = ot.guid
+                JOIN BankAccount AS ba ON s.bankAccount = ba.guid
+                where orderType = ?
+        """
+        result = db.Execute(query, (orderType,))
+        return result
+
     def InsertSupplier(self, dbContext, model):
         print("model", model)
         guid = str(uuid.uuid4())
         updatedAt = datetime.now()
-        query = f"insert into {dbContext} (guid, name, orderType, bankAccount, contactPerson, updatedAt) values (?, ?, ?, ?, ?, ?)"
+        query = f"insert into {dbContext} (guid, name, orderType, productName, bankAccount, contactPerson, updatedAt) values (?, ?, ?, ?, ?, ?, ?)"
         result = db.Execute(query, (
             guid,
             model.name,
             model.orderType,
+            model.productName,
             model.bankAccount,
             model.contactPerson,
             updatedAt
@@ -47,7 +68,7 @@ class SupplierRepository():
 
     def GetSupplierId(self, dbContext, input):
         query = f"select guid from {dbContext} where name = ?"
-        result = db.Execute(query, (input,))
+        result = db.Execute(query, (input.name,))
         if result:
             return dict(result[0])
         else:

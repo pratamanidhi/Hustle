@@ -19,11 +19,16 @@ class SupplierBussiness():
         result = repo.GetAllSupplier(dbContext.Supplier)
         return result
 
+    def GetSupplierWithCategory(self, input):
+        result = self.GetSupplierFilteredByCategory(input)
+        return result
+
     def InputSupplier(self, input):
         model.name = input.name
-        model.orderType = self.SupplierTypeid(input.orderType)['guid']
+        model.orderType = self.SupplierTypeId(input.orderType)['guid']
         model.bankAccount = self.BankAccountId(input)['guid']
         model.contactPerson = input.contactPerson
+        model.productName = input.productName
 
         result = repo.InsertSupplier(dbContext.Supplier, model)
         return result
@@ -49,7 +54,7 @@ class SupplierBussiness():
         result = repo.InputBankNumber(dbContext.BankAccount, bankModel)
         return result
 
-    def SupplierTypeid(self, name):
+    def SupplierTypeId(self, name):
         result = repo.GetSupplierId(dbContext.OrderType, name)
 
         if result is None:
@@ -69,6 +74,11 @@ class SupplierBussiness():
             return input
         else:
             return result
+
+    def GetSupplierFilteredByCategory(self, category):
+        categoryGuid = repo.GetSupplierId(dbContext.OrderType, category)
+        result = repo.GetSupplierWithCategory(dbContext.Supplier, categoryGuid['guid'])
+        return result
 
 
 

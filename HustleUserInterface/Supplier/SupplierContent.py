@@ -24,7 +24,6 @@ def SupplierContent():
         result = await session.Session()
         if result is not False:
             layout.Header(result)
-            ui.label('Supplier page is still under construction')
             SupplierList()
             container.visible = False
         else:
