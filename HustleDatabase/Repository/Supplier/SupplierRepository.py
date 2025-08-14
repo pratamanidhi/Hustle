@@ -114,3 +114,15 @@ class SupplierRepository():
         ))
         data = self.GetBankNumberId(dbContext, model)
         return data
+
+    def InputReceiveOrder(self, dbContext, model):
+        guid = str(uuid.uuid4())
+        updatedAt = datetime.now()
+        query = f"insert into {dbContext} (guid, supplierId, quantity, updatedAt) values (?, ?, ?, ?)"
+        result = db.Execute(query, (
+            guid,
+            model.supplierId,
+            model.quantity,
+            updatedAt
+        ))
+        return result

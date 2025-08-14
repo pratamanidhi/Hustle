@@ -11,3 +11,4 @@ class WarehouseTable():
     Supplier = "Supplier"
     BankAccount = "BankAccount"
     OrderType = "OrderType"
+    ReceivedOrder = "ReceivedOrder"

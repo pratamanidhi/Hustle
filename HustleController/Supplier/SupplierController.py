@@ -4,6 +4,7 @@ from HustleCommon.Dto.SupplierDto import SupplierDto as SupplierDto
 from HustleCommon.Dto.OrderTypeDto import OrderTypeDto as OrderTypeDto
 from HustleCommon.Dto.SupplierByCategoryDto import SupplierByCategoryDto as SupplierByCategoryDto
 from HustleCommon.Dto.BankAccountDto import BankAccountDto as BankAccountDto
+from HustleCommon.Dto.ReceiveOrderDto import ReceiveOrderDto as ReceiveOrderDto
 
 router = APIRouter()
 service = Business()
@@ -35,4 +36,8 @@ def GetBankAccount():
 @router.post('/add-bank-account')
 def InputBankAccount(model: BankAccountDto = Body(...)):
     return service.InputBankAccount(model)
+
+@router.post('/receive-order')
+def ReceiveOrder(model: ReceiveOrderDto = Body(...)):
+    return service.InputOrder(model)
 

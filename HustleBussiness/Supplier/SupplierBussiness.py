@@ -3,12 +3,14 @@ from HustleDatabase.Repository.Supplier.SupplierRepository import SupplierReposi
 from HustleDatabase.Model.Supplier.SupplierModel import SupplierModel as Model
 from HustleDatabase.Model.Supplier.OrderTypeModel import OrderTypeModel as OrderModel
 from HustleDatabase.Model.Supplier.BankAccountModel import BankAccountModel as BankAccountModel
+from HustleDatabase.Model.Supplier.ReceiveOrderModel import ReceiveOrderModel as ReceiveOrderModel
 from HustleDatabase.Table.WarehouseTable import WarehouseTable as DbContext
 
 repo = Repository()
 model = Model()
 orderModel = OrderModel()
 bankModel = BankAccountModel()
+receiveOrderModel = ReceiveOrderModel()
 dbContext = DbContext()
 
 class SupplierBussiness():
@@ -78,6 +80,12 @@ class SupplierBussiness():
     def GetSupplierFilteredByCategory(self, category):
         categoryGuid = repo.GetSupplierId(dbContext.OrderType, category)
         result = repo.GetSupplierWithCategory(dbContext.Supplier, categoryGuid['guid'])
+        return result
+
+    def InputOrder(self, datas):
+        receiveOrderModel.supplierId = datas.supplierId
+        receiveOrderModel.quantity = datas.quantity
+        result = repo.InputReceiveOrder(dbContext.ReceivedOrder, receiveOrderModel)
         return result
 
 
