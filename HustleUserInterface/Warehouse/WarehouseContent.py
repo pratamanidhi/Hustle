@@ -1,6 +1,6 @@
 from nicegui import ui
-from HustleUserInterface.Business.Warehouse.WarehouseBusiness import WarehouseBusiness as Warehouse
-from HustleUserInterface.Common.Button import Button as Button
+from Business.Warehouse.WarehouseBusiness import WarehouseBusiness as Warehouse
+from Common.Button import Button as Button
 from Common.Layout.Layout import Layout as Layout
 from Common.Session.Session import Session as Session
 

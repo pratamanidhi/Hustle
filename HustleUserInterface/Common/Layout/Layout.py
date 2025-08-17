@@ -44,7 +44,7 @@ class Layout():
 
 
 
-                dropdown = ui.dropdown_button(f'Hi! {datas['name']}', auto_close=True)
+                dropdown = ui.dropdown_button(f'Hi! {datas["name"]}', auto_close=True)
                 dropdown.props('color=amber-500 text-black')
                 with dropdown:
                     ui.item('Logout', on_click=handleLogout)
@@ -303,20 +303,20 @@ class Layout():
                                         ui.chip(employee, removable=False, icon='person', color='indigo-5').style('color: white')
 
                                 ui.label('Dose').classes('font-semibold text-gray-800')
-                                ui.label(f'{data['dose']} gr')
+                                ui.label(f'{data["dose"]} gr')
 
                                 ui.label('Time').classes('font-semibold text-gray-800')
-                                ui.label(f'{data['time']} second')
+                                ui.label(f'{data["time"]} second')
 
                                 ui.label('Yield').classes('font-semibold text-gray-800')
                                 ui.label(f'{data['calibrationYield']} ml')
 
                                 ui.label('Sweet Spot').classes('font-semibold text-gray-800')
-                                ui.label(f'{data['sweetSpot']} ml')
+                                ui.label(f'{data["sweetSpot"]} ml')
 
                                 ui.label('Tools').classes('font-semibold text-gray-800')
                                 with ui.grid(columns=2).classes('gap-2'):
-                                    for tool in data['tools']:
+                                    for tool in data["tools"]:
                                         ui.chip(tool, removable=False, icon='label', color='grey-3')
 
                                 ui.label('Grind Size').classes('font-semibold text-gray-800')

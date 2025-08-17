@@ -1,4 +1,4 @@
-from HustleUserInterface.Common.ApiEnum import Enum as Enum
+from Common.ApiEnum import Enum as Enum
 
 mainiUrl = 'http://localhost:8000'
 class APIUrl:

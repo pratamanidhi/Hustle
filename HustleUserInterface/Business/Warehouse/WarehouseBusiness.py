@@ -1,6 +1,6 @@
-from HustleUserInterface.API.Warehouse.WarehouseAPI import WarehouseAPI as Warehouse
-from HustleUserInterface.Business.Logs.LogsBusiness import LogsBusiness as Log
-from HustleUserInterface.API.Unit.UnitAPI import UnitAPI as Unit
+from API.Warehouse.WarehouseAPI import WarehouseAPI as Warehouse
+from Business.Logs.LogsBusiness import LogsBusiness as Log
+from API.Unit.UnitAPI import UnitAPI as Unit
 from Common.StockEnum import StockEnum as Enum
 from Common.StockName import  StockName as StockName
 from datetime import datetime

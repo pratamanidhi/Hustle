@@ -1,5 +1,5 @@
 from nicegui import ui, context
-from HustleUserInterface.API.UserManagement.UserManagementAPI import UserManagementAPI as User
+from API.UserManagement.UserManagementAPI import UserManagementAPI as User
 import asyncio
 
 @ui.page('/')

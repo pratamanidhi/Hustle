@@ -1,7 +1,7 @@
 import requests
 from nicegui.html import param
 
-from HustleUserInterface.Common.ApiUrl import APIUrl as Api
+from Common.ApiUrl import APIUrl as Api
 
 class WarehouseAPI:
     def __init__(self) -> None:

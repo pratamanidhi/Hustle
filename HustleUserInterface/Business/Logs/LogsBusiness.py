@@ -1,4 +1,4 @@
-from HustleUserInterface.API.Logs.LogsAPI import LogsAPI as Logs
+from API.Logs.LogsAPI import LogsAPI as Logs
 
 log = Logs()
 class LogsBusiness:
