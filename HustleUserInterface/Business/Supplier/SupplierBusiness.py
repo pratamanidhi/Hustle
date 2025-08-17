@@ -25,11 +25,12 @@ class SupplierBusiness:
         else:
             return False
 
-    def ReceiveOrder(self, supplierId, quantity):
+    def ReceiveOrder(self, supplierId, quantity, receivedBy):
         if supplierId is not None and quantity is not None:
             jsons = {
                 "supplierId" : supplierId,
-                "quantity": quantity
+                "quantity": quantity,
+                "receiveBy": receivedBy["name"]
             }
             return api.ReceiveOrder(jsons)
         else:

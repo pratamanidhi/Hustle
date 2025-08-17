@@ -119,12 +119,13 @@ class SupplierRepository():
         guid = str(uuid.uuid4())
         updatedAt = datetime.now()
         dateNow = date.today()
-        query = f"insert into {dbContext} (guid, supplierId, quantity, dateReceived, updatedAt) values (?, ?, ?, ?, ?)"
+        query = f"insert into {dbContext} (guid, supplierId, quantity, dateReceived, receivedBy, updatedAt) values (?, ?, ?, ?, ?, ?)"
         result = db.Execute(query, (
             guid,
             model.supplierId,
             model.quantity,
             dateNow,
+            model.receivedBy,
             updatedAt
         ))
         return result

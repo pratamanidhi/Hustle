@@ -12,6 +12,7 @@ class Session():
         js_user = await ui.run_javascript('localStorage.getItem("user")')
         if js_user and js_user != 'null':
             user = json.loads(js_user)
+            print("account: ", user)
             context.client.storage['user'] = user
 
             username = user['username']

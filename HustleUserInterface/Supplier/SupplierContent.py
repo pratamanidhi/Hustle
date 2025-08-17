@@ -10,9 +10,9 @@ supplierBusiness = SupplierBusiness()
 
 supplierLayout = SupplierLayout()
 
-def SupplierList():
+def SupplierList(user):
     result = supplierBusiness.GetAllSupplier()
-    supplierLayout.SupplierContent(result)
+    supplierLayout.SupplierContent(result, user)
 
 @ui.page('/supplier')
 def SupplierContent():
@@ -23,8 +23,9 @@ def SupplierContent():
     async def Init():
         result = await session.Session()
         if result is not False:
+            print("user: ", result)
             layout.Header(result)
-            SupplierList()
+            SupplierList(result)
             container.visible = False
         else:
             ui.notify("No login info found", type='warning')

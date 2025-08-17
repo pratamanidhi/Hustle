@@ -90,11 +90,11 @@ class SupplierModal():
 
         dialog.open()
 
-    def ReceiveOrderModal(self, identity):
+    def ReceiveOrderModal(self, identity, user):
         dialog = ui.dialog()
 
         def onSubmitQuantity():
-            result = business.ReceiveOrder(identity['guid'], quantity.value)
+            result = business.ReceiveOrder(identity['guid'], quantity.value, user)
             if result:
                 ui.notify("Order submitted")
                 dialog.close()

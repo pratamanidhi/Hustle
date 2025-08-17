@@ -85,6 +85,7 @@ class SupplierBussiness():
     def InputOrder(self, datas):
         receiveOrderModel.supplierId = datas.supplierId
         receiveOrderModel.quantity = datas.quantity
+        receiveOrderModel.receivedBy = datas.receiveBy
         result = repo.InputReceiveOrder(dbContext.ReceivedOrder, receiveOrderModel)
         return result
 

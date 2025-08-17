@@ -7,7 +7,7 @@ class SupplierLayout:
     def __init__(self) -> None:
         pass
 
-    def SupplierContent(self, supplierList):
+    def SupplierContent(self, supplierList, user):
         def addNewSupplier():
             modal.AddSupplierModal()
 
@@ -31,16 +31,16 @@ class SupplierLayout:
                             with ui.grid().classes('grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 w-full'):
                                 for supplier in supplierList:
                                     with ui.card().classes('p-0 shadow-sm !border-0 w-full'):
-                                        self.SupplierListContent(supplier)
+                                        self.SupplierListContent(supplier, user)
                         with ui.tab_panel(history_tab):
                             ui.label('Supplier history list')
 
-    def SupplierListContent(self, supplier):
+    def SupplierListContent(self, supplier, user):
         def onDeleteItem():
             modal.ConfirmationDeleteModal(supplier)
 
         def receiveOrder():
-            modal.ReceiveOrderModal(supplier)
+            modal.ReceiveOrderModal(supplier, user)
 
 
         with ui.column().classes('w-full relative p-4 border-2 rounded-3xl'):
