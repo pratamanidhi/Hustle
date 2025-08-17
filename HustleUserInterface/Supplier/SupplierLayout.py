@@ -56,22 +56,22 @@ class SupplierLayout:
             with ui.column().classes('w-full p-4 border-2 rounded-3xl h-full'):
                 with ui.grid(columns=2).classes('gap-5'):
                     ui.label("Supplier Name").classes('font-semibold text-gray-800')
-                    ui.label(supplier['name'])
+                    ui.label(supplier["name"])
 
                     ui.label("Product Name").classes('font-semibold text-gray-800')
-                    ui.label(supplier['productName'])
+                    ui.label(supplier["productName"])
 
                     ui.label("Product Category").classes('font-semibold text-gray-800')
-                    ui.label(supplier['orderType'])
+                    ui.label(supplier["orderType"])
 
                     ui.label("Bank Name").classes('font-semibold text-gray-800')
-                    ui.label(supplier['bankName'])
+                    ui.label(supplier["bankName"])
 
                     ui.label("Bank Number").classes('font-semibold text-gray-800')
-                    ui.label(supplier['bankNumber'])
+                    ui.label(supplier["bankNumber"])
 
                     ui.label("Contact Person").classes('font-semibold text-gray-800')
-                    ui.label(supplier['contactPerson'])
+                    ui.label(supplier["contactPerson"])
 
             ui.button('Delete', on_click=onDeleteItem) \
                 .classes('text-sm px-3 py-1 rounded-md') \

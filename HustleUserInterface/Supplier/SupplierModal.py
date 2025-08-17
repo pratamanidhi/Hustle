@@ -18,7 +18,7 @@ class SupplierModal():
         def getSupplierCategory():
             result = business.GetAllSupplierCategory()
             for i in result:
-                categoryList.append(i['name'])
+                categoryList.append(i["name"])
 
         with dialog, ui.card().classes('w-full max-w-screen-md p-6 relative space-y-4 shadow-xl'):
 
@@ -94,7 +94,7 @@ class SupplierModal():
         dialog = ui.dialog()
 
         def onSubmitQuantity():
-            result = business.ReceiveOrder(identity['guid'], quantity.value, user)
+            result = business.ReceiveOrder(identity["guid"], quantity.value, user)
             if result:
                 ui.notify("Order submitted")
                 dialog.close()
@@ -111,7 +111,7 @@ class SupplierModal():
             ui.chip(color='amber-500', removable=False).style(
                 'color: white; padding-left: 8px; gap: 0.5rem').set_text(dateNow)
             ui.separator()
-            ui.label(f"Receive order from {identity['name']}")
+            ui.label(f"Receive order from {identity["name"]}")
 
             with ui.column().classes('relative p-4 border rounded-md'):
                 with ui.grid(columns=2).classes('gap-3'):
@@ -130,7 +130,7 @@ class SupplierModal():
         dialog = ui.dialog()
 
         def onDeleteConfirmation():
-            result = business.DeleteSupplier(datas['guid'])
+            result = business.DeleteSupplier(datas["guid"])
             if result:
                 ui.notify("item already deleted")
                 ui.navigate.to('/supplier')

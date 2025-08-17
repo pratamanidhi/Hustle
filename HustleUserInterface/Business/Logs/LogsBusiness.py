@@ -6,11 +6,11 @@ class LogsBusiness:
         pass
 
     def InsertLog(self,data):
-        datas = data['data'][0]
+        datas = data["data"][0]
         logsData = {
             "data" : {
-                "isOut": data['isOut'],
+                "isOut": data["isOut"],
                 "input": datas
             }
         }
-        return log.InsertLog(datas['updatedBy'], logsData)
+        return log.InsertLog(datas["updatedBy"], logsData)

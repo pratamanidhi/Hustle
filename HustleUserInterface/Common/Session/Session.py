@@ -13,10 +13,10 @@ class Session():
         if js_user and js_user != 'null':
             user = json.loads(js_user)
             print("account: ", user)
-            context.client.storage['user'] = user
+            context.client.storage["user"] = user
 
-            username = user['username']
-            is_admin = user['isAdmin']
+            username = user["username"]
+            is_admin = user["isAdmin"]
 
             if is_admin == 1:
                 admin = True

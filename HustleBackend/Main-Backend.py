@@ -31,7 +31,7 @@ app.include_router(UnitController.router, prefix="/unit", tags=["Unit"])
 app.include_router(LogController.router, prefix="/logs", tags=["Logs"])
 app.include_router(ReportController.router, prefix="/report", tags=["Report"])
 app.include_router(DialInController.router, prefix="/dialIn", tags=["DialIn"])
-app.include_router(SupplierController.router, prefix="/supplier", tags=['Supplier'])
+app.include_router(SupplierController.router, prefix="/supplier", tags=["Supplier"])
 
 
 if __name__ == "__main__":

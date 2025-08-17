@@ -31,41 +31,41 @@ class WarehouseBusiness:
             rowCopy = row.copy()
             if rowCopy.get('lastInput'):
                 try:
-                    dt_object = datetime.fromisoformat(rowCopy['lastInput'])
-                    rowCopy['lastInput'] = dt_object.strftime('%Y-%b-%d %H:%M:%S')
+                    dt_object = datetime.fromisoformat(rowCopy["lastInput"])
+                    rowCopy["lastInput"] = dt_object.strftime('%Y-%b-%d %H:%M:%S')
                 except ValueError:
-                    rowCopy['lastInput'] = 'Invalid Date'
+                    rowCopy["lastInput"] = 'Invalid Date'
             else:
-                rowCopy['lastInput'] = '-'
+                rowCopy["lastInput"] = '-'
 
             if rowCopy.get('lastOutput'):
                 try:
-                    dt_object = datetime.fromisoformat(rowCopy['lastOutput'])
-                    rowCopy['lastOutput'] = dt_object.strftime('%Y-%b-%d %H:%M:%S')
+                    dt_object = datetime.fromisoformat(rowCopy["lastOutput"])
+                    rowCopy["lastOutput"] = dt_object.strftime('%Y-%b-%d %H:%M:%S')
                 except ValueError:
-                    rowCopy['lastOutput'] = 'Invalid Date'
+                    rowCopy["lastOutput"] = 'Invalid Date'
             else:
-                rowCopy['lastOutput'] = '-'
+                rowCopy["lastOutput"] = '-'
 
             if rowCopy.get('price') is not None:
                 try:
-                    price_value = int(rowCopy['price'])
+                    price_value = int(rowCopy["price"])
                     formatted_price = f"Rp {price_value:,.0f}".replace(",", ".")
-                    rowCopy['price'] = formatted_price
+                    rowCopy["price"] = formatted_price
                 except (ValueError, TypeError):
-                    rowCopy['price'] = 'N/A'
+                    rowCopy["price"] = 'N/A'
             else:
-                rowCopy['price'] = '-'
+                rowCopy["price"] = '-'
 
             if rowCopy.get('priceUnit') is not None:
                 try:
-                    price_value = int(rowCopy['priceUnit'])
+                    price_value = int(rowCopy["priceUnit"])
                     formatted_price = f"Rp {price_value:,.0f}".replace(",", ".")
-                    rowCopy['priceUnit'] = formatted_price
+                    rowCopy["priceUnit"] = formatted_price
                 except (ValueError, TypeError):
-                    rowCopy['priceUnit'] = 'N/A'
+                    rowCopy["priceUnit"] = 'N/A'
             else:
-                rowCopy['price'] = '-'
+                rowCopy["price"] = '-'
 
             newRow.append(rowCopy)
 
@@ -76,53 +76,53 @@ class WarehouseBusiness:
         newDatas = []
         for rows in datas:
             newRow = []
-            for row in rows['data']:
+            for row in rows["data"]:
                 rowCopy = row.copy()
                 if rowCopy.get('lastInput'):
                     try:
-                        dt_object = datetime.fromisoformat(rowCopy['lastInput'])
-                        rowCopy['lastInput'] = dt_object.strftime('%Y-%b-%d %H:%M:%S')
+                        dt_object = datetime.fromisoformat(rowCopy["lastInput"])
+                        rowCopy["lastInput"] = dt_object.strftime('%Y-%b-%d %H:%M:%S')
                     except ValueError:
-                        rowCopy['lastInput'] = 'Invalid Date'
+                        rowCopy["lastInput"] = 'Invalid Date'
                 else:
-                    rowCopy['lastInput'] = '-'
+                    rowCopy["lastInput"] = '-'
 
                 if rowCopy.get('lastOutput'):
                     try:
-                        dt_object = datetime.fromisoformat(rowCopy['lastOutput'])
-                        rowCopy['lastOutput'] = dt_object.strftime('%Y-%b-%d %H:%M:%S')
+                        dt_object = datetime.fromisoformat(rowCopy["lastOutput"])
+                        rowCopy["lastOutput"] = dt_object.strftime('%Y-%b-%d %H:%M:%S')
                     except ValueError:
-                        rowCopy['lastOutput'] = 'Invalid Date'
+                        rowCopy["lastOutput"] = 'Invalid Date'
                 else:
-                    rowCopy['lastOutput'] = '-'
+                    rowCopy["lastOutput"] = '-'
 
                 if rowCopy.get('price') is not None:
                     try:
-                        price_value = int(rowCopy['price'])
+                        price_value = int(rowCopy["price"])
                         formatted_price = f"Rp {price_value:,.0f}".replace(",", ".")
-                        rowCopy['price'] = formatted_price
+                        rowCopy["price"] = formatted_price
                     except (ValueError, TypeError):
-                        rowCopy['price'] = 'N/A'
+                        rowCopy["price"] = 'N/A'
                 else:
-                    rowCopy['price'] = '-'
+                    rowCopy["price"] = '-'
 
                 if rowCopy.get('priceUnit') is not None:
                     try:
-                        price_value = int(rowCopy['priceUnit'])
+                        price_value = int(rowCopy["priceUnit"])
                         formatted_price = f"Rp {price_value:,.0f}".replace(",", ".")
-                        rowCopy['priceUnit'] = formatted_price
+                        rowCopy["priceUnit"] = formatted_price
                     except (ValueError, TypeError):
-                        rowCopy['priceUnit'] = 'N/A'
+                        rowCopy["priceUnit"] = 'N/A'
                 else:
-                    rowCopy['price'] = '-'
+                    rowCopy["price"] = '-'
 
                 newRow.append(rowCopy)
 
-            if rows['type'] in self.context_map:
-                type = self.context_map[rows['type']]
+            if rows["type"] in self.context_map:
+                type = self.context_map[rows["type"]]
                 newDataOfStock = {
                     'name' : type,
-                    'type' : rows['type'],
+                    'type' : rows["type"],
                     'data' : newRow
                 }
                 newDatas.append(newDataOfStock)
@@ -131,17 +131,17 @@ class WarehouseBusiness:
 
 
     def AddItem(self, item):
-        item['data']['stockIn'] = int(item['data']['stockIn'])
-        item['data']['packaging'] = int(item['data']['packaging'])
-        item['data']['price'] = int(item['data']['price'])
+        item["data"]["stockIn"] = int(item["data"]["stockIn"])
+        item["data"]["packaging"] = int(item["data"]["packaging"])
+        item["data"]["price"] = int(item["data"]["price"])
         return warehouse.AddStock(item)
 
     def UpdateItem(self, item):
         data = item["data"][0]
 
         if 'inPrice' in item:
-            if item['inPrice'] is not None:
-                data['price'] = item['itemPrice']
+            if item["inPrice"] is not None:
+                data["price"] = item["itemPrice"]
             else:
                 data["price"] = int(data["price"].replace('Rp', '').replace('.', '').strip())
         else:
@@ -162,7 +162,7 @@ class WarehouseBusiness:
 
     def DeleteStock(self, item):
         data = item['data'][0]
-        return warehouse.DeleteStock(item['type'], data['guid'])
+        return warehouse.DeleteStock(item["type"], data["guid"])
 
 
 

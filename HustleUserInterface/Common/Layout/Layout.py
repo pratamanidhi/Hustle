@@ -37,7 +37,7 @@ class Layout():
 
                 ui.button('Home', on_click=goToHome).props('flat dense')
                 ui.button('Warehouse', on_click=goToWarehouse).props('flat dense')
-                if datas['isAdmin']:
+                if datas["isAdmin"]:
                     ui.button('Menu', on_click=goToMenu).props('flat dense')
                     ui.button('Report', on_click=goToReport).props('flat dense')
                     ui.button('Supplier', on_click=goToSupplier).props('flat dense')
@@ -63,7 +63,7 @@ class Layout():
         with ui.column().classes('w-full max-w-screen-md'):
             ui.label(title).classes('text-lg font-bold mb-2')
 
-            if userInfo['isAdmin']:
+            if userInfo["isAdmin"]:
                 def CreateNewItem():
                     modal.ShowAddModal(stockType, userInfo)
 
@@ -170,28 +170,28 @@ class Layout():
 
     def RenderChartReport(self, datas):
         ui.separator()
-        ui.label(datas['name'])
+        ui.label(datas["name"])
 
         chart = ui.highchart({
-            'title': datas['name'],
+            'title': datas["name"],
             'chart': {'type': 'bar'},
             'xAxis': {'categories': ['Stock In', 'Stock Out']},
             'series': [],
         }).classes('w-full h-64')
 
         def loadData():
-            reports = datas['data']
+            reports = datas["data"]
             charts = []
             if reports is not None:
                 for reportData in reports:
                     data = []
-                    if reportData['stockIn'] is not None:
-                        data.append(reportData['stockIn'])
-                    if reportData['stockOut'] is not None:
-                        data.append(reportData['stockOut'])
+                    if reportData["stockIn"] is not None:
+                        data.append(reportData["stockIn"])
+                    if reportData["stockOut"] is not None:
+                        data.append(reportData["stockOut"])
 
                     charts.append({
-                        'name': reportData['name'],
+                        'name': reportData["name"],
                         'data': data,
                     })
 
@@ -202,7 +202,7 @@ class Layout():
 
     def RenderTableReport(self, datas):
         ui.separator()
-        ui.label(datas['name'])
+        ui.label(datas["name"])
 
         columns = [
             {'name': 'Name', 'label': 'Name', 'field': 'name', 'required': True, 'align': 'left'},
@@ -215,14 +215,14 @@ class Layout():
 
         rowsData = []
 
-        for reportData in datas['data']:
-            dt_object = datetime.fromisoformat(reportData['lastUpdated'])
+        for reportData in datas["data"]:
+            dt_object = datetime.fromisoformat(reportData["lastUpdated"])
             data = {
-                'name' : reportData['name'],
-                'stockIn' : reportData['stockIn'],
-                'stockOut' : reportData['stockOut'],
-                'totalTransaction' : reportData['totalStockTransaction'],
-                'date' : reportData['datetime'],
+                'name' : reportData["name"],
+                'stockIn' : reportData["stockIn"],
+                'stockOut' : reportData["stockOut"],
+                'totalTransaction' : reportData["totalStockTransaction"],
+                'date' : reportData["datetime"],
                 'lastUpdate' : dt_object.strftime('%Y-%b-%d %H:%M:%S')
             }
             rowsData.append(data)
@@ -275,7 +275,7 @@ class Layout():
         print("Dial in data: ", data)
 
         with ui.column().classes('w-full relative p-4 border-2 rounded-3xl'):
-            dates = datetime.fromisoformat(data['updatedAt'])
+            dates = datetime.fromisoformat(data["updatedAt"])
             newDate = dates.strftime("%d %b %Y %H:%M")
             ui.chip(icon='calendar_today', color='indigo-5', removable=False).style('color: white; padding-left: 8px; gap: 0.5rem').set_text(newDate)
 
@@ -295,11 +295,11 @@ class Layout():
                                 ui.label(data["beansName"])
 
                                 ui.label('Roast Date').classes('font-semibold text-gray-800')
-                                ui.label(data['roastDate'])
+                                ui.label(data["roastDate"])
 
                                 ui.label('Dialed By').classes('font-semibold text-gray-800')
                                 with ui.grid(columns=2).classes('gap-2'):
-                                    for employee in data['dialedBy']:
+                                    for employee in data["dialedBy"]:
                                         ui.chip(employee, removable=False, icon='person', color='indigo-5').style('color: white')
 
                                 ui.label('Dose').classes('font-semibold text-gray-800')
@@ -309,7 +309,7 @@ class Layout():
                                 ui.label(f'{data["time"]} second')
 
                                 ui.label('Yield').classes('font-semibold text-gray-800')
-                                ui.label(f'{data['calibrationYield']} ml')
+                                ui.label(f'{data["calibrationYield"]} ml')
 
                                 ui.label('Sweet Spot').classes('font-semibold text-gray-800')
                                 ui.label(f'{data["sweetSpot"]} ml')
@@ -320,10 +320,10 @@ class Layout():
                                         ui.chip(tool, removable=False, icon='label', color='grey-3')
 
                                 ui.label('Grind Size').classes('font-semibold text-gray-800')
-                                ui.label(data['grindSize'])
+                                ui.label(data["grindSize"])
 
                                 ui.label('Mouth Feels').classes('font-semibold text-gray-800')
-                                ui.label(data['mouthFeel'])
+                                ui.label(data["mouthFeel"])
 
                 with ui.tab_panel(two).classes('h-full'):
                     with ui.column().classes('h-full justify-start w-full'):
@@ -334,22 +334,22 @@ class Layout():
                         with ui.column().classes('w-full relative p-4 border-2 rounded-3xl'):
                             with ui.grid(columns=2).classes('gap-2 w-full'):
                                 ui.label('Black').classes('font-semibold text-gray-800')
-                                ui.label(data['black'])
+                                ui.label(data["black"])
 
                                 ui.label('Espresso').classes('font-semibold text-gray-800')
-                                ui.label(data['espressoNotes'])
+                                ui.label(data["espressoNotes"])
 
                                 ui.label('Americano').classes('font-semibold text-gray-800')
-                                ui.label(data['americanoNotes'])
+                                ui.label(data["americanoNotes"])
 
                                 ui.label('White').classes('font-semibold text-gray-800')
-                                ui.label(data['white'])
+                                ui.label(data["white"])
 
                                 ui.label('Cappuccino').classes('font-semibold text-gray-800')
-                                ui.label(data['cappuccinoNotes'])
+                                ui.label(data["cappuccinoNotes"])
 
                                 ui.label('Latte').classes('font-semibold text-gray-800')
-                                ui.label(data['latteNotes'])
+                                ui.label(data["latteNotes"])
 
 
 

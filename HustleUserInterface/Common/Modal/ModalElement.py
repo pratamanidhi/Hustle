@@ -25,7 +25,7 @@ class ModalElement:
             {'name': 'description', 'label': 'Description', 'field': 'description'},
         ]
 
-        if userInfo['isAdmin']:
+        if userInfo["isAdmin"]:
             columns.append({'name': 'stockIn', 'label': 'Stock In', 'field': 'stockIn'})
 
         columns += [
@@ -41,12 +41,12 @@ class ModalElement:
                 'stockOut': str(d.get('stockOut', '')),
                 'totalStock': str(d.get('totalStock', '')),
             }
-            if userInfo['isAdmin']:
-                row['stockIn'] = str(d.get('stockIn'))
+            if userInfo["isAdmin"]:
+                row["stockIn"] = str(d.get('stockIn'))
             rows.append(row)
 
         def onCheckout():
-            datas[0]['updatedBy'] = userInfo['name']
+            datas[0]["updatedBy"] = userInfo["name"]
             isOut = True
             item = {
                 "type": type,
@@ -61,9 +61,9 @@ class ModalElement:
             else:
                 print(False)
 
-        if userInfo['isAdmin']:
+        if userInfo["isAdmin"]:
             def onCheckin():
-                datas[0]['updatedBy'] = userInfo['name']
+                datas[0]["updatedBy"] = userInfo["name"]
                 isOut = False
                 item = {
                     "type": type,
@@ -114,7 +114,7 @@ class ModalElement:
                 .props('flat round dense color=grey') \
                 .classes('absolute top-2 right-2 z-10')
 
-            if userInfo['isAdmin']:
+            if userInfo["isAdmin"]:
                 ui.label('Manage Stock').classes('text-2xl font-semibold text-gray-800')
             else:
                 ui.label('Checkout Stock Item').classes('text-2xl font-semibold text-gray-800')
@@ -124,17 +124,17 @@ class ModalElement:
             with ui.column().classes('relative p-4 border rounded-md'):
 
                 with ui.grid(columns=2).classes('gap-3'):
-                    if userInfo['isAdmin']:
+                    if userInfo["isAdmin"]:
                         inQty = ui.input(label='Quantity Out') \
                             .props('type=number dense outlined') \
-                            .classes('flex-1 text-sm').bind_visibility_from(userInfo['isAdmin'])
+                            .classes('flex-1 text-sm').bind_visibility_from(userInfo["isAdmin"])
                         ui.button('Stock In', on_click=onCheckin) \
                             .classes('text-sm px-3 py-1 rounded-md')
 
                         formatedPrice = int(datas[0]["price"].replace('Rp', '').replace('.', '').strip())
                         inPrice = ui.input(label='Item Price', value=formatedPrice) \
                             .props('type=number dense outlined') \
-                            .classes('flex-1 text-sm').bind_visibility_from(userInfo['isAdmin'])
+                            .classes('flex-1 text-sm').bind_visibility_from(userInfo["isAdmin"])
                         ui.button('Update Price', on_click=onUpdatePrice) \
                             .classes('text-sm px-3 py-1 rounded-md')
 
@@ -146,7 +146,7 @@ class ModalElement:
                         .classes('text-sm px-3 py-1 rounded-md')
 
             ui.separator()
-            if userInfo['isAdmin']:
+            if userInfo["isAdmin"]:
                 ui.button('Delete Item', on_click=onDeleteItem) \
                     .classes('text-sm px-3 py-1 rounded-md') \
                     .props('color=amber-500 text-black')
@@ -167,7 +167,7 @@ class ModalElement:
                 .classes('absolute top-2 right-2 z-10')
 
             async def init_form():
-                unit_options = {u['guid']: u['name'] for u in business.GetUnit()}
+                unit_options = {u["guid"]: u["name"] for u in business.GetUnit()}
                 first_guid = next(iter(unit_options))
 
                 with form_container:
@@ -214,7 +214,7 @@ class ModalElement:
                                     "price": itemPrice.value,
                                     "description": description.value,
                                     "unit": radio.value,
-                                    "updatedBy": userInfo['name']
+                                    "updatedBy": userInfo["name"]
                                 }
                             }
                             result = business.AddItem(value)
@@ -242,13 +242,13 @@ class ModalElement:
             return {category["value"]: category["name"] for category in categories}
 
         def unitForm():
-            return {unit['guid']: unit['name'] for unit in units}
+            return {unit["guid"]: unit["name"] for unit in units}
 
         def ingredientForm(category_id):
             option = {}
             for ingredient in ingredients:
-                if ingredient['type'] == category_id:
-                    for ingredientData in ingredient['data']:
+                if ingredient["type"] == category_id:
+                    for ingredientData in ingredient["data"]:
                         option[f"{ingredientData['guid']} ({ingredientData['priceUnit']})"] = ingredientData['name']
             return option
 

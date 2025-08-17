@@ -27,8 +27,8 @@ class SupplierBussiness():
 
     def InputSupplier(self, input):
         model.name = input.name
-        model.orderType = self.SupplierTypeId(input.orderType)['guid']
-        model.bankAccount = self.BankAccountId(input)['guid']
+        model.orderType = self.SupplierTypeId(input.orderType)["guid"]
+        model.bankAccount = self.BankAccountId(input)["guid"]
         model.contactPerson = input.contactPerson
         model.productName = input.productName
 
@@ -79,7 +79,7 @@ class SupplierBussiness():
 
     def GetSupplierFilteredByCategory(self, category):
         categoryGuid = repo.GetSupplierId(dbContext.OrderType, category)
-        result = repo.GetSupplierWithCategory(dbContext.Supplier, categoryGuid['guid'])
+        result = repo.GetSupplierWithCategory(dbContext.Supplier, categoryGuid["guid"])
         return result
 
     def InputOrder(self, datas):

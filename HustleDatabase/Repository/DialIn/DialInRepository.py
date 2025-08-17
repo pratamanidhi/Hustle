@@ -15,16 +15,16 @@ class DialInRepository():
         for row in rows:
             rowDict = dict(row)
             try:
-                if rowDict['dialedBy']:
-                    rowDict['dialedBy'] = json.loads(rowDict['dialedBy'])
+                if rowDict["dialedBy"]:
+                    rowDict["dialedBy"] = json.loads(rowDict["dialedBy"])
             except json.JSONDecodeError:
-                rowDict['dialedBy'] = []
+                rowDict["dialedBy"] = []
 
             try:
-                if rowDict['tools']:
-                    rowDict['tools'] = json.loads(rowDict['tools'])
+                if rowDict["tools"]:
+                    rowDict["tools"] = json.loads(rowDict["tools"])
             except json.JSONDecodeError:
-                rowDict['tools'] = []
+                rowDict["tools"] = []
 
             result.append(rowDict)
 

@@ -50,10 +50,10 @@ class LogBusiness():
         checkReport = self.CheckDailyReport(model)
 
         if checkReport is not None:
-            if model.stockIn is None or model.stockIn == int(checkReport['stockIn']):
+            if model.stockIn is None or model.stockIn == int(checkReport["stockIn"]):
                 model.stockIn = 0
 
-            if model.stockOut is None or model.stockOut == int(checkReport['stockOut']):
+            if model.stockOut is None or model.stockOut == int(checkReport["stockOut"]):
                 model.stockOut = 0
 
             model.totalStockTransaction = int(model.stockIn) + int(model.stockOut)
@@ -61,10 +61,10 @@ class LogBusiness():
 
 
         if checkReport is not None:
-            model.guid = checkReport['guid']
-            model.stockOut = int(model.stockOut) + int(checkReport['stockOut'])
-            model.stockIn = int(model.stockIn) + int(checkReport['stockIn'])
-            model.totalStockTransaction = int(model.totalStockTransaction) + int(checkReport['totalStockTransaction'])
+            model.guid = checkReport["guid"]
+            model.stockOut = int(model.stockOut) + int(checkReport["stockOut"])
+            model.stockIn = int(model.stockIn) + int(checkReport["stockIn"])
+            model.totalStockTransaction = int(model.totalStockTransaction) + int(checkReport["totalStockTransaction"])
             return repo.UpdateDailyReport(dbContext.DailyStock, model)
         else:
             return repo.InsertIntoDailyReport(dbContext.DailyStock, model)

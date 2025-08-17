@@ -23,7 +23,7 @@ def WarehouseContent():
             with ui.row().classes('w-full justify-evenly'):
                 allStock = warehouse.GetAllStock()
                 for stock in allStock:
-                    layout.RenderTable(stock['type'], stock['name'], result, stock['data'])
+                    layout.RenderTable(stock["type"], stock["name"], result, stock['data'])
 
             container.visible = False
         else:

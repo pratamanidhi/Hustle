@@ -68,25 +68,25 @@ class WarehouseBusiness:
             context, _ = self.context_map[types]
             checkStock = repo.CheckStock(context, model)
 
-            if checkStock['totalStock'] is None:
-                checkStock['totalStock'] = 0
+            if checkStock["totalStock"] is None:
+                checkStock["totalStock"] = 0
 
-            if checkStock['stockIn'] is None:
-                checkStock['stockIn'] = 0
+            if checkStock["stockIn"] is None:
+                checkStock["stockIn"] = 0
 
-            if checkStock['stockOut'] is None:
-                checkStock['stockOut'] = 0
+            if checkStock["stockOut"] is None:
+                checkStock["stockOut"] = 0
 
             if isOut:
-                model.totalStock = int(checkStock['totalStock']) - int(model.stockOut)
+                model.totalStock = int(checkStock["totalStock"]) - int(model.stockOut)
                 model.stockOut =  int(model.stockOut)
-                model.lastInput = checkStock['lastInput']
+                model.lastInput = checkStock["lastInput"]
                 model.lastOutput = datetime.now()
             else:
-                model.totalStock = int(checkStock['totalStock']) + int(model.stockIn)
+                model.totalStock = int(checkStock["totalStock"]) + int(model.stockIn)
                 model.stockIn = int(model.stockIn)
                 model.lastInput = datetime.now()
-                model.lastOutput = checkStock['lastOutput']
+                model.lastOutput = checkStock["lastOutput"]
 
             unitGuid = self.GetUnitGuid(model.unit)
             model.unit = unitGuid
@@ -105,7 +105,7 @@ class WarehouseBusiness:
 
     def GetUnitGuid(self, unitName):
         result = unit.GetUnitByName(unitName)
-        return result['guid']
+        return result["guid"]
 
     def InsertLog(self, isOut, data):
         data.lastInput = utils.FormatedDate(data.lastInput)
@@ -142,16 +142,16 @@ class WarehouseBusiness:
         if latestDatas is not None:
 
             if isOut:
-                if latestDatas['stockOut'] is None:
+                if latestDatas["stockOut"] is None:
                     dailyLog.stockOut = int(model.stockOut)
                 else:
-                    dailyLog.stockOut = int(latestDatas['stockOut']) + int(model.stockOut)
+                    dailyLog.stockOut = int(latestDatas["stockOut"]) + int(model.stockOut)
 
             else:
-                if latestDatas['stockIn'] is None:
+                if latestDatas["stockIn"] is None:
                     dailyLog.stockIn = int(model.stockIn)
                 else:
-                    dailyLog.stockIn = int(latestDatas['stockIn']) + int(model.stockIn)
+                    dailyLog.stockIn = int(latestDatas["stockIn"]) + int(model.stockIn)
 
             result = logBusiness.UpdateDailyStock(model, isOut)
         else:
