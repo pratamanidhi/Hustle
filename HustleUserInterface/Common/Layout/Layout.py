@@ -132,7 +132,7 @@ class Layout():
             ui.separator()
 
     def GetReportMainContent(self):
-        content_container = ui.column().classes('w-full h-full')
+        content_container = ui.column().classes('w-full h-full p-2')
 
         def applyFilter(from_date, to_date):
             ui.notify(f'Filter applied: {from_date} → {to_date}')
@@ -144,60 +144,61 @@ class Layout():
                 ui.spinner('dots', size='lg', color='red')
 
             content_container.clear()
-
             data = report.GetAllReport()
 
             with content_container:
-                with ui.splitter(value=10).classes('w-full h-full') as splitter:
-                    with splitter.before:
-                        with ui.tabs().props('vertical').classes('w-50') as tabs:
-                            chart = ui.tab('Chart Report', icon='bar_chart')
-                            table = ui.tab('Table Report', icon='view_list')
+                # ✅ Remove vertical splitter on mobile
+                with ui.tabs().classes('w-full').props('breakpoint="600" horizontal') as tabs:
+                    chart = ui.tab('Chart Report', icon='bar_chart')
+                    table = ui.tab('Table Report', icon='view_list')
 
-                    with splitter.after:
-                        self.FilterDate(onApply=applyFilter)
+                # ✅ Stacked filter on mobile
+                with ui.row().classes('w-full flex-wrap gap-2 items-center'):
+                    self.FilterDate(onApply=applyFilter)
 
-                        with ui.tab_panels(tabs, value=chart).props('vertical').classes('w-full h-full'):
-                            with ui.tab_panel(chart):
-                                for reportValue in data:
-                                    self.RenderChartReport(reportValue)
-                            with ui.tab_panel(table):
-                                for reportValue in data:
-                                    self.RenderTableReport(reportValue)
+                with ui.tab_panels(tabs, value=chart).classes('w-full h-full'):
+                    with ui.tab_panel(chart):
+                        with ui.scroll_area().classes('w-full h-full'):
+                            for reportValue in data:
+                                self.RenderChartReport(reportValue)
+
+                    with ui.tab_panel(table):
+                        with ui.scroll_area().classes('w-full h-full'):
+                            for reportValue in data:
+                                self.RenderTableReport(reportValue)
+
             container.visible = False
-        renderContent()
 
+        renderContent()
 
     def RenderChartReport(self, datas):
         ui.separator()
-        ui.label(datas["name"])
+        ui.label(datas["name"]).classes("text-base font-semibold")
 
         chart = ui.highchart({
-            'title': datas["name"],
+            'title': None,  # ✅ hide duplicate title
             'chart': {'type': 'bar'},
             'xAxis': {'categories': ['Stock In', 'Stock Out']},
             'series': [],
-        }).classes('w-full h-64')
+        }).classes('w-full h-56 sm:h-80')  # smaller on mobile
 
         def loadData():
             reports = datas["data"]
             charts = []
-            if reports is not None:
+            if reports:
                 for reportData in reports:
-                    data = []
-                    if reportData["stockIn"] is not None:
-                        data.append(reportData["stockIn"])
-                    if reportData["stockOut"] is not None:
-                        data.append(reportData["stockOut"])
-
                     charts.append({
                         'name': reportData["name"],
-                        'data': data,
+                        'data': [
+                            reportData.get("stockIn") or 0,
+                            reportData.get("stockOut") or 0,
+                        ],
                     })
 
             chart.options['series'] = charts
             chart.update()
             ui.separator()
+
         ui.timer(0.5, loadData, once=True)
 
     def RenderTableReport(self, datas):

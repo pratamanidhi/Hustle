@@ -514,12 +514,12 @@ class ModalElement:
             with ui.tabs().classes('w-full') as tabs:
                 one = ui.tab('Dial In')
                 two = ui.tab('Body')
-            with ui.tab_panels(tabs, value=one).classes('w-full h-[550px]'):
+            with ui.tab_panels(tabs, value=one).classes('w-full max-h-[80vh] overflow-y-auto'):
                 with ui.tab_panel(one).classes('h-full'):
                     ui.label('Calibration').classes('text-2xl font-semibold text-gray-800')
                     ui.separator()
 
-                    with ui.row().classes('w-full h-screen items-center justify-center'):
+                    with ui.row().classes('w-full items-center justify-center'):
                         with ui.grid(columns=2).classes('gap-3'):
                             getCoffee()
                             ui.label('Beans Name')
