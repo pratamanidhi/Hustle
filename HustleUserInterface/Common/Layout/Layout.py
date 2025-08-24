@@ -1,6 +1,6 @@
 from nicegui import ui
 from Common.Button import Button as Button
-from HustleUserInterface.Common.Modal.ModalElement import ModalElement as Modal
+from Common.Modal.ModalElement import ModalElement as Modal
 from Business.Report.ReportBusiness import ReportBusiness as Report
 from Common.StockEnum import StockEnum
 from datetime import datetime

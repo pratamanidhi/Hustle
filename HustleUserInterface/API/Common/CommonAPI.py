@@ -1,5 +1,5 @@
 import requests
-from HustleUserInterface.Common.ApiUrl import APIUrl as Api
+from Common.ApiUrl import APIUrl as Api
 
 class CommonApi:
     def __init__(self) -> None:

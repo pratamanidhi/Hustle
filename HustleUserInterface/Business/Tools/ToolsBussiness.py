@@ -1,4 +1,4 @@
-from HustleUserInterface.API.Tools.ToolsAPI import ToolsAPI as ToolsApi
+from API.Tools.ToolsAPI import ToolsAPI as ToolsApi
 
 api = ToolsApi()
 class ToolsBusiness:

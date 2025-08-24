@@ -13,7 +13,6 @@ import sys
 import os
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 
-
 app = FastAPI(
     title="Hustle API",
     description="API for managing coffee, milk base, camera, users, and warehouse operations.",

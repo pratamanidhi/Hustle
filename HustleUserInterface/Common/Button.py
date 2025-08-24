@@ -22,7 +22,7 @@ class Button():
                         }}));
                     ''', timeout=5.0)
 
-                    ui.notify(f"Welcome {result["username"]}", type="positive")
+                    ui.notify(f'Welcome {result["username"]}', type="positive")
                     ui.navigate.to('/home')
                 else:
                     ui.notify("Login Failed: Invalid username or password.", type="negative")

@@ -3,7 +3,7 @@ from datetime import datetime
 
 from nicegui.html import dialog
 
-from HustleUserInterface.Business.Supplier.SupplierBusiness import SupplierBusiness as Business
+from Business.Supplier.SupplierBusiness import SupplierBusiness as Business
 
 business = Business()
 class SupplierModal():
@@ -111,7 +111,7 @@ class SupplierModal():
             ui.chip(color='amber-500', removable=False).style(
                 'color: white; padding-left: 8px; gap: 0.5rem').set_text(dateNow)
             ui.separator()
-            ui.label(f"Receive order from {identity["name"]}")
+            ui.label(f'Receive order from {identity["name"]}')
 
             with ui.column().classes('relative p-4 border rounded-md'):
                 with ui.grid(columns=2).classes('gap-3'):

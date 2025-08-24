@@ -1,6 +1,5 @@
-from charset_normalizer.cli import query_yes_no
 
-from HustleUserInterface.API.Supplier.SupplierAPI import SupplierAPI as Api
+from API.Supplier.SupplierAPI import SupplierAPI as Api
 
 api = Api()
 class SupplierBusiness:

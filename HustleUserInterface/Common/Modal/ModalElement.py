@@ -1,9 +1,9 @@
 from nicegui import ui
-from HustleUserInterface.Business.Warehouse.WarehouseBusiness import WarehouseBusiness as Business
+from Business.Warehouse.WarehouseBusiness import WarehouseBusiness as Business
 from Business.Common.CommonBusiness import CommonBusiness as CommonBusiness
 from starlette.formparsers import MultiPartParser
 from datetime import datetime, date
-from HustleUserInterface.Business.DialIn.DialInBussiness import DialInBussiness as DialIn
+from Business.DialIn.DialInBussiness import DialInBussiness as DialIn
 
 business = Business()
 commonBusiness = CommonBusiness()
@@ -405,8 +405,8 @@ class ModalElement:
                 'ingredient': ingredient['selectedIngredient'],
                 'dose': ingredient['doseInput'],
                 'unit': ingredient['selectedUnit'],
-                'price': f'Rp. {ingredient['price']}',
-                'totalCost': f'Rp. {int(ingredient['price']) * int(ingredient['doseInput'])}'
+                'price': f'Rp. {ingredient["price"]}',
+                'totalCost': f'Rp. {int(ingredient["price"]) * int(ingredient["doseInput"])}'
             }
             row.append(datas)
 
