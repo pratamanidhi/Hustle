@@ -94,5 +94,9 @@ class SupplierBussiness():
         result = repo.DeleteSupplier(dbContext.Supplier, param.guid)
         return result
 
+    def GetSupplierHisory(self):
+        result = repo.GetSupplierHistpry()
+        return result
+
 
 
