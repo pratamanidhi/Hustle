@@ -1,7 +1,7 @@
 import requests
 from nicegui.html import param
 
-from HustleUserInterface.Common.ApiUrl import APIUrl as Api
+from Common.ApiUrl import APIUrl as Api
 
 class WarehouseAPI:
     def __init__(self) -> None:
@@ -36,8 +36,8 @@ class WarehouseAPI:
 
     def AddStock(self, value):
         try:
-            param = {'types': value['type']}
-            response = requests.post(Api.addStock, params=param, json=value['data'])
+            param = {'types': value["type"]}
+            response = requests.post(Api.addStock, params=param, json=value["data"])
             if response.status_code == 200:
                 return True
             else:

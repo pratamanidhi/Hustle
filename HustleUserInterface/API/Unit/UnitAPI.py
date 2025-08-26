@@ -1,7 +1,7 @@
 from http.client import responses
 
 import requests
-from HustleUserInterface.Common.ApiUrl import APIUrl as Api
+from Common.ApiUrl import APIUrl as Api
 
 class UnitAPI:
     def __init__(self) -> None:

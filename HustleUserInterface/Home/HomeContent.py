@@ -2,10 +2,10 @@ from nicegui import ui, context
 from Common.Session.Session import Session as Session
 from Common.Layout.Layout import Layout as Layout
 from Common.Modal.ModalElement import ModalElement as Modal
-from HustleUserInterface.Business.Warehouse.WarehouseBusiness import WarehouseBusiness as Warehouse
-from HustleUserInterface.Business.UserManagement.UserBusiness import UserBusiness as User
-from HustleUserInterface.Business.Tools.ToolsBussiness import ToolsBusiness as Tools
-from HustleUserInterface.Business.DialIn.DialInBussiness import DialInBussiness as DialIn
+from Business.Warehouse.WarehouseBusiness import WarehouseBusiness as Warehouse
+from Business.UserManagement.UserBusiness import UserBusiness as User
+from Business.Tools.ToolsBussiness import ToolsBusiness as Tools
+from Business.DialIn.DialInBussiness import DialInBussiness as DialIn
 
 
 session = Session()

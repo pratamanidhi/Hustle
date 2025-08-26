@@ -1,6 +1,6 @@
 from nicegui import ui
 from Common.Button import Button as Button
-from HustleUserInterface.Common.Modal.ModalElement import ModalElement as Modal
+from Common.Modal.ModalElement import ModalElement as Modal
 from Business.Report.ReportBusiness import ReportBusiness as Report
 from Common.StockEnum import StockEnum
 from datetime import datetime
@@ -32,15 +32,19 @@ class Layout():
                 def goToReport():
                     ui.navigate.to('/report')
 
+                def goToSupplier():
+                    ui.navigate.to('/supplier')
+
                 ui.button('Home', on_click=goToHome).props('flat dense')
                 ui.button('Warehouse', on_click=goToWarehouse).props('flat dense')
-                if datas['isAdmin']:
+                if datas["isAdmin"]:
                     ui.button('Menu', on_click=goToMenu).props('flat dense')
                     ui.button('Report', on_click=goToReport).props('flat dense')
+                    ui.button('Supplier', on_click=goToSupplier).props('flat dense')
 
 
 
-                dropdown = ui.dropdown_button(f'Hi! {datas['name']}', auto_close=True)
+                dropdown = ui.dropdown_button(f'Hi! {datas["name"]}', auto_close=True)
                 dropdown.props('color=amber-500 text-black')
                 with dropdown:
                     ui.item('Logout', on_click=handleLogout)
@@ -59,7 +63,7 @@ class Layout():
         with ui.column().classes('w-full max-w-screen-md'):
             ui.label(title).classes('text-lg font-bold mb-2')
 
-            if userInfo['isAdmin']:
+            if userInfo["isAdmin"]:
                 def CreateNewItem():
                     modal.ShowAddModal(stockType, userInfo)
 
@@ -128,7 +132,7 @@ class Layout():
             ui.separator()
 
     def GetReportMainContent(self):
-        content_container = ui.column().classes('w-full h-full')
+        content_container = ui.column().classes('w-full h-full p-2')
 
         def applyFilter(from_date, to_date):
             ui.notify(f'Filter applied: {from_date} → {to_date}')
@@ -140,65 +144,66 @@ class Layout():
                 ui.spinner('dots', size='lg', color='red')
 
             content_container.clear()
-
             data = report.GetAllReport()
 
             with content_container:
-                with ui.splitter(value=10).classes('w-full h-full') as splitter:
-                    with splitter.before:
-                        with ui.tabs().props('vertical').classes('w-50') as tabs:
-                            chart = ui.tab('Chart Report', icon='bar_chart')
-                            table = ui.tab('Table Report', icon='view_list')
+                # ✅ Remove vertical splitter on mobile
+                with ui.tabs().classes('w-full').props('breakpoint="600" horizontal') as tabs:
+                    chart = ui.tab('Chart Report', icon='bar_chart')
+                    table = ui.tab('Table Report', icon='view_list')
 
-                    with splitter.after:
-                        self.FilterDate(onApply=applyFilter)
+                # ✅ Stacked filter on mobile
+                with ui.row().classes('w-full flex-wrap gap-2 items-center'):
+                    self.FilterDate(onApply=applyFilter)
 
-                        with ui.tab_panels(tabs, value=chart).props('vertical').classes('w-full h-full'):
-                            with ui.tab_panel(chart):
-                                for reportValue in data:
-                                    self.RenderChartReport(reportValue)
-                            with ui.tab_panel(table):
-                                for reportValue in data:
-                                    self.RenderTableReport(reportValue)
+                with ui.tab_panels(tabs, value=chart).classes('w-full h-full'):
+                    with ui.tab_panel(chart):
+                        with ui.scroll_area().classes('w-full h-full'):
+                            for reportValue in data:
+                                self.RenderChartReport(reportValue)
+
+                    with ui.tab_panel(table):
+                        with ui.scroll_area().classes('w-full h-full'):
+                            for reportValue in data:
+                                self.RenderTableReport(reportValue)
+
             container.visible = False
-        renderContent()
 
+        renderContent()
 
     def RenderChartReport(self, datas):
         ui.separator()
-        ui.label(datas['name'])
+        ui.label(datas["name"]).classes("text-base font-semibold")
 
         chart = ui.highchart({
-            'title': datas['name'],
+            'title': None,  # ✅ hide duplicate title
             'chart': {'type': 'bar'},
             'xAxis': {'categories': ['Stock In', 'Stock Out']},
             'series': [],
-        }).classes('w-full h-64')
+        }).classes('w-full h-56 sm:h-80')  # smaller on mobile
 
         def loadData():
-            reports = datas['data']
+            reports = datas["data"]
             charts = []
-            if reports is not None:
+            if reports:
                 for reportData in reports:
-                    data = []
-                    if reportData['stockIn'] is not None:
-                        data.append(reportData['stockIn'])
-                    if reportData['stockOut'] is not None:
-                        data.append(reportData['stockOut'])
-
                     charts.append({
-                        'name': reportData['name'],
-                        'data': data,
+                        'name': reportData["name"],
+                        'data': [
+                            reportData.get("stockIn") or 0,
+                            reportData.get("stockOut") or 0,
+                        ],
                     })
 
             chart.options['series'] = charts
             chart.update()
             ui.separator()
+
         ui.timer(0.5, loadData, once=True)
 
     def RenderTableReport(self, datas):
         ui.separator()
-        ui.label(datas['name'])
+        ui.label(datas["name"])
 
         columns = [
             {'name': 'Name', 'label': 'Name', 'field': 'name', 'required': True, 'align': 'left'},
@@ -211,14 +216,14 @@ class Layout():
 
         rowsData = []
 
-        for reportData in datas['data']:
-            dt_object = datetime.fromisoformat(reportData['lastUpdated'])
+        for reportData in datas["data"]:
+            dt_object = datetime.fromisoformat(reportData["lastUpdated"])
             data = {
-                'name' : reportData['name'],
-                'stockIn' : reportData['stockIn'],
-                'stockOut' : reportData['stockOut'],
-                'totalTransaction' : reportData['totalStockTransaction'],
-                'date' : reportData['datetime'],
+                'name' : reportData["name"],
+                'stockIn' : reportData["stockIn"],
+                'stockOut' : reportData["stockOut"],
+                'totalTransaction' : reportData["totalStockTransaction"],
+                'date' : reportData["datetime"],
                 'lastUpdate' : dt_object.strftime('%Y-%b-%d %H:%M:%S')
             }
             rowsData.append(data)
@@ -271,7 +276,7 @@ class Layout():
         print("Dial in data: ", data)
 
         with ui.column().classes('w-full relative p-4 border-2 rounded-3xl'):
-            dates = datetime.fromisoformat(data['updatedAt'])
+            dates = datetime.fromisoformat(data["updatedAt"])
             newDate = dates.strftime("%d %b %Y %H:%M")
             ui.chip(icon='calendar_today', color='indigo-5', removable=False).style('color: white; padding-left: 8px; gap: 0.5rem').set_text(newDate)
 
@@ -291,35 +296,35 @@ class Layout():
                                 ui.label(data["beansName"])
 
                                 ui.label('Roast Date').classes('font-semibold text-gray-800')
-                                ui.label(data['roastDate'])
+                                ui.label(data["roastDate"])
 
                                 ui.label('Dialed By').classes('font-semibold text-gray-800')
                                 with ui.grid(columns=2).classes('gap-2'):
-                                    for employee in data['dialedBy']:
+                                    for employee in data["dialedBy"]:
                                         ui.chip(employee, removable=False, icon='person', color='indigo-5').style('color: white')
 
                                 ui.label('Dose').classes('font-semibold text-gray-800')
-                                ui.label(f'{data['dose']} gr')
+                                ui.label(f'{data["dose"]} gr')
 
                                 ui.label('Time').classes('font-semibold text-gray-800')
-                                ui.label(f'{data['time']} second')
+                                ui.label(f'{data["time"]} second')
 
                                 ui.label('Yield').classes('font-semibold text-gray-800')
-                                ui.label(f'{data['calibrationYield']} ml')
+                                ui.label(f'{data["calibrationYield"]} ml')
 
                                 ui.label('Sweet Spot').classes('font-semibold text-gray-800')
-                                ui.label(f'{data['sweetSpot']} ml')
+                                ui.label(f'{data["sweetSpot"]} ml')
 
                                 ui.label('Tools').classes('font-semibold text-gray-800')
                                 with ui.grid(columns=2).classes('gap-2'):
-                                    for tool in data['tools']:
+                                    for tool in data["tools"]:
                                         ui.chip(tool, removable=False, icon='label', color='grey-3')
 
                                 ui.label('Grind Size').classes('font-semibold text-gray-800')
-                                ui.label(data['grindSize'])
+                                ui.label(data["grindSize"])
 
                                 ui.label('Mouth Feels').classes('font-semibold text-gray-800')
-                                ui.label(data['mouthFeel'])
+                                ui.label(data["mouthFeel"])
 
                 with ui.tab_panel(two).classes('h-full'):
                     with ui.column().classes('h-full justify-start w-full'):
@@ -330,22 +335,22 @@ class Layout():
                         with ui.column().classes('w-full relative p-4 border-2 rounded-3xl'):
                             with ui.grid(columns=2).classes('gap-2 w-full'):
                                 ui.label('Black').classes('font-semibold text-gray-800')
-                                ui.label(data['black'])
+                                ui.label(data["black"])
 
                                 ui.label('Espresso').classes('font-semibold text-gray-800')
-                                ui.label(data['espressoNotes'])
+                                ui.label(data["espressoNotes"])
 
                                 ui.label('Americano').classes('font-semibold text-gray-800')
-                                ui.label(data['americanoNotes'])
+                                ui.label(data["americanoNotes"])
 
                                 ui.label('White').classes('font-semibold text-gray-800')
-                                ui.label(data['white'])
+                                ui.label(data["white"])
 
                                 ui.label('Cappuccino').classes('font-semibold text-gray-800')
-                                ui.label(data['cappuccinoNotes'])
+                                ui.label(data["cappuccinoNotes"])
 
                                 ui.label('Latte').classes('font-semibold text-gray-800')
-                                ui.label(data['latteNotes'])
+                                ui.label(data["latteNotes"])
 
 
 

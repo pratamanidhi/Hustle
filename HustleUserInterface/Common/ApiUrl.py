@@ -1,4 +1,4 @@
-from HustleUserInterface.Common.ApiEnum import Enum as Enum
+from Common.ApiEnum import Enum as Enum
 
 mainiUrl = 'http://localhost:8000'
 class APIUrl:
@@ -20,3 +20,10 @@ class APIUrl:
     getAllTools = mainiUrl + f"/{Enum.Warehouse}/get-tools"
     getAllDialIn = mainiUrl + f"/{Enum.DialIn}/get-all-dialIn"
     insertDialIn = mainiUrl + f"/{Enum.DialIn}/add-dialIn"
+    getAllSupplier = mainiUrl + f"/{Enum.Supplier}/get-all-supplier"
+    inputSupplier = mainiUrl + f"/{Enum.Supplier}/add-supplier"
+    getAllSupplierCategory = mainiUrl + f"/{Enum.Supplier}/supplier-type"
+    getSupplierByCategory = mainiUrl + f"/{Enum.Supplier}/get-supplier-by-category"
+    receiveOrder = mainiUrl + f"/{Enum.Supplier}/receive-order"
+    deleteSupplier = mainiUrl + f"/{Enum.Supplier}/delete-supplier"
+    getSupplierHistory = mainiUrl + f"/{Enum.Supplier}/get-supplier-history"

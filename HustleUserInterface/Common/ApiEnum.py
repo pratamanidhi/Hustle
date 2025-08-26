@@ -9,3 +9,4 @@ class Enum(StrEnum):
     Log = "logs"
     Report = "report"
     DialIn = "dialIn"
+    Supplier = "supplier"

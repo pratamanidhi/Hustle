@@ -1,6 +1,6 @@
 from nicegui import ui
-from HustleUserInterface.Business.Warehouse.WarehouseBusiness import WarehouseBusiness as Warehouse
-from HustleUserInterface.Common.Button import Button as Button
+from Business.Warehouse.WarehouseBusiness import WarehouseBusiness as Warehouse
+from Common.Button import Button as Button
 from Common.Layout.Layout import Layout as Layout
 from Common.Session.Session import Session as Session
 
@@ -23,7 +23,7 @@ def WarehouseContent():
             with ui.row().classes('w-full justify-evenly'):
                 allStock = warehouse.GetAllStock()
                 for stock in allStock:
-                    layout.RenderTable(stock['type'], stock['name'], result, stock['data'])
+                    layout.RenderTable(stock["type"], stock["name"], result, stock['data'])
 
             container.visible = False
         else:

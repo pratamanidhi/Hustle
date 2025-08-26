@@ -1,4 +1,4 @@
-from HustleUserInterface.API.DialIn.DialInAPI import  DialInAPI as Api
+from API.DialIn.DialInAPI import  DialInAPI as Api
 
 
 api = Api()

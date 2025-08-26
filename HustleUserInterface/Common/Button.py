@@ -17,12 +17,12 @@ class Button():
                 elif result is not None:
                     await ui.run_javascript(f'''
                         localStorage.setItem('user', JSON.stringify({{
-                            username: "{result['username']}",
-                            isAdmin: {str(result['isAdmin']).lower()}
+                            username: "{result["username"]}",
+                            isAdmin: {str(result["isAdmin"]).lower()}
                         }}));
                     ''', timeout=5.0)
 
-                    ui.notify(f"Welcome {result['username']}", type="positive")
+                    ui.notify(f'Welcome {result["username"]}', type="positive")
                     ui.navigate.to('/home')
                 else:
                     ui.notify("Login Failed: Invalid username or password.", type="negative")
