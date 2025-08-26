@@ -43,3 +43,6 @@ class SupplierBusiness:
             return api.DeleteSupplier(jsons)
         else:
             return False
+
+    def GetSupplierHistory(self):
+        return api.GetSupplierHistory()

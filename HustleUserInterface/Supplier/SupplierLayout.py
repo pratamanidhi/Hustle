@@ -1,8 +1,12 @@
 from nicegui import ui
 from datetime import datetime
+from typing import Dict
+
+from Business.Supplier.SupplierBusiness import SupplierBusiness as SupplierBusiness
 from Supplier.SupplierModal import SupplierModal as Modal
 
 modal = Modal()
+supplierBusiness = SupplierBusiness()
 class SupplierLayout:
     def __init__(self) -> None:
         pass
@@ -34,6 +38,7 @@ class SupplierLayout:
                                         self.SupplierListContent(supplier, user)
                         with ui.tab_panel(history_tab):
                             ui.label('Supplier history list')
+                            self.GetSupplierHistory()
 
     def SupplierListContent(self, supplier, user):
         def onDeleteItem():
@@ -76,3 +81,59 @@ class SupplierLayout:
             ui.button('Delete', on_click=onDeleteItem) \
                 .classes('text-sm px-3 py-1 rounded-md') \
                 .props('color=amber-500 text-black')
+
+    def GetSupplierHistory(self):
+        result = supplierBusiness.GetSupplierHistory()
+        if result is not False:
+            print(result)
+
+            columns = [
+                {'no': 'no', 'label': 'No', 'field': 'no', 'required': True, 'align': 'left'},
+                {'name': 'name', 'label': 'Name', 'field': 'name', 'required': True, 'align': 'left'},
+                {'name': 'productType', 'label': 'Product Type', 'field': 'productType', 'sortable': True,
+                 'align': 'left'},
+                {'name': 'productName', 'label': 'Product Name', 'field': 'productName', 'sortable': True,
+                 'align': 'left'},
+                {'name': 'bankAccount', 'label': 'Bank Account', 'field': 'bankAccount', 'sortable': True,
+                 'align': 'left'},
+                {'name': 'bankNumber', 'label': 'Bank Number', 'field': 'bankNumber', 'sortable': True,
+                 'align': 'left'},
+                {'name': 'contactPerson', 'label': 'Contact Person', 'field': 'contactPerson', 'sortable': True,
+                 'align': 'left'},
+                {'name': 'quantity', 'label': 'Quantity', 'field': 'quantity', 'sortable': True, 'align': 'left'},
+                {'name': 'receivedBy', 'label': 'Received By', 'field': 'receivedBy', 'sortable': True,
+                 'align': 'left'},
+                {'name': 'dateReceived', 'label': 'Date Received', 'field': 'dateReceived', 'sortable': True,
+                 'align': 'left'},
+            ]
+            rows = result
+
+            def toggle(column: dict, visible: bool) -> None:
+                column['classes'] = '' if visible else 'hidden'
+                column['headerClasses'] = '' if visible else 'hidden'
+                table.update()
+
+            with ui.button(icon='menu'):
+                with ui.menu(), ui.column().classes('gap-0 p-2'):
+                    for column in columns:
+                        ui.switch(column['label'], value=True,
+                                  on_change=lambda e, column=column: toggle(column, e.value))
+
+            table = ui.table(columns=columns, rows=rows, row_key='name')
+            table.add_slot('body-cell-dateReceived', '''
+              <q-td key="dateReceived" :props="props">
+                <q-chip color="indigo-5" text-color="white" dense>
+                  {{ props.value }}
+                </q-chip>
+              </q-td>
+            ''')
+            table.add_slot('body-cell-quantity', '''
+              <q-td key="quantity" :props="props">
+                <q-chip :color="props.value <= 5 ? 'red' : 'green'" text-color="white" dense>
+                  {{ props.value }}
+                </q-chip>
+              </q-td>
+            ''')
+
+
+

@@ -3,7 +3,7 @@ from typing import Type, List
 
 class ConnectionLogs():
     def __init__(self):
-        self.db_path = "HustleBackend/DbFile/HustleLog.db"
+        self.db_path = "DbFile/HustleLog.db"
 
     def Execute(self, query, param=None):
         with sqlite3.connect(self.db_path) as con:
