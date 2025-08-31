@@ -62,3 +62,10 @@ class SupplierAPI:
         except Exception as e:
             print("Exception occurred: ", e)
             return e
+
+    def GetSupplierHistory(self):
+        response = requests.get(Api.getSupplierHistory)
+        if response.status_code == 200:
+            return response.json()
+        else:
+            return False

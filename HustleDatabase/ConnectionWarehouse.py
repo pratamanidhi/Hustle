@@ -4,7 +4,7 @@ from typing import  Type, List
 
 class ConnectionWarehouse():
     def __init__(self):
-        self.db_path = "HustleBackend/DbFile/HustleWarehouse.db"
+        self.db_path = "DbFile/HustleWarehouse.db"
 
     def Execute(self, query, param=None):
         with sqlite3.connect(self.db_path) as con:

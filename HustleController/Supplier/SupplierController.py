@@ -46,3 +46,7 @@ def ReceiveOrder(model: ReceiveOrderDto = Body(...)):
 def DeleteSupplier(model: DeleteSupplierDto = Body(...)):
     return service.DeleteSupplier(model)
 
+@router.get('/get-supplier-history')
+def GetSupplierHistory():
+    return service.GetSupplierHisory()
+

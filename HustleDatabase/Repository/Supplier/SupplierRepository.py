@@ -131,8 +131,26 @@ class SupplierRepository():
         return result
 
     def DeleteSupplier(self, dbContext, guid):
-        print(dbContext)
-        print(guid)
         query = f"delete from {dbContext} where guid = ?"
         result = db.Execute(query, (guid,))
+        return result
+
+    def GetSupplierHistpry(self):
+        query = f"""
+            select 
+            s.name,
+            ot.name as productType,
+            s.productName,
+            ba.name as bankAccount,
+            ba.bankNumber,
+            s.contactPerson,
+            ro.quantity,
+            ro.receivedBy,
+            ro.dateReceived
+            from ReceivedOrder as ro 
+            join Supplier as s on ro.supplierId = s.guid
+            join OrderType as ot on s.orderType = ot.guid
+            join BankAccount as ba on s.bankAccount = ba.guid
+        """
+        result = db.Execute(query)
         return result

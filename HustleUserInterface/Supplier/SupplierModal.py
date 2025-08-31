@@ -97,7 +97,7 @@ class SupplierModal():
             result = business.ReceiveOrder(identity["guid"], quantity.value, user)
             if result:
                 ui.notify("Order submitted")
-                dialog.close()
+                ui.navigate.to('/supplier')
             else:
                 ui.notify(result)
 
@@ -112,6 +112,7 @@ class SupplierModal():
                 'color: white; padding-left: 8px; gap: 0.5rem').set_text(dateNow)
             ui.separator()
             ui.label(f'Receive order from {identity["name"]}')
+            ui.label(f'Product: {identity["productName"]}')
 
             with ui.column().classes('relative p-4 border rounded-md'):
                 with ui.grid(columns=2).classes('gap-3'):

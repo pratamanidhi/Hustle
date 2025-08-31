@@ -26,3 +26,4 @@ class APIUrl:
     getSupplierByCategory = mainiUrl + f"/{Enum.Supplier}/get-supplier-by-category"
     receiveOrder = mainiUrl + f"/{Enum.Supplier}/receive-order"
     deleteSupplier = mainiUrl + f"/{Enum.Supplier}/delete-supplier"
+    getSupplierHistory = mainiUrl + f"/{Enum.Supplier}/get-supplier-history"
