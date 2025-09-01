@@ -68,13 +68,13 @@ class Layout():
                 def CreateNewItem():
                     modal.ShowAddModal(stockType, userInfo)
 
-                ui.button('Add new', on_click=CreateNewItem) \
-                    .props('flat dense')
+                ui.button('Add new', on_click=CreateNewItem).props('flat dense')
                 ui.separator()
 
             columns = self.DefineColumn()
             rows = datas
             table = ui.table(columns=columns, rows=rows, row_key='name').classes('w-full')
+
             table.add_slot('header', r'''
                 <q-tr :props="props">
                     <q-th auto-width />
@@ -87,19 +87,22 @@ class Layout():
                 </q-tr>
             ''')
 
-            table.add_slot('body', r'''
+            is_admin = userInfo.get("isAdmin", False)
+
+            table.add_slot('body', fr'''
                 <q-tr :props="props">
                     <q-td auto-width>
-                        <q-btn size="sm" color="accent" round dense
-                            @click="props.expand = !props.expand"
-                            :icon="props.expand ? 'remove' : 'add'" />
+                        <q-btn v-if="{str(is_admin).lower()}"
+                               size="sm" color="accent" round dense
+                               @click="props.expand = !props.expand"
+                               :icon="props.expand ? 'remove' : 'add'" />
                     </q-td>
 
                     <q-td v-for="col in props.cols" :key="col.name" :props="props">
                         <q-badge 
                             v-if="col.name === 'totalStock'" 
                             :color="(props.row[col.field] ?? 0) < 2 ? 'red' : 'green'">
-                            {{ props.row[col.field] ?? '-' }}
+                            {{{{ props.row[col.field] ?? '-' }}}}
                         </q-badge>
 
                         <q-btn 
@@ -108,19 +111,18 @@ class Layout():
                             label="Edit" 
                             @click="() => $parent.$emit('edit', props.row)" />
 
-                        <span v-else>{{ props.row[col.field] ?? '-' }}</span>
+                        <span v-else>{{{{ props.row[col.field] ?? '-' }}}}</span>
                     </q-td>
                 </q-tr>
 
-                <q-tr v-show="props.expand" :props="props">
+                <q-tr v-show="props.expand && {str(is_admin).lower()}" :props="props">
                     <q-td colspan="100%">
-                        <div class="text-left">Last Input : {{ props.row.lastInput ?? '-' }}</div>
-                        <div class="text-left">Last Output : {{ props.row.lastOutput ?? '-' }}</div>
-                        <div class="text-left">Brand : {{ props.row.description ?? '-' }}</div>
-                        <div class="text-left">Packaging : {{ props.row.packaging ?? '-' }} {{ props.row.unit ?? '' }}</div>
-                        <div class="text-left">Item price : {{ props.row.price ?? '-' }}</div>
-                        <div class="text-left">Price per unit : {{ props.row.priceUnit ?? '-' }}</div>
-
+                        <div class="text-left">Last Input : {{{{ props.row.lastInput ?? '-' }}}}</div>
+                        <div class="text-left">Last Output : {{{{ props.row.lastOutput ?? '-' }}}}</div>
+                        <div class="text-left">Brand : {{{{ props.row.description ?? '-' }}}}</div>
+                        <div class="text-left">Packaging : {{{{ props.row.packaging ?? '-' }}}} {{{{ props.row.unit ?? '' }}}}</div>
+                        <div class="text-left">Item price : {{{{ props.row.price ?? '-' }}}}</div>
+                        <div class="text-left">Price per unit : {{{{ props.row.priceUnit ?? '-' }}}}</div>
                     </q-td>
                 </q-tr>
             ''')
