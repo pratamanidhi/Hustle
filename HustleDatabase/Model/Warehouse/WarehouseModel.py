@@ -5,9 +5,9 @@ class WarehouseModel(BaseModel):
     guid: str = None
     name: Optional[str] = None
     description: Optional[str] = None
-    stockIn: Optional[int] = None
-    stockOut: Optional[int] = None
-    totalStock: Optional[int] = None
+    stockIn: Optional[float] = None
+    stockOut: Optional[float] = None
+    totalStock: Optional[float] = None
     updatedBy: Optional[str] = None
     price: Optional[int] = None
     unit: Optional[str] = None
