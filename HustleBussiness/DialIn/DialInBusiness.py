@@ -35,3 +35,7 @@ class DialInBusiness():
         result = repo.InsertDialInData(model)
         return result
 
+    def DeleteDialIn(self, input):
+        result = repo.DeleteDialIn(input.guid)
+        return result
+

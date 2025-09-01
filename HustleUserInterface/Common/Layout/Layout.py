@@ -37,10 +37,11 @@ class Layout():
 
                 ui.button('Home', on_click=goToHome).props('flat dense')
                 ui.button('Warehouse', on_click=goToWarehouse).props('flat dense')
+                ui.button('Supplier', on_click=goToSupplier).props('flat dense')
                 if datas["isAdmin"]:
                     ui.button('Menu', on_click=goToMenu).props('flat dense')
                     ui.button('Report', on_click=goToReport).props('flat dense')
-                    ui.button('Supplier', on_click=goToSupplier).props('flat dense')
+
 
 
 
