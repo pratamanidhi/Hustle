@@ -57,3 +57,8 @@ class DialInRepository():
             model.updatedAt
         ))
         return result
+
+    def DeleteDialIn(self, id):
+        query = f"delete from DialIn where guid = ?"
+        result = db.Execute(query, (id,))
+        return result

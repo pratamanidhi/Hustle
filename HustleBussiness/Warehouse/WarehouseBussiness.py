@@ -78,13 +78,13 @@ class WarehouseBusiness:
                 checkStock["stockOut"] = 0
 
             if isOut:
-                model.totalStock = int(checkStock["totalStock"]) - int(model.stockOut)
-                model.stockOut =  int(model.stockOut)
+                model.totalStock = float(checkStock["totalStock"]) - float(model.stockOut)
+                model.stockOut =  float(model.stockOut)
                 model.lastInput = checkStock["lastInput"]
                 model.lastOutput = datetime.now()
             else:
-                model.totalStock = int(checkStock["totalStock"]) + int(model.stockIn)
-                model.stockIn = int(model.stockIn)
+                model.totalStock = float(checkStock["totalStock"]) + float(model.stockIn)
+                model.stockIn = float(model.stockIn)
                 model.lastInput = datetime.now()
                 model.lastOutput = checkStock["lastOutput"]
 

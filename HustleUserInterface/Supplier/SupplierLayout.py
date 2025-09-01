@@ -69,18 +69,20 @@ class SupplierLayout:
                     ui.label("Product Category").classes('font-semibold text-gray-800')
                     ui.label(supplier["orderType"])
 
-                    ui.label("Bank Name").classes('font-semibold text-gray-800')
-                    ui.label(supplier["bankName"])
+                    if user["isAdmin"]:
+                        ui.label("Bank Name").classes('font-semibold text-gray-800')
+                        ui.label(supplier["bankName"])
 
-                    ui.label("Bank Number").classes('font-semibold text-gray-800')
-                    ui.label(supplier["bankNumber"])
+                        ui.label("Bank Number").classes('font-semibold text-gray-800')
+                        ui.label(supplier["bankNumber"])
 
-                    ui.label("Contact Person").classes('font-semibold text-gray-800')
-                    ui.label(supplier["contactPerson"])
+                        ui.label("Contact Person").classes('font-semibold text-gray-800')
+                        ui.label(supplier["contactPerson"])
 
-            ui.button('Delete', on_click=onDeleteItem) \
-                .classes('text-sm px-3 py-1 rounded-md') \
-                .props('color=amber-500 text-black')
+            if user["isAdmin"]:
+                ui.button('Delete', on_click=onDeleteItem) \
+                    .classes('text-sm px-3 py-1 rounded-md') \
+                    .props('color=amber-500 text-black')
 
     def GetSupplierHistory(self):
         result = supplierBusiness.GetSupplierHistory()
