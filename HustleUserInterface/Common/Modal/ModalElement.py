@@ -61,23 +61,24 @@ class ModalElement:
             else:
                 print(False)
 
+        def onCheckin():
+            datas[0]["updatedBy"] = userInfo["name"]
+            isOut = False
+            item = {
+                "type": type,
+                "inQty": inQty.value,
+                ""
+                "isOut": isOut,
+                "data": datas
+            }
+            result = business.UpdateItem(item)
+            if result:
+                dialog.close()
+                ui.navigate.to('/warehouse')
+            else:
+                print(False)
+
         if userInfo["isAdmin"]:
-            def onCheckin():
-                datas[0]["updatedBy"] = userInfo["name"]
-                isOut = False
-                item = {
-                    "type": type,
-                    "inQty": inQty.value,
-                    ""
-                    "isOut": isOut,
-                    "data": datas
-                }
-                result = business.UpdateItem(item)
-                if result:
-                    dialog.close()
-                    ui.navigate.to('/warehouse')
-                else:
-                    print(False)
 
             def onDeleteItem():
                 item = {
@@ -125,11 +126,6 @@ class ModalElement:
 
                 with ui.grid(columns=2).classes('gap-3'):
                     if userInfo["isAdmin"]:
-                        inQty = ui.input(label='Quantity Out') \
-                            .props('type=number dense outlined') \
-                            .classes('flex-1 text-sm').bind_visibility_from(userInfo["isAdmin"])
-                        ui.button('Stock In', on_click=onCheckin) \
-                            .classes('text-sm px-3 py-1 rounded-md')
 
                         formatedPrice = int(datas[0]["price"].replace('Rp', '').replace('.', '').strip())
                         inPrice = ui.input(label='Item Price', value=formatedPrice) \
@@ -137,6 +133,12 @@ class ModalElement:
                             .classes('flex-1 text-sm').bind_visibility_from(userInfo["isAdmin"])
                         ui.button('Update Price', on_click=onUpdatePrice) \
                             .classes('text-sm px-3 py-1 rounded-md')
+
+                    inQty = ui.input(label='Quantity Out') \
+                        .props('type=number dense outlined') \
+                        .classes('flex-1 text-sm').bind_visibility_from(userInfo["isAdmin"])
+                    ui.button('Stock In', on_click=onCheckin) \
+                        .classes('text-sm px-3 py-1 rounded-md')
 
                     outQty = ui.input(label='Quantity Out') \
                         .props('type=number dense outlined') \

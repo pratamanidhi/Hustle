@@ -151,9 +151,9 @@ class WarehouseBusiness:
         data["lastInput"] = None
         data["lastOutput"] = None
         if item['isOut']:
-            data["stockOut"] = int(item["outQty"])
+            data["stockOut"] = float(item["outQty"])
         else:
-            data["stockIn"] = int(item['inQty'])
+            data["stockIn"] = float(item['inQty'])
         result = warehouse.CheckOutStock(item["type"], item["isOut"], data)
         return result
 
