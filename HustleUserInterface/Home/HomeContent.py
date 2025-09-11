@@ -25,34 +25,33 @@ def GenerateContent(warehouse, user, tools):
     ui.button('Add new', on_click=AddDialIn) \
         .props('flat dense')
 
-
-
-
 def GenerateMainMenu(datas):
     layout.DialInContent(datas)
 
-@ui.page('/home')
-def HomeContent():
-    with ui.row().classes('w-full h-screen items-center justify-center') as container:
-        ui.label('Loading Data..')
-        ui.spinner('dots', size='lg', color='red')
 
-    async def Init():
-        result = await session.Session()
-        if result is not False:
-            layout.Header(result)
-            warehouse = whBusiness.GetStock(1)
-            user = userBusiness.GetAlluser()
-            tool = toolsBusiness.GetTools()
-            GenerateContent(warehouse, user, tool)
-            dialInData = dialIn.GetAllDialIn()
-            GenerateMainMenu(dialInData)
-            container.visible = False
-        else:
-            ui.notify("No login info found", type='warning')
-            ui.navigate.to('/')
+def Content():
+    @ui.page('/home')
+    def HomeContent():
+        with ui.row().classes('w-full h-screen items-center justify-center') as container:
+            ui.label('Loading Data..')
+            ui.spinner('dots', size='lg', color='red')
 
-    ui.timer(0.1, Init, once=True)
+        async def Init():
+            result = await session.Session()
+            if result is not False:
+                layout.Header(result)
+                warehouse = whBusiness.GetStock(1)
+                user = userBusiness.GetAlluser()
+                tool = toolsBusiness.GetTools()
+                GenerateContent(warehouse, user, tool)
+                dialInData = dialIn.GetAllDialIn()
+                GenerateMainMenu(dialInData)
+                container.visible = False
+            else:
+                ui.notify("No login info found", type='warning')
+                ui.navigate.to('/')
+
+        ui.timer(0.1, Init, once=True)
 
 
 

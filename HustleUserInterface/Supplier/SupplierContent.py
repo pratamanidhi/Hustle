@@ -14,21 +14,22 @@ def SupplierList(user):
     result = supplierBusiness.GetAllSupplier()
     supplierLayout.SupplierContent(result, user)
 
-@ui.page('/supplier')
-def SupplierContent():
-    with ui.row().classes('w-full h-screen items-center justify-center') as container:
-        ui.label('Loading Data..')
-        ui.spinner('dots', size='lg', color='red')
+def Content():
+    @ui.page('/supplier')
+    def SupplierContent():
+        with ui.row().classes('w-full h-screen items-center justify-center') as container:
+            ui.label('Loading Data..')
+            ui.spinner('dots', size='lg', color='red')
 
-    async def Init():
-        result = await session.Session()
-        if result is not False:
-            print("user: ", result)
-            layout.Header(result)
-            SupplierList(result)
-            container.visible = False
-        else:
-            ui.notify("No login info found", type='warning')
-            ui.navigate.to('/')
+        async def Init():
+            result = await session.Session()
+            if result is not False:
+                print("user: ", result)
+                layout.Header(result)
+                SupplierList(result)
+                container.visible = False
+            else:
+                ui.notify("No login info found", type='warning')
+                ui.navigate.to('/')
 
-    ui.timer(0.1, Init, once=True)
+        ui.timer(0.1, Init, once=True)
