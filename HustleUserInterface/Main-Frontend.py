@@ -1,13 +1,20 @@
 from nicegui import ui
-import UserManagement.Login
-import Warehouse.WarehouseContent
-import Home.HomeContent
-import Menu.MenuContent
-import Report.ReportContent
-import Supplier.SupplierContent
+import UserManagement.Login as Login
+import Warehouse.WarehouseContent as WarehouseContent
+import Home.HomeContent as HomeContent
+import Menu.MenuContent as MenuContent
+import Report.ReportContent as ReportContent
+import Supplier.SupplierContent as SupplierContent
 import Test.Test
 
 if __name__ in {"__main__", "__mp_main__"}:
+    Login.Content()
+    WarehouseContent.Content()
+    HomeContent.Content()
+    MenuContent.Content()
+    ReportContent.Content()
+    SupplierContent.Content()
+
     ui.add_head_html('''
     <script>
         window.send_event = (name, detail) => {
