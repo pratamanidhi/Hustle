@@ -17,6 +17,7 @@ class ModalElement:
     def ShowModal(self, datas, type, userInfo):
         if isinstance(datas, dict):
             datas = [datas]
+            print(datas)
 
         dialog = ui.dialog()
 
@@ -119,6 +120,13 @@ class ModalElement:
                 ui.label('Manage Stock').classes('text-2xl font-semibold text-gray-800')
             else:
                 ui.label('Checkout Stock Item').classes('text-2xl font-semibold text-gray-800')
+
+            with ui.grid(columns=2).classes('gap-3'):
+                ui.label("Last Input")
+                ui.label(datas[0]['lastInput'])
+
+                ui.label("Last Output")
+                ui.label(datas[0]['lastOutput'])
 
             ui.table(columns=columns, rows=rows, row_key='name').classes('w-full rounded border border-gray-300')
             ui.separator()
