@@ -38,7 +38,7 @@ class SupplierLayout:
                                         self.SupplierListContent(supplier, user)
                         with ui.tab_panel(history_tab):
                             ui.label('Supplier history list')
-                            self.GetSupplierHistory()
+                            self.GetSupplierHistory(user)
 
     def SupplierListContent(self, supplier, user):
         def onDeleteItem():
@@ -84,7 +84,7 @@ class SupplierLayout:
                     .classes('text-sm px-3 py-1 rounded-md') \
                     .props('color=amber-500 text-black')
 
-    def GetSupplierHistory(self):
+    def GetSupplierHistory(self, user):
         result = supplierBusiness.GetSupplierHistory()
         if result is not False:
             print(result)
@@ -96,18 +96,24 @@ class SupplierLayout:
                  'align': 'left'},
                 {'name': 'productName', 'label': 'Product Name', 'field': 'productName', 'sortable': True,
                  'align': 'left'},
-                {'name': 'bankAccount', 'label': 'Bank Account', 'field': 'bankAccount', 'sortable': True,
-                 'align': 'left'},
-                {'name': 'bankNumber', 'label': 'Bank Number', 'field': 'bankNumber', 'sortable': True,
-                 'align': 'left'},
-                {'name': 'contactPerson', 'label': 'Contact Person', 'field': 'contactPerson', 'sortable': True,
-                 'align': 'left'},
                 {'name': 'quantity', 'label': 'Quantity', 'field': 'quantity', 'sortable': True, 'align': 'left'},
                 {'name': 'receivedBy', 'label': 'Received By', 'field': 'receivedBy', 'sortable': True,
                  'align': 'left'},
                 {'name': 'dateReceived', 'label': 'Date Received', 'field': 'dateReceived', 'sortable': True,
                  'align': 'left'},
             ]
+
+            if user["isAdmin"]:
+                addColumn = [
+                    {'name': 'bankAccount', 'label': 'Bank Account', 'field': 'bankAccount', 'sortable': True,
+                     'align': 'left'},
+                    {'name': 'bankNumber', 'label': 'Bank Number', 'field': 'bankNumber', 'sortable': True,
+                     'align': 'left'},
+                    {'name': 'contactPerson', 'label': 'Contact Person', 'field': 'contactPerson', 'sortable': True,
+                     'align': 'left'},
+                ]
+                columns.extend(addColumn)
+
             rows = result
 
             def toggle(column: dict, visible: bool) -> None:

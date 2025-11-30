@@ -21,3 +21,14 @@ class ReportApi:
             return response.json()
         else:
             return None
+
+    def GetAllReportByPeriod(self, start, end):
+        param = {
+            "start": start,
+            "end": end
+        }
+        response = requests.get(Api.getAllReportByPeriod, params=param)
+        if response.status_code == 200:
+            return response.json()
+        else:
+            return None

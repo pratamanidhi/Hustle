@@ -20,7 +20,8 @@ class WarehouseBusiness:
             Enum.Powder: stockName.Powder,
             Enum.Syrup: stockName.Syrup,
             Enum.Tea: stockName.Tea,
-            Enum.Topping: stockName.Topping
+            Enum.Topping: stockName.Topping,
+            Enum.Pip: stockName.Pip
         }
         pass
 
@@ -73,6 +74,7 @@ class WarehouseBusiness:
 
     def GetAllStock(self):
         datas = warehouse.GetAllStock()
+        print(datas)
         newDatas = []
         for rows in datas:
             newRow = []

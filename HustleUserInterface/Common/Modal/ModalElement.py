@@ -17,6 +17,7 @@ class ModalElement:
     def ShowModal(self, datas, type, userInfo):
         if isinstance(datas, dict):
             datas = [datas]
+            print(datas)
 
         dialog = ui.dialog()
 
@@ -119,6 +120,13 @@ class ModalElement:
                 ui.label('Manage Stock').classes('text-2xl font-semibold text-gray-800')
             else:
                 ui.label('Checkout Stock Item').classes('text-2xl font-semibold text-gray-800')
+
+            with ui.grid(columns=2).classes('gap-3'):
+                ui.label("Last Input")
+                ui.label(datas[0]['lastInput'])
+
+                ui.label("Last Output")
+                ui.label(datas[0]['lastOutput'])
 
             ui.table(columns=columns, rows=rows, row_key='name').classes('w-full rounded border border-gray-300')
             ui.separator()
@@ -428,15 +436,15 @@ class ModalElement:
     def ProductionCost(self, TotalProductionCost):
 
         def calculate():
-            total = int(profitInput.value) + int(TotalProductionCost)
+            total = int(sellingInput.value) - int(TotalProductionCost)
             finalPrice.text = f'Rp {total}'
 
         with ui.grid(columns=2).classes('gap-3'):
             ui.label('Production Cost')
             ui.label(f'Rp {TotalProductionCost}')
 
-            ui.label('Target Profit')
-            profitInput = ui.input(label='Profit').props('type=number dense outlined').classes('w-60 text-sm')
+            ui.label('Target Price')
+            sellingInput = ui.input(label='Selling Price').props('type=number dense outlined').classes('w-60 text-sm')
             ui.button('Add item', on_click=calculate).classes('text-sm px-3 py-1 rounded-md').props(
                 'color=amber-500 text-black')
 

@@ -20,23 +20,25 @@ def GenerateContent(stocks, ingredients, units):
     ui.button('Add new', on_click=CreateMenuItem) \
         .props('flat dense')
 
-@ui.page('/menu')
-def MenuContent():
-    with ui.row().classes('w-full h-screen items-center justify-center') as container:
-        ui.label('Loading Data..')
-        ui.spinner('dots', size='lg', color='red')
 
-    async def Init():
-        result = await session.Session()
-        if result is not False:
-            allStocks = warehouse.GetAllStock()
-            ingredients = common.GetIngredient()
-            units = common.GetUnit()
-            layout.Header(result)
-            container.visible = False
-            GenerateContent(allStocks, ingredients, units)
-        else:
-            ui.notify("No login info found", type='warning')
-            ui.navigate.to('/')
+def Content():
+    @ui.page('/menu')
+    def MenuContent():
+        with ui.row().classes('w-full h-screen items-center justify-center') as container:
+            ui.label('Loading Data..')
+            ui.spinner('dots', size='lg', color='red')
 
-    ui.timer(0.1, Init, once=True)
+        async def Init():
+            result = await session.Session()
+            if result is not False:
+                allStocks = warehouse.GetAllStock()
+                ingredients = common.GetIngredient()
+                units = common.GetUnit()
+                layout.Header(result)
+                container.visible = False
+                GenerateContent(allStocks, ingredients, units)
+            else:
+                ui.notify("No login info found", type='warning')
+                ui.navigate.to('/')
+
+        ui.timer(0.1, Init, once=True)

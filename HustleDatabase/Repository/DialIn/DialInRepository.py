@@ -8,7 +8,7 @@ class DialInRepository():
         pass
 
     def GetDialInAllData(self):
-        query = "SELECT * FROM DialIn"
+        query = "SELECT * FROM DialIn order by date desc"
         rows = db.Execute(query)
         result = []
 

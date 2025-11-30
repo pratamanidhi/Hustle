@@ -1,4 +1,4 @@
-from nicegui import ui
+from nicegui import ui, app
 from Common.Button import Button as Button
 from Common.Modal.ModalElement import ModalElement as Modal
 from Business.Report.ReportBusiness import ReportBusiness as Report
@@ -135,67 +135,73 @@ class Layout():
             ui.separator()
 
     def GetReportMainContent(self):
-        content_container = ui.column().classes('w-full h-full p-2')
+        content_container = ui.column().classes('w-full h-full')
+        data = report.GetAllReport()
 
         def applyFilter(from_date, to_date):
-            ui.notify(f'Filter applied: {from_date} → {to_date}')
-            renderContent()
 
-        def renderContent():
+            ui.notify(f'Filter applied: {from_date} → {to_date}')
+            dataPeriod = report.GetAllReportByPeriod(from_date, to_date)
+            renderContent(dataPeriod)
+
+        def resetFilter():
+            datas = report.GetAllReport()
+            renderContent(datas)
+
+        def renderContent(datas):
             with ui.row().classes('w-full min-h-16 items-center justify-center gap-2') as container:
                 ui.label('Loading Data..')
                 ui.spinner('dots', size='lg', color='red')
 
             content_container.clear()
-            data = report.GetAllReport()
-
             with content_container:
-                # ✅ Remove vertical splitter on mobile
-                with ui.tabs().classes('w-full').props('breakpoint="600" horizontal') as tabs:
-                    chart = ui.tab('Chart Report', icon='bar_chart')
-                    table = ui.tab('Table Report', icon='view_list')
+                with ui.splitter(value=10).classes('w-full h-full') as splitter:
+                    with splitter.before:
+                        with ui.tabs().props('vertical').classes('w-50') as tabs:
+                            chart = ui.tab('Chart Report', icon='bar_chart')
+                            table = ui.tab('Table Report', icon='view_list')
 
-                # ✅ Stacked filter on mobile
-                with ui.row().classes('w-full flex-wrap gap-2 items-center'):
-                    self.FilterDate(onApply=applyFilter)
+                    with splitter.after:
+                        self.FilterDate(onApply=applyFilter, onReset=resetFilter)
 
-                with ui.tab_panels(tabs, value=chart).classes('w-full h-full'):
-                    with ui.tab_panel(chart):
-                        with ui.scroll_area().classes('w-full h-full'):
-                            for reportValue in data:
-                                self.RenderChartReport(reportValue)
+                        with ui.tab_panels(tabs, value=chart).props('vertical').classes('w-full h-full'):
+                            with ui.tab_panel(chart):
+                                for reportValue in datas:  # FIXED
+                                    self.RenderChartReport(reportValue)
 
-                    with ui.tab_panel(table):
-                        with ui.scroll_area().classes('w-full h-full'):
-                            for reportValue in data:
-                                self.RenderTableReport(reportValue)
+                            with ui.tab_panel(table):
+                                for reportValue in datas:  # FIXED
+                                    self.RenderTableReport(reportValue)
 
             container.visible = False
 
-        renderContent()
+        renderContent(data)
 
     def RenderChartReport(self, datas):
         ui.separator()
-        ui.label(datas["name"]).classes("text-base font-semibold")
+        ui.label(datas['name'])
 
         chart = ui.highchart({
-            'title': None,  # ✅ hide duplicate title
+            'title': datas['name'],
             'chart': {'type': 'bar'},
             'xAxis': {'categories': ['Stock In', 'Stock Out']},
             'series': [],
-        }).classes('w-full h-56 sm:h-80')  # smaller on mobile
+        }).classes('w-full h-64')
 
         def loadData():
-            reports = datas["data"]
+            reports = datas['data']
             charts = []
-            if reports:
+            if reports is not None:
                 for reportData in reports:
+                    data = []
+                    if reportData['stockIn'] is not None:
+                        data.append(reportData['stockIn'])
+                    if reportData['stockOut'] is not None:
+                        data.append(reportData['stockOut'])
+
                     charts.append({
-                        'name': reportData["name"],
-                        'data': [
-                            reportData.get("stockIn") or 0,
-                            reportData.get("stockOut") or 0,
-                        ],
+                        'name': reportData['name'],
+                        'data': data,
                     })
 
             chart.options['series'] = charts
@@ -206,7 +212,7 @@ class Layout():
 
     def RenderTableReport(self, datas):
         ui.separator()
-        ui.label(datas["name"])
+        ui.label(datas['name'])
 
         columns = [
             {'name': 'Name', 'label': 'Name', 'field': 'name', 'required': True, 'align': 'left'},
@@ -219,15 +225,15 @@ class Layout():
 
         rowsData = []
 
-        for reportData in datas["data"]:
-            dt_object = datetime.fromisoformat(reportData["lastUpdated"])
+        for reportData in datas['data']:
+            dt_object = datetime.fromisoformat(reportData['lastUpdated'])
             data = {
-                'name' : reportData["name"],
-                'stockIn' : reportData["stockIn"],
-                'stockOut' : reportData["stockOut"],
-                'totalTransaction' : reportData["totalStockTransaction"],
-                'date' : reportData["datetime"],
-                'lastUpdate' : dt_object.strftime('%Y-%b-%d %H:%M:%S')
+                'name': reportData['name'],
+                'stockIn': reportData['stockIn'],
+                'stockOut': reportData['stockOut'],
+                'totalTransaction': reportData['totalStockTransaction'],
+                'date': reportData['datetime'],
+                'lastUpdate': dt_object.strftime('%Y-%b-%d %H:%M:%S')
             }
             rowsData.append(data)
 
@@ -242,12 +248,16 @@ class Layout():
 
         ui.separator()
 
-    def FilterDate(self, onApply):
+    def FilterDate(self, onApply, onReset):
         def UpdateDatas():
             fromValue = fromDate.value
             toValue = toDate.value
             ui.notify('Applying filter...')
             onApply(fromValue, toValue)
+
+        def ResetFilter():
+            ui.notify('Reset filter...')
+            onReset()
 
         with ui.grid(columns=4).classes('gap-3'):
             fromDate = ui.input('From').props('dense').classes('w-32 text-sm')
@@ -267,6 +277,9 @@ class Layout():
                 ui.icon('edit_calendar').on('click', menu.open).classes('cursor-pointer')
 
             ui.button('Apply Filter', on_click=UpdateDatas).classes(
+                'text-sm px-3 py-1 rounded-md').props('color=amber-500 text-black')
+
+            ui.button('Reset Filter', on_click=ResetFilter).classes(
                 'text-sm px-3 py-1 rounded-md').props('color=amber-500 text-black')
 
     def DialInContent(self, datas):

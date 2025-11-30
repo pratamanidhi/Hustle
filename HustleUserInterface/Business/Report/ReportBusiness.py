@@ -10,3 +10,6 @@ class ReportBusiness:
 
     def GetAllReport(self):
         return api.GetAllReport()
+
+    def GetAllReportByPeriod(self, start, end):
+        return api.GetAllReportByPeriod(start, end)
