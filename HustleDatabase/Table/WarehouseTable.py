@@ -12,3 +12,4 @@ class WarehouseTable():
     BankAccount = "BankAccount"
     OrderType = "OrderType"
     ReceivedOrder = "ReceivedOrder"
+    Pip = "Pip"

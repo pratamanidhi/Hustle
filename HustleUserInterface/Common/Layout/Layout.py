@@ -136,20 +136,24 @@ class Layout():
 
     def GetReportMainContent(self):
         content_container = ui.column().classes('w-full h-full')
+        data = report.GetAllReport()
 
         def applyFilter(from_date, to_date):
-            ui.notify(f'Filter applied: {from_date} → {to_date}')
-            renderContent()
 
-        def renderContent():
+            ui.notify(f'Filter applied: {from_date} → {to_date}')
+            dataPeriod = report.GetAllReportByPeriod(from_date, to_date)
+            renderContent(dataPeriod)
+
+        def resetFilter():
+            datas = report.GetAllReport()
+            renderContent(datas)
+
+        def renderContent(datas):
             with ui.row().classes('w-full min-h-16 items-center justify-center gap-2') as container:
                 ui.label('Loading Data..')
                 ui.spinner('dots', size='lg', color='red')
 
             content_container.clear()
-
-            data = report.GetAllReport()
-
             with content_container:
                 with ui.splitter(value=10).classes('w-full h-full') as splitter:
                     with splitter.before:
@@ -158,18 +162,20 @@ class Layout():
                             table = ui.tab('Table Report', icon='view_list')
 
                     with splitter.after:
-                        self.FilterDate(onApply=applyFilter)
+                        self.FilterDate(onApply=applyFilter, onReset=resetFilter)
 
                         with ui.tab_panels(tabs, value=chart).props('vertical').classes('w-full h-full'):
                             with ui.tab_panel(chart):
-                                for reportValue in data:
+                                for reportValue in datas:  # FIXED
                                     self.RenderChartReport(reportValue)
+
                             with ui.tab_panel(table):
-                                for reportValue in data:
+                                for reportValue in datas:  # FIXED
                                     self.RenderTableReport(reportValue)
+
             container.visible = False
 
-        renderContent()
+        renderContent(data)
 
     def RenderChartReport(self, datas):
         ui.separator()
@@ -242,12 +248,16 @@ class Layout():
 
         ui.separator()
 
-    def FilterDate(self, onApply):
+    def FilterDate(self, onApply, onReset):
         def UpdateDatas():
             fromValue = fromDate.value
             toValue = toDate.value
             ui.notify('Applying filter...')
             onApply(fromValue, toValue)
+
+        def ResetFilter():
+            ui.notify('Reset filter...')
+            onReset()
 
         with ui.grid(columns=4).classes('gap-3'):
             fromDate = ui.input('From').props('dense').classes('w-32 text-sm')
@@ -267,6 +277,9 @@ class Layout():
                 ui.icon('edit_calendar').on('click', menu.open).classes('cursor-pointer')
 
             ui.button('Apply Filter', on_click=UpdateDatas).classes(
+                'text-sm px-3 py-1 rounded-md').props('color=amber-500 text-black')
+
+            ui.button('Reset Filter', on_click=ResetFilter).classes(
                 'text-sm px-3 py-1 rounded-md').props('color=amber-500 text-black')
 
     def DialInContent(self, datas):

@@ -17,6 +17,7 @@ class APIUrl:
     insertLogs = mainiUrl + f"/{Enum.Log}/insert-log"
     getReport = mainiUrl + f"/{Enum.Report}/get-report"
     getAllReport = mainiUrl + f"/{Enum.Report}/get-report-all"
+    getAllReportByPeriod = mainiUrl + f"/{Enum.Report}/get-report-all-by-period"
     getAllTools = mainiUrl + f"/{Enum.Warehouse}/get-tools"
     getAllDialIn = mainiUrl + f"/{Enum.DialIn}/get-all-dialIn"
     insertDialIn = mainiUrl + f"/{Enum.DialIn}/add-dialIn"

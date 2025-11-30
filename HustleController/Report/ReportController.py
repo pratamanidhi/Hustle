@@ -13,3 +13,7 @@ def GetReport(types: stockType):
 @router.get('/get-report-all')
 def GetAllReport():
     return service.GetAllReport()
+
+@router.get('/get-report-all-by-period')
+def GetReportByPeriod(start: str, end: str):
+    return service.GetReportByPeriod(start, end)

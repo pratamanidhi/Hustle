@@ -7,3 +7,4 @@ class StockName():
     Syrup = "Syrup Stock"
     Tea = "Tea Stock"
     Topping = "Topping Stock"
+    Pip = "Pip Stock"

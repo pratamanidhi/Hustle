@@ -12,12 +12,22 @@ from HustleController.Supplier import SupplierController
 import sys
 import os
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
+from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI(
     title="Hustle API",
     description="API for managing coffee, milk base, camera, users, and warehouse operations.",
     version="1.0.0"
 )
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # or restrict: ["http://127.0.0.1:5500", "http://localhost:3000"]
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
 
 app.include_router(CoffeeMenuController.router, prefix="/coffee", tags=["Coffee Menu"])
 app.include_router(MilkBaseMenuController.router, prefix="/milkbase", tags=["Milk Base"])

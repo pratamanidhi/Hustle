@@ -43,6 +43,17 @@ class LogBusiness():
             datas.append(data)
         return datas
 
+    def GetReportByPeriod(self, start, end):
+        datas = []
+        for category in Ingredient:
+            data = {
+                'name' : Ingredient(category).name,
+                'data' : repo.GetReportByCategoryAndPeriod(dbContext.DailyStock, Ingredient(category).name, start, end)
+            }
+            datas.append(data)
+        return datas
+
+
 
     def InputIntoDailyStockReport(self, model):
         model.datetime = date.today().isoformat()
