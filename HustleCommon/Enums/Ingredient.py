@@ -9,3 +9,4 @@ class Ingredient(IntEnum):
     Syrup = 6
     Tea = 7
     Topping = 8
+    Pip = 9

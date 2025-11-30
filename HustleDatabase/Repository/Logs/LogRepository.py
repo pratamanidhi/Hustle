@@ -56,8 +56,13 @@ class LogRepository():
             return dict(result[0])
 
     def GetReportByCategory(self, table, category):
-        query = f'select * from {table} where category = ?'
+        query = f'select guid,name,SUM(stockOut) AS stockOut,SUM(stockIn) AS stockIn,SUM(totalStockTransaction) AS totalStockTransaction, category, datetime, MAX(lastUpdated) AS lastUpdated from {table} where category = ? GROUP BY name, category ORDER BY name'
         result = db.Execute(query, (category,))
+        return result
+
+    def GetReportByCategoryAndPeriod(self, table, category, start, end):
+        query = f'select guid,name,SUM(stockOut) AS stockOut,SUM(stockIn) AS stockIn,SUM(totalStockTransaction) AS totalStockTransaction, category, MAX(datetime) as datetime, MAX(lastUpdated) AS lastUpdated from {table} where category = ?   AND datetime >= ? AND datetime <  ? GROUP BY name, category ORDER BY name'
+        result = db.Execute(query, (category, start, end))
         return result
 
     def InsertIntoDailyReport(self, table, model):

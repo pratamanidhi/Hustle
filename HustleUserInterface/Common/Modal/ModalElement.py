@@ -436,15 +436,15 @@ class ModalElement:
     def ProductionCost(self, TotalProductionCost):
 
         def calculate():
-            total = int(profitInput.value) + int(TotalProductionCost)
+            total = int(sellingInput.value) - int(TotalProductionCost)
             finalPrice.text = f'Rp {total}'
 
         with ui.grid(columns=2).classes('gap-3'):
             ui.label('Production Cost')
             ui.label(f'Rp {TotalProductionCost}')
 
-            ui.label('Target Profit')
-            profitInput = ui.input(label='Profit').props('type=number dense outlined').classes('w-60 text-sm')
+            ui.label('Target Price')
+            sellingInput = ui.input(label='Selling Price').props('type=number dense outlined').classes('w-60 text-sm')
             ui.button('Add item', on_click=calculate).classes('text-sm px-3 py-1 rounded-md').props(
                 'color=amber-500 text-black')
 

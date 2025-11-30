@@ -34,6 +34,7 @@ class WarehouseBusiness:
             Enum.Syrup: (dbContext.Syrup, Warehouse),
             Enum.Tea: (dbContext.Tea, Warehouse),
             Enum.Topping: (dbContext.Topping, Warehouse),
+            Enum.Pip:(dbContext.Pip, Warehouse)
         }
 
     def GetAllStock(self):
