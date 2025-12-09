@@ -2,6 +2,7 @@ from nicegui import ui, app
 from Common.Button import Button as Button
 from Common.Modal.ModalElement import ModalElement as Modal
 from Business.Report.ReportBusiness import ReportBusiness as Report
+from PIP.PipWarehouseModal import PipWarehouseModal as PipModal
 from Common.StockEnum import StockEnum
 from datetime import datetime
 
@@ -9,6 +10,7 @@ from datetime import datetime
 modal = Modal()
 button = Button()
 report = Report()
+pipModal = PipModal()
 class Layout():
     def __init__(self) -> None:
         pass
@@ -35,10 +37,14 @@ class Layout():
                 def goToSupplier():
                     ui.navigate.to('/supplier')
 
+                def goToPip():
+                    ui.navigate.to('/pip')
+
                 ui.button('Home', on_click=goToHome).props('flat dense')
                 ui.button('Warehouse', on_click=goToWarehouse).props('flat dense')
                 ui.button('Supplier', on_click=goToSupplier).props('flat dense')
                 if datas["isAdmin"]:
+                    ui.button('PIP', on_click=goToPip).props('flat dense')
                     ui.button('Menu', on_click=goToMenu).props('flat dense')
                     ui.button('Report', on_click=goToReport).props('flat dense')
 
@@ -66,7 +72,10 @@ class Layout():
 
             if userInfo["isAdmin"]:
                 def CreateNewItem():
-                    modal.ShowAddModal(stockType, userInfo)
+                    if stockType == 9:
+                        pipModal.ShowAddModal(stockType, userInfo)
+                    else:
+                        modal.ShowAddModal(stockType, userInfo)
 
                 ui.button('Add new', on_click=CreateNewItem).props('flat dense')
                 ui.separator()

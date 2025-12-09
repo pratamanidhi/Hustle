@@ -28,3 +28,6 @@ class APIUrl:
     receiveOrder = mainiUrl + f"/{Enum.Supplier}/receive-order"
     deleteSupplier = mainiUrl + f"/{Enum.Supplier}/delete-supplier"
     getSupplierHistory = mainiUrl + f"/{Enum.Supplier}/get-supplier-history"
+    inputPip = mainiUrl + f"/{Enum.Pip}/add-pip"
+    getPip = mainiUrl + f"/{Enum.Pip}/get-all-pip"
+    deletePip = mainiUrl + f"/{Enum.Pip}/delete-pip"

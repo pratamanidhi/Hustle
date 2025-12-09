@@ -10,3 +10,4 @@ class Enum(StrEnum):
     Report = "report"
     DialIn = "dialIn"
     Supplier = "supplier"
+    Pip = "pip"
