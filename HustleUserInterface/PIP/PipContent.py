@@ -1,7 +1,7 @@
 from nicegui import ui
 from Common.Session.Session import Session as Session
 from Common.Layout.Layout import Layout as Layout
-from HustleUserInterface.PIP.PipLayout import PipLayout as PipLayout
+from PIP.PipLayout import PipLayout as PipLayout
 from Business.Warehouse.WarehouseBusiness import WarehouseBusiness as WarehouseBusiness
 from Business.Common.CommonBusiness import CommonBusiness as CommonBusiness
 warehouse = WarehouseBusiness()
@@ -29,7 +29,7 @@ def Content():
                 ingredients = common.GetIngredient()
                 units = common.GetUnit()
 
-                pipLayout.PipContent(allStocks, ingredients, units)
+                pipLayout.PipContent(allStocks, ingredients, units, result['name'])
                 container.visible = False
             else:
                 ui.notify("No login info found", type='warning')

@@ -8,7 +8,7 @@ class PipModal():
     def __init__(self) -> None:
         pass
 
-    def AddPip(self, ingredients, categories, units):
+    def AddPip(self, ingredients, categories, units, user):
         dialog = ui.dialog().props('maximized')
 
         def categoryForm():
@@ -131,7 +131,8 @@ class PipModal():
             datas = {
                 "name" : productName.value,
                 "ingredient": ingredient,
-                "price": productionCost['value']
+                "price": productionCost['value'],
+                "inputedBy": user
             }
             result = business.InputPip(datas)
             if result:
@@ -240,6 +241,9 @@ class PipModal():
 
         with ui.grid(columns=2).classes('gap-3'):
             ui.label('Final pricing point')
-            finalPrice = ui.label('Rp 0').classes('text-green-600 font-bold text-2xl')
+            finalPrice = ui.label(f'Rp {TotalProductionCost}').classes('text-green-600 font-bold text-2xl')
+
+        if result['value'] == None:
+            result['value'] = 0 + int(TotalProductionCost)
 
         return result

@@ -10,6 +10,7 @@ service = Bussiness()
 def GetAllPip():
     return service.GetAllPip()
 
+
 @router.post('/add-pip')
 def InputPip(model: PipDto = Body(...)):
     return service.InputPip(model)

@@ -13,6 +13,11 @@ class WarehouseRepository():
         stock = db.Execute( query, model)
         return stock
 
+    def GetStockByGuid(self, table, name):
+        query = f'select A.guid, A.name, A.description, A.stockIn, A.stockOut, A.totalStock, A.lastInput, A.lastOutput, A.updatedBy, A.price, B.name as unit, A.packaging, A.priceUnit from {table} AS A INNER JOIN Unit AS B WHERE A.unit = B.guid and a.guid = ?'
+        result = db.Execute( query, (name,))
+        return dict(result[0])
+
     def AddStock(self, table, model):
         guid = str(uuid.uuid4())
         priceUnit = int(model.price)/int(model.packaging)
@@ -82,4 +87,14 @@ class WarehouseRepository():
         except Exception as e:
             print("Error when deleting stock:", e)
             return False
+
+    def DeletePipStock(self, table, name):
+        query = f'''DELETE FROM {table} WHERE name = ?'''
+        try:
+            result = db.Execute(query, (name,))
+            return result
+        except Exception as e:
+            print("Error when deleting stock:", e)
+            return False
+
 

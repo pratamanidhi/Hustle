@@ -5,3 +5,4 @@ class PipDto(BaseModel):
     name: Optional[str] = None
     ingredient: Optional[str] = None
     price: Optional[float] = None
+    inputedBy: Optional[str] = None

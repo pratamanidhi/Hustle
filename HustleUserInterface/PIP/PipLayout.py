@@ -10,9 +10,9 @@ class PipLayout():
     def __init__(self) -> None:
         pass
 
-    def PipContent(self, allStocks, ingredients, units):
+    def PipContent(self, allStocks, ingredients, units, user):
         def addNewPip():
-            modal.AddPip(allStocks, ingredients, units)
+            modal.AddPip(allStocks, ingredients, units, user)
 
         content_container = ui.column().classes('w-full h-full')
         with content_container:

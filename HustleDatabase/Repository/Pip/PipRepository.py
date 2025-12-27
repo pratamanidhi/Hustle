@@ -14,6 +14,11 @@ class PipRepository():
         result = db.Execute(query)
         return result
 
+    def GetPipByGuid(self, name):
+        query = "select * from Pip where name = ?"
+        result = db.Execute(query, (name,))
+        return dict(result[0])
+
     def InputPip(self, model):
         guid = str(uuid.uuid4())
         updatedAt = datetime.now()
