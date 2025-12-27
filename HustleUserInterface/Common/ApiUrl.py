@@ -7,6 +7,7 @@ class APIUrl:
     getAllWarehouse = mainiUrl + f"/{Enum.Warehouse}/get-all-stock"
     login = mainiUrl + f"/{Enum.UserManagement}/user-login"
     getAllUser = mainiUrl + f"/{Enum.UserManagement}/get-all-user"
+    addUser = mainiUrl + f"/{Enum.UserManagement}/add-user"
     ingredientEnum = mainiUrl + f"/{Enum.Enum}/ingredient"
     ingredient = mainiUrl + f"/{Enum.Business}/ingredient"
     addStock = mainiUrl + f"/{Enum.Warehouse}/add-stock"

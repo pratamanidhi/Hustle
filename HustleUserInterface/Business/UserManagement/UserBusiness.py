@@ -11,3 +11,6 @@ class UserBusiness():
 
     def GetAlluser(self):
         return api.GetAllUser()
+
+    def AddUser(self, data):
+        return api.InputNewUser(data)

@@ -32,3 +32,14 @@ class UserManagementAPI:
         except Exception as e:
             print("Exception occurred: ", e)
             return e
+
+    def InputNewUser(self, data):
+        try:
+            response = requests.post(Api.addUser, json=data)
+            if response.status_code == 200:
+                return True
+            else:
+                return False
+        except Exception as e:
+            print("Exception occurred: ", e)
+            return e

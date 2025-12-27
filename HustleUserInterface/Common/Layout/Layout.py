@@ -19,6 +19,9 @@ class Layout():
         async def handleLogout():
             await button.ButtonLogout()
 
+        async def handleUserManagement():
+            ui.navigate.to('/usermanagement')
+
         with ui.header().classes('bg-[#292928] text-white'):
             with ui.element('div').classes('flex justify-between w-full items-center'):
                 ui.label('Hustle Management System').classes('text-xl')
@@ -55,6 +58,8 @@ class Layout():
                 dropdown.props('color=amber-500 text-black')
                 with dropdown:
                     ui.item('Logout', on_click=handleLogout)
+                    if datas["isAdmin"]:
+                        ui.item('User Management', on_click=handleUserManagement)
 
     def DefineColumn(self):
         return [
@@ -298,8 +303,6 @@ class Layout():
                     self.DialInData(data)
 
     def DialInData(self, data):
-        print("Dial in data: ", data)
-
         with ui.column().classes('w-full relative p-4 border-2 rounded-3xl'):
             dates = datetime.fromisoformat(data["updatedAt"])
             newDate = dates.strftime("%d %b %Y %H:%M")
