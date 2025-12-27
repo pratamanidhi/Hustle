@@ -11,3 +11,7 @@ class UserManagementBussiness():
 
     def GetAllUser(self):
         return UserMgmt.GetAllUser()
+
+    def AddUser(self, model):
+        result = UserMgmt.AddUserAccount(model)
+        return result

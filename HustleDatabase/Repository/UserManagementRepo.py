@@ -1,5 +1,7 @@
+import uuid
+
 from HustleDatabase.Connection import Connection
-from HustleDatabase.Model import UserLogin, UserManagement
+from HustleDatabase.Model import UserLogin, UserMgmt
 from datetime import datetime
 
 
@@ -20,7 +22,7 @@ class UserManagementRepo():
             return False
 
     def GetAllUser(self):
-        query = 'select * from "User.Management" where isAdmin = 0'
+        query = 'select * from "User.Management"'
         result = db.Execute(query)
         return result
 
@@ -31,3 +33,9 @@ class UserManagementRepo():
             query = 'Update "User.Management" set lastLogout = ? where username = ?'
         db.Execute(query, (datetime.now(), login.username))
         return True
+
+    def AddUserAccount(self, model):
+        guid = str(uuid.uuid4())
+        query = 'insert into "User.Management" (userId, username, password, isAdmin) values (?, ?, ?, ?)'
+        result = db.Execute(query, (guid, model.username, model.password, model.isAdmin))
+        return result
