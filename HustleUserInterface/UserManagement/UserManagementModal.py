@@ -64,3 +64,32 @@ class UserManagementModal:
                 .classes('text-sm px-3 py-1 rounded-md') \
                 .props('color=amber-500 text-black')
         dialog.open()
+
+    def ConfirmationDeleteModal(self, datas):
+        dialog = ui.dialog()
+
+        def onDeleteConfirmation():
+            result = userBusiness.DeleteUser(datas['userId'])
+            if result:
+                ui.notify(f"Success to delete user of {datas['username']}")
+                ui.navigate.to("/usermanagement")
+                dialog.close()
+            else:
+                ui.notify("Failed to delete user")
+
+        with dialog, ui.card().classes('w-full max-w-screen-md p-6 relative space-y-4 shadow-xl'):
+            ui.button(icon='close', on_click=dialog.close) \
+                .props('flat round dense color=grey') \
+                .classes('absolute top-2 right-2 z-10')
+
+            ui.label('Confirmation').classes('text-2xl font-semibold text-gray-800')
+            ui.separator()
+            ui.label(f"Are you sure going to delete account with name {datas['username']}?")
+
+
+            ui.button('Yes', on_click=onDeleteConfirmation) \
+                .classes('text-sm px-3 py-1 rounded-md') \
+                .props('color=amber-500 text-black')
+
+        dialog.open()
+

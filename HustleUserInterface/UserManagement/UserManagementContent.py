@@ -13,7 +13,6 @@ userManagementLayout = UserManagementLayout()
 
 def UserList():
     result = userBusiness.GetAlluser()
-    print(result)
     userManagementLayout.UserManagementContent(result)
 
 def Content():

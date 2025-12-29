@@ -24,7 +24,7 @@ class UserManagementLayout:
 
     def UserList(self, user):
         def onDeleteUser():
-            ui.notify('user deleted')
+            modal.ConfirmationDeleteModal(user)
 
         with ui.column().classes('w-full relative p-4 border-2 rounded-3xl'):
             if (user["isAdmin"] == True):

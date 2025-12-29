@@ -39,3 +39,13 @@ class UserManagementRepo():
         query = 'insert into "User.Management" (userId, username, password, isAdmin) values (?, ?, ?, ?)'
         result = db.Execute(query, (guid, model.username, model.password, model.isAdmin))
         return result
+
+    def DeleteUserAccount(self, model):
+        query = 'delete from "User.Management" where userId = ?'
+        result = db.Execute(query, (model.guid, ))
+        return result
+
+    def UpdateUserAccount(self, model):
+        query = 'update "User.Management" set username = ?, password = ?, isAdmin = ? where userId = ?'
+        result = db.Execute(query, (model.username, model.password, model.isAdmin, model.userId))
+        return result

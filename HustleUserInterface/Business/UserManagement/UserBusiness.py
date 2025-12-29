@@ -14,3 +14,18 @@ class UserBusiness():
 
     def AddUser(self, data):
         return api.InputNewUser(data)
+
+    def DeleteUser(self, guid):
+        data = {
+            "guid" : guid
+        }
+        return api.DeleteUser(data)
+
+    def UpdateUser(self, userId, username, password, isAdmin):
+        data = {
+            "userId": userId,
+            "username": username,
+            "password": password,
+            "isAdmin": isAdmin
+        }
+        return api.UpdateUser(data)

@@ -43,3 +43,25 @@ class UserManagementAPI:
         except Exception as e:
             print("Exception occurred: ", e)
             return e
+
+    def DeleteUser(self, data):
+        try:
+            response = requests.delete(Api.deleteUser, json=data)
+            if response.status_code == 200:
+                return True
+            else:
+                return False
+        except Exception as e:
+            print("Exception occurred: ", e)
+            return e
+
+    def UpdateUser(self, data):
+        try:
+            response = requests.put(Api.updateUser, json=data)
+            if response.status_code == 200:
+                return True
+            else:
+                return False
+        except Exception as e:
+            print("Exception occurred: ", e)
+            return e
