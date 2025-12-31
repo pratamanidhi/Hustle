@@ -9,6 +9,8 @@ from HustleController.Log import LogController
 from HustleController.Report import ReportController
 from HustleController.DialIn import DialInController
 from HustleController.Supplier import SupplierController
+from HustleController.Pip import PipController
+
 import sys
 import os
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
@@ -41,6 +43,7 @@ app.include_router(LogController.router, prefix="/logs", tags=["Logs"])
 app.include_router(ReportController.router, prefix="/report", tags=["Report"])
 app.include_router(DialInController.router, prefix="/dialIn", tags=["DialIn"])
 app.include_router(SupplierController.router, prefix="/supplier", tags=["Supplier"])
+app.include_router(PipController.router, prefix="/pip", tags=["Pip"])
 
 
 if __name__ == "__main__":

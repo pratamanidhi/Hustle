@@ -5,6 +5,8 @@ import Home.HomeContent as HomeContent
 import Menu.MenuContent as MenuContent
 import Report.ReportContent as ReportContent
 import Supplier.SupplierContent as SupplierContent
+import PIP.PipContent as PipContent
+import UserManagement.UserManagementContent as UserManagermentContet
 import Test.Test
 
 if __name__ in {"__main__", "__mp_main__"}:
@@ -14,6 +16,9 @@ if __name__ in {"__main__", "__mp_main__"}:
     MenuContent.Content()
     ReportContent.Content()
     SupplierContent.Content()
+    PipContent.Content()
+    UserManagermentContet.Content()
+
 
     ui.add_head_html('''
     <script>
