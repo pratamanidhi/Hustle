@@ -10,3 +10,9 @@ class MenuBusiness():
 
     def GetMenu(self):
         return api.GetMenu()
+
+    def DeleteMenu(self, name):
+        datas = {
+            "name": name
+        }
+        return api.DeleteMenu(datas)

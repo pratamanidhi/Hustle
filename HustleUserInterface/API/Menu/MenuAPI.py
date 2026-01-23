@@ -22,3 +22,13 @@ class MenuAPI():
         except Exception as e:
             print(e)
 
+    def DeleteMenu(self, data):
+        try:
+            response = requests.delete(Api.deleteMenu, json=data)
+            if response.status_code == 200:
+                return True
+            else:
+                return None
+        except Exception as e:
+            print(e)
+
