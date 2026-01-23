@@ -47,10 +47,10 @@ class MenuLayout:
 
         def onDelete(args):
             print(args['name'])
-            result = business.DeletePip(args['name'])
+            result = business.DeleteMenu(args['name'])
             if result == True:
                 ui.notify(f" {args['name']} deleted!")
-                ui.navigate.to('/pip')
+                ui.navigate.to('/menu')
             else:
                 ui.notify(f" {args['name']} failed to delete!")
 
@@ -82,4 +82,4 @@ class MenuLayout:
                 </q-td>
             '''
         )
-        # table.on('delete', lambda e: onDelete(e.args))
+        table.on('delete', lambda e: onDelete(e.args))

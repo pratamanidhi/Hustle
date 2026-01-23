@@ -70,7 +70,6 @@ class PipLayout():
         ingredient_columns_json = json.dumps(ingredient_columns)
 
         def onDelete(args):
-            print(args['name'])
             result = business.DeletePip(args['name'])
             if result == True:
                 ui.notify(f" {args['name']} deleted!")
