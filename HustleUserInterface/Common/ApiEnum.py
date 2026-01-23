@@ -11,3 +11,4 @@ class Enum(StrEnum):
     DialIn = "dialIn"
     Supplier = "supplier"
     Pip = "pip"
+    Menu = "menu"

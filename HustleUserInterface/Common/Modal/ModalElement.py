@@ -5,11 +5,13 @@ from starlette.formparsers import MultiPartParser
 from datetime import datetime, date
 from Business.DialIn.DialInBussiness import DialInBussiness as DialIn
 from Business.Pip.PipBusiness import PipBusiness as Pip
+from Business.Menu.MenuBusiness import MenuBusiness as MenuBusiness
 
 business = Business()
 commonBusiness = CommonBusiness()
 dialIn = DialIn()
 pip = Pip()
+menuBusiness = MenuBusiness()
 
 
 class ModalElement:
@@ -249,6 +251,13 @@ class ModalElement:
 
     def ShowAddMenuModal(self, ingredients, categories, units):
         dialog = ui.dialog().props('maximized')
+        ingredientList = []
+
+        def getIngredient():
+            result = commonBusiness.GetIngredient()
+            for ingredients in result:
+                ingredient = ingredients['name']
+                ingredientList.append(ingredient)
 
         def categoryForm():
             return {category["value"]: category["name"] for category in categories}
@@ -269,6 +278,8 @@ class ModalElement:
 
         inputFormContainer = None
         ingredientListContainer = None
+        listOfIngredients = None
+        productionCost = None
 
         ingredientForms = []
         listOfIngredient = []
@@ -337,6 +348,8 @@ class ModalElement:
             inputForm()
 
         def onSubmitAll():
+            nonlocal productionCost
+            nonlocal listOfIngredients
             listOfIngredient.clear()
             for form in ingredientForms:
                 form['doseInput'] = form['doseInput'].value if form['doseInput'] else ''
@@ -346,12 +359,27 @@ class ModalElement:
 
             ingredientListContainer.clear()
             with ingredientListContainer:
-                self.DevelopMenu(listOfIngredient, ingredients, units)
-
+                listOfIngredients = self.DevelopMenu(listOfIngredient, ingredients, units)
                 ui.separator()
-
                 totalProductionCost = sum(item['price'] * int(item['doseInput']) for item in listOfIngredient)
-                self.ProductionCost(totalProductionCost)
+                productionCost = self.ProductionCost(totalProductionCost)
+            stepper.next()
+
+        def onSave():
+            ingredient = str(listOfIngredients)
+            datas = {
+                "name" : productName.value,
+                "ingredient": ingredient,
+                "price": productionCost['value']
+            }
+
+            result = menuBusiness.InputMenu(datas)
+            if result:
+                ui.notify("Success to save Menu data")
+                dialog.close()
+                ui.navigate.to('/pip')
+            else:
+                ui.notify("Failed to save Menu")
 
         with dialog, ui.card().classes('w-full h-full p-6 max-w-none shadow-xl'):
             ui.button(icon='close', on_click=dialog.close).props('flat round dense color=grey').classes(
@@ -361,12 +389,13 @@ class ModalElement:
                 with ui.step('Product Name'):
                     ui.label('Name of your product')
                     with ui.grid(columns=2).classes('gap-2'):
+                        getIngredient()
                         ui.label('Product Name')
-                        ui.input(label='Product Name').props('dense outlined').classes('w-60 text-sm')
+                        productName = ui.input(label='Product Name').props('dense outlined').classes('w-60 text-sm')
 
-                        ui.label('Upload image')
-                        MultiPartParser.spool_max_size = 1024 * 1024 * 5  # 5 MB
-                        ui.upload(on_upload=lambda e: ui.notify(f'Uploaded {e.name}')).classes('max-w-full')
+                        # ui.label('Upload image')
+                        # MultiPartParser.spool_max_size = 1024 * 1024 * 5  # 5 MB
+                        # ui.upload(on_upload=lambda e: ui.notify(f'Uploaded {e.name}')).classes('max-w-full')
 
                     with ui.stepper_navigation():
                         ui.button('Next', on_click=stepper.next)
@@ -392,7 +421,7 @@ class ModalElement:
                     ingredientListContainer
 
                     with ui.stepper_navigation():
-                        ui.button('Done', on_click=lambda: ui.notify('Yay!', type='positive'))
+                        ui.button('Save', on_click=onSave).props('color=green text-white')
                         ui.button('Back', on_click=stepper.previous).props('flat')
 
         dialog.open()
@@ -436,27 +465,41 @@ class ModalElement:
         return listOfIngredient
 
     def ProductionCost(self, TotalProductionCost):
+        result = {'value': None}
+
+        ui.separator()
 
         def calculate():
-            total = int(sellingInput.value) - int(TotalProductionCost)
+            total = int(sellingInput.value) + int(TotalProductionCost)
             finalPrice.text = f'Rp {total}'
+            result['value'] = total
+            return total
 
         with ui.grid(columns=2).classes('gap-3'):
             ui.label('Production Cost')
             ui.label(f'Rp {TotalProductionCost}')
 
-            ui.label('Target Price')
-            sellingInput = ui.input(label='Selling Price').props('type=number dense outlined').classes('w-60 text-sm')
-            ui.button('Add item', on_click=calculate).classes('text-sm px-3 py-1 rounded-md').props(
-                'color=amber-500 text-black')
+            ui.label('Fix Price')
+            sellingInput = ui.input(label='Selling Price') \
+                .props('type=number dense outlined') \
+                .classes('w-60 text-sm')
+
+            ui.button('Calculate Pip', on_click=calculate) \
+                .classes('text-sm px-3 py-1 rounded-md') \
+                .props('color=amber-500 text-black')
 
         ui.separator()
 
         with ui.grid(columns=2).classes('gap-3'):
             ui.label('Final pricing point')
-            finalPrice = ui.label('Rp 0').classes('text-green-600 font-bold text-2xl')
+            finalPrice = ui.label(f'Rp {TotalProductionCost}').classes('text-green-600 font-bold text-2xl')
 
-    def AddDialInModal(self, warehouseData, userData, toolsData):
+        if result['value'] == None:
+            result['value'] = 0 + int(TotalProductionCost)
+
+        return result
+
+    def AddDialInModal(self, warehouseData, userData, toolsData, category):
         dialog = ui.dialog()
         userList = []
         toolsList = []
