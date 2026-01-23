@@ -387,7 +387,7 @@ class ModalElement:
                         ui.button('Next', on_click=stepper.next)
                         ui.button('Back', on_click=stepper.previous).props('flat')
 
-                with ui.step('Bake'):
+                with ui.step('Result'):
                     ingredientListContainer = ui.column().classes('gap-2 mt-2')
                     ingredientListContainer
 
