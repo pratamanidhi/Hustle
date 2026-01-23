@@ -377,7 +377,7 @@ class ModalElement:
             if result:
                 ui.notify("Success to save Menu data")
                 dialog.close()
-                ui.navigate.to('/pip')
+                ui.navigate.to('/menu')
             else:
                 ui.notify("Failed to save Menu")
 
