@@ -34,3 +34,4 @@ class APIUrl:
     inputPip = mainiUrl + f"/{Enum.Pip}/add-pip"
     getPip = mainiUrl + f"/{Enum.Pip}/get-all-pip"
     deletePip = mainiUrl + f"/{Enum.Pip}/delete-pip"
+    inputMenu = mainiUrl + f"/{Enum.Menu}/add-menu"
