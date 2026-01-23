@@ -13,6 +13,8 @@ from HustleDatabase.Model.Logs.LogModel import LogModel as LogModel
 from HustleUtils.Utils import Utils as Utils
 from HustleCommon.Enums.Ingredient import Ingredient as Ingredient
 from HustleDatabase.Model.Logs.DailyStockReport import DailyStockReport as StockReport
+from HustleDatabase.Repository.Pip.PipRepository import PipRepository as pipRepository
+from HustleDatabase.Model.Pip.PipDeleteModel import PipDeleteModel
 
 repo = Repo()
 dbContext = DbContext()
@@ -22,6 +24,7 @@ logBusiness = LogBusiness()
 unit = Unit()
 utils = Utils()
 stockReport = StockReport()
+pipRepo = pipRepository()
 
 class WarehouseBusiness:
     def __init__(self) -> None:
@@ -57,10 +60,13 @@ class WarehouseBusiness:
             return repo.GetStock(context, model)
         return "No Data"
 
+    def GetStockByGuid(self, database, guid):
+        result = repo.GetStockByGuid(database, guid)
+        return result
+
     def AddStock(self, types: Enum, model):
         if types in self.context_map:
             context, _ = self.context_map[types]
-
             return repo.AddStock(context, model)
         return "No Data"
 
@@ -100,8 +106,22 @@ class WarehouseBusiness:
     def DeleteStock(self, types:Enum, model):
         if types in self.context_map:
             context, _ = self.context_map[types]
+
+            if(types == Ingredient.Pip):
+                stockData = self.GetStockByGuid(context, model.guid)
+                PipDeleteModel.name = stockData['name']
+                pipRepo.DeletePip(PipDeleteModel)
             return repo.Delete(context, model)
         return False
+
+    def DeletePipStock(self, name):
+        try:
+            context, _ = self.context_map[Ingredient.Pip]
+            result = repo.DeletePipStock(context, name)
+            return result
+        except Exception as e:
+            print(e)
+            return False
 
 
     def GetUnitGuid(self, unitName):
