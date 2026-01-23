@@ -18,3 +18,10 @@ class MenuBusiness():
             return result
         except Exception as e:
             return e
+
+    def GetMenu(self):
+        result = repo.GetMenu()
+        return result
+
+    def DeleteMenu(self, model):
+        return repo.DeleteMenu(model)

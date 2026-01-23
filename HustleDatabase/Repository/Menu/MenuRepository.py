@@ -8,6 +8,11 @@ class MenuRepository():
     def __init__(self) -> None:
         pass
 
+    def GetMenu(self):
+        query = "select * from Menu"
+        result = db.Execute(query)
+        return result
+
     def InputMenu(self, model):
         guid = str(uuid.uuid4())
         updatedAt = datetime.now()
@@ -20,4 +25,9 @@ class MenuRepository():
             model.category,
             updatedAt
         ))
+        return result
+
+    def DeleteMenu(self, model):
+        query = "delete from Menu where name = ?"
+        result = db.Execute(query, (model.name, ))
         return result
