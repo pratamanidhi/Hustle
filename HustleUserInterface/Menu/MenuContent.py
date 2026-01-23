@@ -4,12 +4,14 @@ from Common.Layout.Layout import Layout as Layout
 from Common.Modal.ModalElement import ModalElement as Modal
 from Business.Warehouse.WarehouseBusiness import WarehouseBusiness as WarehouseBusiness
 from Business.Common.CommonBusiness import CommonBusiness as CommonBusiness
+from Menu.MenuLayout import MenuLayout as MenuLayout
 
 session = Session()
 layout = Layout()
 modal = Modal()
 warehouse = WarehouseBusiness()
 common = CommonBusiness()
+menuLayout = MenuLayout()
 
 def GenerateContent(stocks, ingredients, units):
 
@@ -19,7 +21,7 @@ def GenerateContent(stocks, ingredients, units):
 
     ui.button('Add new', on_click=CreateMenuItem) \
         .props('flat dense')
-
+    menuLayout.ShowMenu()
 
 def Content():
     @ui.page('/menu')

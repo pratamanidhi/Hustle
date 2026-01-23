@@ -7,3 +7,6 @@ class MenuBusiness():
 
     def InputMenu(self, data):
         return api.InputMenu(data)
+
+    def GetMenu(self):
+        return api.GetMenu()
