@@ -140,22 +140,22 @@ class WarehouseBusiness:
 
     def UpdateItem(self, item):
         data = item["data"][0]
-
-        if 'inPrice' in item:
-            if item["inPrice"] is not None:
-                data["price"] = item["itemPrice"]
-            else:
-                data["price"] = int(data["price"].replace('Rp', '').replace('.', '').strip())
+        if 'inPrice' in item and item["inPrice"] is not None:
+            data["price"] = self.to_int_rp(item["itemPrice"])
         else:
-            data["price"] = int(data["price"].replace('Rp', '').replace('.', '').strip())
+            data["price"] = self.to_int_rp(data.get("price"))
 
-        data["priceUnit"] = int(data["priceUnit"].replace('Rp', '').replace('.', '').strip())
-        data["lastInput"] = None
-        data["lastOutput"] = None
-        if item['isOut']:
-            data["stockOut"] = float(item["outQty"])
+        data["priceUnit"] = self.to_int_rp(data.get("priceUnit"))
+
+        if item.get('isOut'):
+            qty = self.to_float_safe(item.get("outQty"))
+            if isinstance(qty, float):
+                data["stockOut"] = qty
         else:
-            data["stockIn"] = float(item['inQty'])
+            qty = self.to_float_safe(item.get("inQty"))
+            if isinstance(qty, float):
+                data["stockIn"] = qty
+
         result = warehouse.CheckOutStock(item["type"], item["isOut"], data)
         return result
 
@@ -165,6 +165,24 @@ class WarehouseBusiness:
     def DeleteStock(self, item):
         data = item['data'][0]
         return warehouse.DeleteStock(item["type"], data["guid"])
+
+    def to_int_rp(self,value):
+        if isinstance(value, int):
+            return value
+        if isinstance(value, str):
+            value = value.replace('Rp', '').replace('.', '').strip()
+            if value == '':
+                return value  # keep original
+            return int(float(value))
+        return value
+
+    def to_float_safe(self, value):
+        if value in (None, ''):
+            return value  # keep original
+        try:
+            return float(value)
+        except (TypeError, ValueError):
+            return value
 
 
 
