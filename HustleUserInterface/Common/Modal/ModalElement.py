@@ -361,7 +361,7 @@ class ModalElement:
             with ingredientListContainer:
                 listOfIngredients = self.DevelopMenu(listOfIngredient, ingredients, units)
                 ui.separator()
-                totalProductionCost = sum(item['price'] * int(item['doseInput']) for item in listOfIngredient)
+                totalProductionCost = sum(item['price'] * float(item['doseInput']) for item in listOfIngredient)
                 productionCost = self.ProductionCost(totalProductionCost)
             stepper.next()
 
@@ -447,7 +447,7 @@ class ModalElement:
                 'dose': ingredient['doseInput'],
                 'unit': ingredient['selectedUnit'],
                 'price': f'Rp. {ingredient["price"]}',
-                'totalCost': f'Rp. {int(ingredient["price"]) * int(ingredient["doseInput"])}'
+                'totalCost': f'Rp. {int(ingredient["price"]) * float(ingredient["doseInput"])}'
             }
             row.append(datas)
 
