@@ -1,46 +1,22 @@
 from nicegui import ui
-from PIP.PipModal import PipModal as Modal
-from Business.Pip.PipBusiness import PipBusiness as Business
+from Business.Menu.MenuBusiness import MenuBusiness as Business
 import json
 
-modal = Modal()
-business = Business()
 
-class PipLayout():
+business = Business()
+class MenuLayout:
     def __init__(self) -> None:
         pass
 
-    def PipContent(self, allStocks, ingredients, units, user):
-        def addNewPip():
-            modal.AddPip(allStocks, ingredients, units, user)
-
-        content_container = ui.column().classes('w-full h-full')
-        with content_container:
-            with ui.splitter(value=10).classes('w-full h-full') as splitter:
-                with splitter.before:
-                    with ui.tabs().props('vertical').classes('w-50') as tabs:
-                        list_tab = ui.tab('Supplier List')
-
-                with splitter.after:
-                    with ui.tab_panels(tabs, value=list_tab).props('vertical').classes('w-full h-full'):
-                        with ui.tab_panel(list_tab):
-                            with ui.grid(columns=2).classes('gap-5'):
-                                ui.button('Add new PIP', on_click=addNewPip) \
-                                    .props('flat dense')
-
-                            ui.separator()
-                            ui.label("List of PIP").classes('font-semibold text-gray-800')
-                            with ui.column().classes('w-full'):
-                                self.ShowPipData()
-
-    def ShowPipData(self):
-        result = business.GetPip()
+    def ShowMenu(self):
+        result = business.GetMenu()
+        print(result)
 
         rows = []
 
-        for pip in result:
+        for menu in result:
             ingredientDatas = []
-            ingredientsJson = json.loads(pip['ingredient'].replace("'", '"'))
+            ingredientsJson = json.loads(menu['ingredient'].replace("'", '"'))
 
             for ingredient in ingredientsJson:
                 datas = {
@@ -50,9 +26,9 @@ class PipLayout():
                 ingredientDatas.append(datas)
 
             rows.append({
-                "name": pip['name'],
+                "name": menu['name'],
                 "ingredient": ingredientDatas,
-                "price": f"Rp. {pip['price']}"
+                "price": f"Rp. {menu['price']}"
             })
 
         parent_columns = [
@@ -70,10 +46,11 @@ class PipLayout():
         ingredient_columns_json = json.dumps(ingredient_columns)
 
         def onDelete(args):
-            result = business.DeletePip(args['name'])
+            print(args['name'])
+            result = business.DeleteMenu(args['name'])
             if result == True:
                 ui.notify(f" {args['name']} deleted!")
-                ui.navigate.to('/pip')
+                ui.navigate.to('/menu')
             else:
                 ui.notify(f" {args['name']} failed to delete!")
 
@@ -106,6 +83,3 @@ class PipLayout():
             '''
         )
         table.on('delete', lambda e: onDelete(e.args))
-
-
-

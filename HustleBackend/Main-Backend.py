@@ -10,6 +10,7 @@ from HustleController.Report import ReportController
 from HustleController.DialIn import DialInController
 from HustleController.Supplier import SupplierController
 from HustleController.Pip import PipController
+from HustleController.Menu import MenuController
 
 import sys
 import os
@@ -44,6 +45,7 @@ app.include_router(ReportController.router, prefix="/report", tags=["Report"])
 app.include_router(DialInController.router, prefix="/dialIn", tags=["DialIn"])
 app.include_router(SupplierController.router, prefix="/supplier", tags=["Supplier"])
 app.include_router(PipController.router, prefix="/pip", tags=["Pip"])
+app.include_router(MenuController.router, prefix="/menu", tags=["Menu"])
 
 
 if __name__ == "__main__":
